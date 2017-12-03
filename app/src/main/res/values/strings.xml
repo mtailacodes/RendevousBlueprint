@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BluePrintRendevouz</string>
+
+    <!--Login Activity-->
+    <string name="newUser">Create an account</string>
+
+</resources>
