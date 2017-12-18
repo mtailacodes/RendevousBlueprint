@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView android:id="@+id/tv_createUserEmailAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/create_user_fields"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingStart="32dp"
+            android:text=" Email address"
+            android:paddingTop="16dp"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:paddingBottom="4dp"
+            android:textColor="#000000"/>
+
+        <EditText android:id="@+id/et_CreateUserEmailAddress"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_createUserEmailAddress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="13sp"
+            android:hint=" Enter your email here"
+            android:maxLines="1"
+            android:textColorHint="#eeeeee"
+            android:background="@drawable/background_create_user_edit_fields"
+            android:paddingStart="32dp"
+            android:layout_marginTop="4dp"/>
+
+
+        <TextView android:id="@+id/tv_createUserPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/create_user_fields"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="16dp"
+            android:paddingStart="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/et_CreateUserEmailAddress"
+            android:text="Password"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:paddingBottom="4dp"
+            android:textColor="#000000"/>
+
+        <EditText android:id="@+id/et_CreateUserPassword"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_createUserPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="*****"
+            android:textColorHint="#eeeeee"
+            android:background="@drawable/background_create_user_edit_fields"
+            android:paddingStart="32dp" />
+
+
+        <TextView android:id="@+id/tv_createUserUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/create_user_fields"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="16dp"
+            android:paddingStart="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/et_CreateUserPassword"
+            android:text="First name"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:paddingBottom="4dp"
+            android:textColor="#000000"/>
+
+        <EditText android:id="@+id/et_CreateUserName"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_createUserUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="e.g Matty"
+            android:textColorHint="#eeeeee"
+            android:background="@drawable/background_create_user_edit_fields"
+            android:paddingStart="32dp" />
+
+        <TextView android:id="@+id/tv_createUserGender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/create_user_fields"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="16dp"
+            android:paddingStart="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/et_CreateUserName"
+            android:text="I am"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:paddingBottom="4dp"
+            android:textColor="#000000"/>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/cl_createUserMale"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_createUserGender"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cl_createUserFemale">
+
+            <TextView android:id="@+id/tv_CreateUserMale"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/login_rounded_edit_text_fields"
+                android:text="Male"
+                android:textColor="#eeeeee"
+                android:gravity="center" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/cl_createUserFemale"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_createUserGender"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cl_createUserMale">
+
+            <TextView android:id="@+id/tv_CreateUserFemale"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/login_rounded_edit_text_fields"
+                android:text="Female"
+                android:textColor="#eeeeee"
+                android:gravity="center" />
+
+        </android.support.constraint.ConstraintLayout>
+
+
+
+        <Button android:id="@+id/btn_CreateUserStepOneButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/cl_createUserFemale"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Next"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/create_user_application_button"/>
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
