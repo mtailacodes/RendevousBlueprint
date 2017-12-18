@@ -15,7 +15,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="80dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:text="@string/newUser"
@@ -25,8 +25,9 @@
 
         <android.support.constraint.ConstraintLayout android:id="@+id/cl_CreateNewUserContainer"
             android:layout_width="0dp"
-            android:layout_height="@dimen/createUserContainerHeight"
-            app:layout_constraintTop_toBottomOf="@+id/tv_CreateNewUser"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:elevation="1dp"
@@ -40,6 +41,35 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:scaleType="centerCrop"
                 app:srcCompat = "@drawable/create_user_up_arrow"/>
+
+            <com.badoualy.stepperindicator.StepperIndicator android:id="@+id/si_CreateUserStepIndicator"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                app:stpi_stepCount="2"
+                app:layout_constraintTop_toBottomOf="@+id/iv_CreateUserArrowReveal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                app:stpi_animDuration="150"
+                app:stpi_lineMargin="4dp"
+                app:stpi_circleStrokeWidth="4dp"
+                app:stpi_circleRadius="12dp"
+                app:stpi_circleColor="#947CB0"
+                app:stpi_indicatorRadius="4dp"
+                app:stpi_indicatorColor="#809A12B3"
+                app:stpi_lineDoneColor="#809A12B3"/>
+
+            <com.mtailacodes.blueprintrendevouz.customViews.CreateUserViewpager android:id="@+id/vp_CreateUserViewPager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/si_CreateUserStepIndicator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+
+            </com.mtailacodes.blueprintrendevouz.customViews.CreateUserViewpager>
 
         </android.support.constraint.ConstraintLayout>
 
