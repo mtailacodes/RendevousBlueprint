@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "389813176526",
+    "firebase_url": "https://rendevousblueprint.firebaseio.com",
+    "project_id": "rendevousblueprint",
+    "storage_bucket": "rendevousblueprint.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389813176526:android:9af71e36eeec6f0e",
+        "android_client_info": {
+          "package_name": "com.mtailacodes.blueprintrendevouz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389813176526-80o6sblrrr6pm8rem0n6qr2eaa1vdb15.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mtailacodes.blueprintrendevouz",
+            "certificate_hash": "59d4c33d59a17a8eac6cbeef1e5c890c5869844c"
+          }
+        },
+        {
+          "client_id": "389813176526-2qm3jqgvf0oqrcqjvf1bbtro9qter1q3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfmSaKJkPyJ9FQE9rSdJFOOBrAGSsNZoc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389813176526-2qm3jqgvf0oqrcqjvf1bbtro9qter1q3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
