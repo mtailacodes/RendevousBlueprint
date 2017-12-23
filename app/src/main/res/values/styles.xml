@@ -16,7 +16,7 @@
         <item name="android:textColor">@color/grey1</item>
         <item name="colorAccent">@color/hideContainer</item>
         <item name="colorControlNormal">@color/black100</item>
-        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorControlActivated">#FFFFFF</item>
     </style>
 
 </resources>

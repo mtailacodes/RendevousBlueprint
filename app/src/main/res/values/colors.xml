@@ -11,6 +11,8 @@
     <color name="topBar">#162029</color>
     <color name="grey1">#eeeeee</color>
     <color name="green">#2ecc71</color>
+    <color name="failedRed">#c0392b</color>
+
 
 
 </resources>

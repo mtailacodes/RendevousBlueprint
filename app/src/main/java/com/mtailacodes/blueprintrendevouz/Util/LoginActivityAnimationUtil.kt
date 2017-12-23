@@ -4,7 +4,12 @@ import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.provider.ContactsContract
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.CardView
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
 import com.mtailacodes.blueprintrendevouz.R
 
@@ -45,6 +50,40 @@ object LoginActivityAnimationUtil {
         val alphaTo0 = ObjectAnimator.ofFloat(viewToHide, View.ALPHA, alpha0)
         mAnimatorSet.playTogether(alphaTo1, alphaTo0)
         return AnimatorSet()
+    }
+
+    fun translateLoginButton (loginButton : View, translationYValue : Float){
+
+        val translateAnimation = ObjectAnimator.ofFloat(loginButton, View.TRANSLATION_Y, translationYValue)
+        translateAnimation.duration = 220
+        translateAnimation.interpolator = AccelerateDecelerateInterpolator()
+        translateAnimation.start()
+
+    }
+
+    fun animateLoginButton(backgroundView: CardView, startingBackgroundColor: Int,
+                                 endingBackgroundColor: Int, textView: TextView,
+                                 startingTextColor: Int, endingTextColor: Int, duration: Int = 0) : AnimatorSet{
+
+        var mAnimatorSet = AnimatorSet()
+
+        val cvBackgroundColorChange= ValueAnimator.ofObject(ArgbEvaluator(), startingBackgroundColor, endingBackgroundColor)
+        cvBackgroundColorChange.addUpdateListener { valueAnimator ->
+            var value = valueAnimator.animatedValue as Int
+            backgroundView.setCardBackgroundColor(value)
+        }
+
+        val textViewColorChange = ValueAnimator.ofObject(ArgbEvaluator(), startingTextColor, endingTextColor)
+        textViewColorChange.addUpdateListener { valueAnimator ->
+            var value = valueAnimator.animatedValue as Int
+            textView.setTextColor(value)
+        }
+
+        mAnimatorSet.playTogether(cvBackgroundColorChange, textViewColorChange)
+        mAnimatorSet.duration = duration.toLong()
+        mAnimatorSet.interpolator = AccelerateInterpolator()
+
+        return mAnimatorSet
     }
 
 
