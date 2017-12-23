@@ -1,5 +1,7 @@
 package com.mtailacodes.blueprintrendevouz.models.user;
 
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Created by matthewtaila on 12/3/17.
  */
@@ -7,16 +9,23 @@ package com.mtailacodes.blueprintrendevouz.models.user;
 public class ParentUser {
 
     private String userName, emailAddress, gender, password;
+    private FirebaseUser mFirebaseUser;
 
     public ParentUser() {
 
     }
 
-    public ParentUser(String userName, String emailAddress, String gender, String password) {
+    public ParentUser(String userName, String gender) {
         this.userName = userName;
-        this.emailAddress = emailAddress;
         this.gender = gender;
-        this.password = password;
+    }
+
+    public FirebaseUser getmFirebaseUser() {
+        return mFirebaseUser;
+    }
+
+    public void setmFirebaseUser(FirebaseUser mFirebaseUser) {
+        this.mFirebaseUser = mFirebaseUser;
     }
 
     public String getPassword() {

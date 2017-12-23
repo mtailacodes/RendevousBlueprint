@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout android:id="@+id/topContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.Guideline android:id="@+id/signUpGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85"/>
+        <android.support.constraint.Guideline android:id="@+id/signUpGuidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="1.7"/>
+        <android.support.constraint.Guideline android:id="@+id/signInGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15"/>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/cl_SignInContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/signUpGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/showContainer">
+
+            <android.support.design.widget.TextInputLayout android:id="@+id/signInName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.2"
+                android:theme="@style/TextLabel">
+
+            <EditText android:id="@+id/et_signInEmail"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textAllCaps="true"
+                android:hint="Email"
+                android:textColor="@color/black100" />
+
+        </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout android:id="@+id/signInLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/signInName"
+                app:layout_constraintEnd_toEndOf="@+id/signInName"
+                app:layout_constraintTop_toBottomOf="@+id/signInName"
+                android:layout_marginTop="24dp"
+                android:theme="@style/TextLabel">
+
+                <EditText android:id="@+id/et_signInPassword"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textAllCaps="true"
+                    android:hint="Password" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView android:id="@+id/signInTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:padding="8dp"
+                android:text="Log in"
+                android:textColor="#000000"
+                android:textSize="@dimen/middleLoginTextView"
+                app:layout_constraintBottom_toTopOf="@+id/signInTextViewGuideLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView android:id="@+id/tv_SideSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Log in"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/sideLoginTextView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:rotation="270" />
+
+            <android.support.constraint.Guideline android:id="@+id/guideLineBelowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/signInLayout"
+                android:layout_marginTop="24dp" />
+
+            <android.support.constraint.Guideline android:id="@+id/signInTextViewGuideLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8"/>
+
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/cl_SignUpContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@+id/signUpGuideline"
+            app:layout_constraintEnd_toEndOf="@+id/signUpGuidelineEnd"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/hideContainer">
+
+            <TextView android:id="@+id/signUpName"
+                android:layout_width="160dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.35"
+                android:text="Username"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:background="#FFFFFF"/>
+
+            <TextView android:id="@+id/signUpPassword"
+                android:layout_width="160dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signUpName"
+                android:layout_marginTop="32dp"
+                android:text="Password"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:background="#FFFFFF"/>
+
+            <TextView android:id="@+id/signUpTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Sign Up"
+                android:rotation="270"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/sideLoginTextView"
+                android:padding="8dp"/>
+
+            <TextView android:id="@+id/tv_MiddleSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/signUpTextViewGuideLine"
+                android:text="Sign Up"
+                android:textColor="#000000"
+                android:textSize="@dimen/middleLoginTextView"
+                android:padding="8dp" />
+
+            <android.support.constraint.Guideline android:id="@+id/signUpTextViewGuideLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8"/>
+
+            <android.support.constraint.Guideline android:id="@+id/signUpTextViewHorizontalGuideLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

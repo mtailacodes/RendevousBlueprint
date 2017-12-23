@@ -2,17 +2,25 @@ package com.mtailacodes.blueprintrendevouz.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mtailacodes.blueprintrendevouz.MyApplication;
 import com.mtailacodes.blueprintrendevouz.R;
 import com.mtailacodes.blueprintrendevouz.Util.Tags;
 import com.mtailacodes.blueprintrendevouz.databinding.FragmentCreateUserSourceBinding;
 import com.mtailacodes.blueprintrendevouz.models.user.ParentUser;
+
+import java.util.concurrent.Executor;
 
 /**
  * Created by matthewtaila on 12/2/17.
@@ -21,6 +29,7 @@ import com.mtailacodes.blueprintrendevouz.models.user.ParentUser;
 public class CreateUserFirstFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static final String TAG = "CREATE_USER_FRAG";
+    private static FirebaseAuth mAuth;
 
     FragmentCreateUserSourceBinding mBinding;
 
@@ -32,7 +41,7 @@ public class CreateUserFirstFragment extends android.support.v4.app.Fragment imp
     private boolean genderFieldEmpty = true;
     private ParentUser mParentUser = null;
 
-    public static CreateUserFirstFragment newInstance() {
+    public static CreateUserFirstFragment newInstance(FirebaseUser mCurrentUser) {
         CreateUserFirstFragment mFragment = new CreateUserFirstFragment();
         return mFragment;
     }
@@ -40,6 +49,8 @@ public class CreateUserFirstFragment extends android.support.v4.app.Fragment imp
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("mAuth", String.valueOf(mAuth));
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -111,16 +122,33 @@ public class CreateUserFirstFragment extends android.support.v4.app.Fragment imp
                 }
 
                 if (emailFieldPass && !genderFieldEmpty && !nameFieldEmpty && !passwordFieldEmpty){
-                    mParentUser = setParentUserCredentials(nameCredential, emailCredential, gender, mBinding.etCreateUserPassword.getText().toString());
-                    // create User here and if successful move onto the next page
-                    ((MyApplication) getActivity().getApplication())
-                            .bus()
-                            .send(Tags.CREATE_USER_STEP_ONE_SUCCESS);
+                    mParentUser = setParentUserCredentials(nameCredential, gender);
+                    createUser(emailCredential, mBinding.etCreateUserPassword.getText().toString());
                     break;
             }
         }
     }
 
+    private void createUser(String emailCredential, String userPassword) {
+        mAuth.createUserWithEmailAndPassword(emailCredential, userPassword)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Log.i("Create User", "Success");
+                            FirebaseUser mUser = mAuth.getCurrentUser();
+                            mParentUser.setmFirebaseUser(mUser);
+                            String uuId = mParentUser.getmFirebaseUser().getUid();
+                            Log.i("Parent", uuId);
+                            // todo need to send user to the login activity (i think?)
+                                ((MyApplication) getActivity().getApplication()).bus().send(mParentUser);
+                        } else {
+                            Log.i("Create User", "Failed");
+                            Log.i("Create User", task.getException().toString());
+                        }
+                    }
+                });
+    }
     private boolean checkPasswordCredentials(String s) {
         nameCredential = s;
         return nameCredential.isEmpty();
@@ -130,8 +158,8 @@ public class CreateUserFirstFragment extends android.support.v4.app.Fragment imp
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private ParentUser setParentUserCredentials(String nameCredential, String emailCredential, String gender, String userPassword) {
-        ParentUser mParentUser = new ParentUser(nameCredential, emailCredential, gender, userPassword);
+    private ParentUser setParentUserCredentials(String nameCredential,  String gender) {
+        ParentUser mParentUser = new ParentUser(nameCredential, gender);
         return mParentUser;
     }
 

@@ -3,24 +3,22 @@ package com.mtailacodes.blueprintrendevouz.Activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.mtailacodes.blueprintrendevouz.Activity.viewpagerAdapter.CreateUserViewPagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.mtailacodes.blueprintrendevouz.viewpagerAdapter.CreateUserViewPagerAdapter;
 import com.mtailacodes.blueprintrendevouz.MyApplication;
 import com.mtailacodes.blueprintrendevouz.R;
 import com.mtailacodes.blueprintrendevouz.Util.Tags;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityLoginBinding;
-
-import java.util.logging.Logger;
+import com.mtailacodes.blueprintrendevouz.models.user.ParentUser;
 
 import io.reactivex.functions.Consumer;
 
@@ -31,6 +29,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ActivityLoginBinding mBinding;
     private int createUserContainerHeight;
 
+    // User variables
+    private FirebaseAuth mAuthUser;
+    FirebaseUser currentUser;
+
     //Create user variables
     private boolean createUserContainerRevealed = false;
     CreateUserViewPagerAdapter mCreateUserViewPagerAdapter;
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        mAuthUser = FirebaseAuth.getInstance();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -56,11 +59,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object object) throws Exception {
+
+                        if (object instanceof ParentUser){
+                            ParentUser user = (ParentUser) object;
+                            if (user.getmFirebaseUser() != null){
+                                // todo - have another function here called to broadcast to the second fragment to update it's firebase User. Maybe send the ParentUser object
+                                Log.i("main Activity", String.valueOf(user.getmFirebaseUser().getEmail()));
+                                mBinding.vpCreateUserViewPager.setCurrentItem(2);
+                                mBinding.siCreateUserStepIndicator.setCurrentStep(1);
+                            }
+                        }
+
+
                         if (object instanceof String) {
                             switch (String.valueOf(object)){
                                 case Tags.CREATE_USER_STEP_ONE_SUCCESS:
-                                    mBinding.vpCreateUserViewPager.setCurrentItem(2);
-                                    mBinding.siCreateUserStepIndicator.setCurrentStep(1);
+
                                     break;
                                 case Tags.CREATE_USER_STEP_TWO_SUCCESS:
                                     mBinding.vpCreateUserViewPager.setCurrentItem(2);
@@ -72,12 +86,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = mAuthUser.getCurrentUser();
+        // todo - if mAuth user is null - show the sign in views and the create user views
+        // todo - if mAuth user is not null - show animation sign in / sign out option / hide the create account option
+
+    }
+
     private void setupCreateUserViewPager() {
         // disable Scrolling
         mBinding.vpCreateUserViewPager.setPagingEnabled(false);
 
         // viewpager adapter
-        mCreateUserViewPagerAdapter = new CreateUserViewPagerAdapter(getSupportFragmentManager());
+        mCreateUserViewPagerAdapter = new CreateUserViewPagerAdapter(getSupportFragmentManager(), currentUser);
         mBinding.vpCreateUserViewPager.setAdapter(mCreateUserViewPagerAdapter);
 
         // viewpager step indicator setup
@@ -85,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mBinding.siCreateUserStepIndicator.setStepCount(2);
         mBinding.siCreateUserStepIndicator.setCurrentStep(0);
     }
+
 
     private void setOnClickListeners() {
 

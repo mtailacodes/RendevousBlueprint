@@ -3,4 +3,8 @@
     <!--Login Activity-->
     <dimen name="createUserContainerHeight">520dp</dimen>
 
+    <!--Login activity dimens-->
+    <dimen name="sideLoginTextView">16sp</dimen>
+    <dimen name="middleLoginTextView">36sp</dimen>
+
 </resources>
