@@ -1,4 +1,4 @@
-package com.mtailacodes.blueprintrendevouz.models.user;
+package com.mtailacodes.blueprintrendevouz.models.user.user;
 
 import com.google.firebase.auth.FirebaseUser;
 

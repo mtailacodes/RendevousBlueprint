@@ -18,7 +18,7 @@ import com.mtailacodes.blueprintrendevouz.MyApplication;
 import com.mtailacodes.blueprintrendevouz.R;
 import com.mtailacodes.blueprintrendevouz.Util.Tags;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityLoginBinding;
-import com.mtailacodes.blueprintrendevouz.models.user.ParentUser;
+import com.mtailacodes.blueprintrendevouz.models.user.user.ParentUser;
 
 import io.reactivex.functions.Consumer;
 

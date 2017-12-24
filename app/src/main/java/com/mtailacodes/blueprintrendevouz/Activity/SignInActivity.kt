@@ -16,7 +16,14 @@ import android.content.res.ColorStateList
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.animation.AccelerateInterpolator
+import android.widget.Toast
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.mtailacodes.blueprintrendevouz.R.id.createUserContainer
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 
 /**
  * Created by matthewtaila on 12/19/17.
@@ -24,6 +31,10 @@ import android.view.animation.AccelerateInterpolator
 
 class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
+    // tags
+    private final var TAG_EMAIL = "Email Address"
+    private final var TAG_PASSWORD = "Password"
+    private final var CREATE_USER_FAILED = "Create User Failed"
     lateinit var mBinding: ActivitySignInBinding
 
     // two container variables
@@ -34,8 +45,15 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private var editFieldFocus = false
     private var emailInputPassed = false
     private var passwordInputPassed = false
+    private var createUserEmailPassed = false
+    private var createUserPasswordPassed = false
+
     var emailLineCurrentColor  = R.color.black100
     var loginButtonHandled = false
+    var signUpButtonHandled = false
+
+    // Firebase
+    lateinit var mAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +61,78 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
         setEditFieldColor(mBinding.signInName, resources.getColor(R.color.black100), mBinding.emailLine)
         setEditFieldColor(mBinding.signInLayout, resources.getColor(R.color.black100), mBinding.passwordLine)
-
+        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.black100), mBinding.passwordLine)
+        setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.black100), mBinding.passwordLine)
         setOnClickListeners()
+
+        mAuth = FirebaseAuth.getInstance()
     }
 
     override fun onStart() {
         super.onStart()
         setupEmailAddressFieldListener()
         setupPasswordFieldListener()
+        setupCreateUserEmailInputListener()
+        setupCreateUserPasswordInputListener()
+    }
+
+    private fun setupCreateUserPasswordInputListener() {
+        mBinding.etCreateUserPassword.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0.toString().isEmpty()){
+                    signUpButtonHandled = false
+                    setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.failedRed), mBinding.createUserPasswordLine)
+                } else {
+                    if (p0.toString().length >= 6){
+                        createUserPasswordPassed = true
+                        setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.green), mBinding.createUserPasswordLine)
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    } else if (p0.toString().isNotEmpty() && p0.toString().length < 6){
+                        createUserPasswordPassed = false
+                        setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.failedRed), mBinding.createUserPasswordLine)
+                        signUpButtonHandled = false
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    }
+                }
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        })
+    }
+
+    private fun setupCreateUserEmailInputListener() {
+        mBinding.etCreateUserEmailAddress.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0.toString().isEmpty()) {
+                    setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.failedRed), mBinding.createUserEmailLine)
+                    signUpButtonHandled = false
+                } else {
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
+                        createUserEmailPassed = true
+                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.green), mBinding.createUserEmailLine)
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    } else {
+                        createUserEmailPassed = false
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    }
+                }
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p1 != p2) {
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
+                        createUserEmailPassed = true
+                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.green), mBinding.createUserEmailLine)
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    } else {
+                        signUpButtonHandled = false
+                        createUserEmailPassed = false
+                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.failedRed), mBinding.createUserEmailLine)
+                        checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
+                    }
+                }
+            }
+        })
     }
 
     private fun setupPasswordFieldListener() {
@@ -131,6 +213,31 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         changeColor.start()
     }
 
+    private fun checkCreateUserInput(createUserEmailPassed: Boolean, createUserPasswordPassed: Boolean) {
+        var buttonEnabledColor  = resources.getColor(R.color.green)
+        var buttonDisabledColor  = resources.getColor(R.color.showContainer)
+
+        var disabledTextColor  = resources.getColor(R.color.black100)
+        var enabledTextColor  = resources.getColor(R.color.showContainer)
+
+        if (createUserEmailPassed && createUserPasswordPassed){
+            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+                    mBinding.createUserContainer, buttonDisabledColor, buttonEnabledColor,
+                    mBinding.tvMiddleSignUp, disabledTextColor, enabledTextColor, 600)
+            if (!signUpButtonHandled){
+                mBinding.createUserContainer.isEnabled
+                mAnimator.start()
+            }
+            signUpButtonHandled = true
+        } else {
+            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+                    mBinding.createUserContainer, buttonEnabledColor, buttonDisabledColor,
+                    mBinding.tvMiddleSignUp, enabledTextColor, disabledTextColor)
+            mAnimator.start()
+            mBinding.createUserContainer.isEnabled = false
+        }
+    }
+
     fun checkLogInInputs (emailInput : Boolean, passwordInput : Boolean){
 
         var buttonEnabledColor  = resources.getColor(R.color.green)
@@ -140,11 +247,11 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         var enabledTextColor  = resources.getColor(R.color.showContainer)
 
         if (emailInput && passwordInput){
+            mBinding.tvMiddleSignUp.isEnabled
             var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
                     mBinding.loginContainer, buttonDisabledColor, buttonEnabledColor,
                     mBinding.signInTextView, disabledTextColor, enabledTextColor, 600)
             if (!loginButtonHandled){
-                mBinding.loginContainer.isEnabled
                 mAnimator.start()
             }
 
@@ -168,6 +275,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.clSignUpContainer.setOnClickListener(this)
         mBinding.clSignInContainer.setOnClickListener(this)
         mBinding.loginContainer.setOnClickListener(this)
+        mBinding.tvMiddleSignUp.setOnClickListener(this)
 
         // todo - for the SignintextView animation - include the spring animation
         mBinding.etSignInPassword.setOnFocusChangeListener { _, b ->
@@ -192,6 +300,27 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
+        mBinding.etCreateUserEmailAddress.setOnFocusChangeListener { _, b ->
+            val translateLogInButtonValue = (mBinding.createUserContainer.top - mBinding.createUserPasswordLine.bottom) - mBinding.createUserContainer.height/2
+            if (b){
+                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
+                editFieldFocus = true
+            } else {
+                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
+                editFieldFocus = false
+            }
+        }
+
+        mBinding.etCreateUserPassword.setOnFocusChangeListener { _, b ->
+            val translateLogInButtonValue = (mBinding.createUserContainer.top - mBinding.createUserPasswordLine.bottom) - mBinding.createUserContainer.height/2
+            if (b){
+                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
+                editFieldFocus = true
+            } else {
+                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
+                editFieldFocus = false
+            }
+        }
     }
 
     fun setEditFieldColor(textInputLayout: TextInputLayout, @ColorInt color : Int, viewLine : View){
@@ -227,7 +356,39 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                     showSignUpContainerAnimation()
                 } else return
             }
+            R.id.tv_MiddleSignUp ->{
+                createUser()
+            }
+
+
+
         }
+    }
+
+    private fun createUser() {
+
+        var emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
+        var password = mBinding.etCreateUserPassword.text.toString()
+
+        var mNewUser = RendevouzUserModel()
+
+        mAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener {
+            task: Task<AuthResult> ->
+            if (task.isSuccessful){
+                var mFirebaseUser = mAuth.currentUser
+                mNewUser.UuID = mFirebaseUser!!.uid.toString()
+                mNewUser.emailAddress = emailAddress
+                mNewUser.password = password
+                mNewUser.fireBaseUser = mFirebaseUser
+
+                // todo start new activity
+            } else {
+                Toast.makeText(applicationContext, "Create user failed", Toast.LENGTH_SHORT).show()
+                Log.d(CREATE_USER_FAILED, task.exception.toString())
+            }
+
+        }
+
     }
 
     private fun showSignInContainerAnimation() {
