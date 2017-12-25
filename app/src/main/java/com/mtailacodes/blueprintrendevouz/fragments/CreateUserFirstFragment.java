@@ -128,6 +128,11 @@ public class CreateUserFirstFragment extends android.support.v4.app.Fragment imp
     }
 
     private void createUser(String emailCredential, String userPassword) {
+
+
+
+
+
         mAuth.createUserWithEmailAndPassword(emailCredential, userPassword)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override

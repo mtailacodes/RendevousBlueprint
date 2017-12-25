@@ -1,29 +1,34 @@
 package com.mtailacodes.blueprintrendevouz.Activity
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.ColorInt
-import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.inputmethod.InputMethodManager
-import com.mtailacodes.blueprintrendevouz.R
-import com.mtailacodes.blueprintrendevouz.Util.LoginActivityAnimationUtil
-import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
-import android.content.res.ColorStateList
 import android.support.design.widget.TextInputLayout
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.mtailacodes.blueprintrendevouz.R.id.createUserContainer
+import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.TestTom
+import com.mtailacodes.blueprintrendevouz.Util.LoginActivityAnimationUtil
+import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
  * Created by matthewtaila on 12/19/17.
@@ -52,9 +57,6 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     var loginButtonHandled = false
     var signUpButtonHandled = false
 
-    // Firebase
-    lateinit var mAuth : FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
@@ -64,8 +66,6 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.black100), mBinding.passwordLine)
         setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.black100), mBinding.passwordLine)
         setOnClickListeners()
-
-        mAuth = FirebaseAuth.getInstance()
     }
 
     override fun onStart() {
@@ -357,25 +357,43 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else return
             }
             R.id.tv_MiddleSignUp ->{
-                createUser()
+//                createUser()
             }
-
-
-
         }
     }
 
-    private fun createUser() {
+    private fun createUserTom() {
+        val testTom = TestTom()
+        val single = testTom.createUserWithEmailAndPassword(email = mBinding.etCreateUserEmailAddress.text.toString(), password = mBinding.etCreateUserPassword.text.toString())
+        single.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    handleCreateUserSuccess()
+                }, { throwable ->
+                    Log.d("SignInActivity", "Create user failed: ${throwable.message}")
+                })
 
+    }
+
+    private fun handleCreateUserSuccess() {
+        var mNewUser = RendevouzUserModel()
+        var mFirebaseUser = FirebaseAuth.getInstance().currentUser
+        mNewUser.UuID = mFirebaseUser!!.uid
+        mNewUser.emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
+        mNewUser.password = mBinding.etCreateUserPassword.text.toString()
+        mNewUser.fireBaseUser = mFirebaseUser
+    }
+
+    private fun createUser() {
         var emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
         var password = mBinding.etCreateUserPassword.text.toString()
 
         var mNewUser = RendevouzUserModel()
 
-        mAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener {
             task: Task<AuthResult> ->
             if (task.isSuccessful){
-                var mFirebaseUser = mAuth.currentUser
+                var mFirebaseUser = FirebaseAuth.getInstance().currentUser
                 mNewUser.UuID = mFirebaseUser!!.uid.toString()
                 mNewUser.emailAddress = emailAddress
                 mNewUser.password = password
@@ -440,6 +458,8 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         val imm : InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
+
+
 
 }
 
