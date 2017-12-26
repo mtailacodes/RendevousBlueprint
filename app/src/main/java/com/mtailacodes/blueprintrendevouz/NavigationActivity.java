@@ -2,6 +2,12 @@ package com.mtailacodes.blueprintrendevouz;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +20,7 @@ import com.mtailacodes.blueprintrendevouz.databinding.ActivityNavigationBinding;
 public class NavigationActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "Navigation Activity";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     ActivityNavigationBinding mBinding;
 
@@ -28,6 +35,7 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
     private void setOnclickListener() {
         mBinding.signInActivityButton.setOnClickListener(this);
         mBinding.signInActivityButtonKotlin.setOnClickListener(this);
+        mBinding.startActivityForREsils.setOnClickListener(this);
     }
 
     @Override
@@ -44,6 +52,40 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
                 Intent newIntent = new Intent(this, SignInActivity.class);
                 startActivity(newIntent);
                 break;
+            case R.id.startActivityForREsils:
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+
+
+                int newWidth = mBinding.pictureExample.getMeasuredWidth();
+                int newHeight = mBinding.pictureExample.getMeasuredHeight();
+                Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+
+                float ratioX = newWidth / (float) imageBitmap.getWidth();
+                float ratioY = newHeight / (float) imageBitmap.getHeight();
+                float middleX = newWidth / 2.0f;
+                float middleY = newHeight / 2.0f;
+
+                Matrix scaleMatrix = new Matrix();
+                scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
+
+                Canvas canvas = new Canvas(scaledBitmap);
+                canvas.setMatrix(scaleMatrix);
+                canvas.drawBitmap(imageBitmap, middleX - imageBitmap.getWidth() / 2, middleY - imageBitmap.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+
+            mBinding.pictureExample.setImageBitmap(scaledBitmap);
 
         }
     }

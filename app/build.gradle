@@ -6,6 +6,9 @@ android {
     dataBinding {
         enabled = true
     }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.mtailacodes.blueprintrendevouz"
