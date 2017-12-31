@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
+import android.databinding.adapters.NumberPickerBindingAdapter.setValue
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.design.widget.TextInputLayout
@@ -19,11 +21,13 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.mtailacodes.blueprintrendevouz.R
-import com.mtailacodes.blueprintrendevouz.TestTom
+import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.Util.LoginActivityAnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
@@ -39,6 +43,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     // tags
     private final var TAG_EMAIL = "Email Address"
     private final var TAG_PASSWORD = "Password"
+    private var ACTIVE_USERS = "Active Users"
     private final var CREATE_USER_FAILED = "Create User Failed"
     lateinit var mBinding: ActivitySignInBinding
 
@@ -56,6 +61,9 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     var emailLineCurrentColor  = R.color.black100
     var loginButtonHandled = false
     var signUpButtonHandled = false
+
+    // firebase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -357,14 +365,15 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else return
             }
             R.id.tv_MiddleSignUp ->{
-//                createUser()
+                createUserFromEmailAndPassword()
             }
         }
     }
 
-    private fun createUserTom() {
-        val testTom = TestTom()
-        val single = testTom.createUserWithEmailAndPassword(email = mBinding.etCreateUserEmailAddress.text.toString(), password = mBinding.etCreateUserPassword.text.toString())
+    private fun createUserFromEmailAndPassword() {
+        val testTom = RxUserUtil()
+        val single = testTom.createUserWithEmailAndPassword(email = mBinding.etCreateUserEmailAddress.text.toString(),
+                password = mBinding.etCreateUserPassword.text.toString())
         single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -380,8 +389,24 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         var mFirebaseUser = FirebaseAuth.getInstance().currentUser
         mNewUser.UuID = mFirebaseUser!!.uid
         mNewUser.emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
-        mNewUser.password = mBinding.etCreateUserPassword.text.toString()
-        mNewUser.fireBaseUser = mFirebaseUser
+        // todo - need to include username too
+
+        val mFirebaseBaseDatabase = FirebaseDatabase.getInstance()
+        val mFirebaseReference = mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).
+                push()
+        val pushID = mFirebaseReference.key
+        mNewUser.pushID= pushID
+
+        mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).child(pushID).
+                setValue(mNewUser.UuID).addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+                val intent =  Intent(this, MapSearchActivity::class.java)
+                intent.putExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE, mNewUser)
+                startActivity(intent)
+            } else {
+
+            }
+        }
     }
 
     private fun createUser() {
@@ -394,10 +419,8 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             task: Task<AuthResult> ->
             if (task.isSuccessful){
                 var mFirebaseUser = FirebaseAuth.getInstance().currentUser
-                mNewUser.UuID = mFirebaseUser!!.uid.toString()
+                mNewUser.UuID = mFirebaseUser!!.uid
                 mNewUser.emailAddress = emailAddress
-                mNewUser.password = password
-                mNewUser.fireBaseUser = mFirebaseUser
 
                 // todo start new activity
             } else {
