@@ -11,10 +11,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,12 +20,7 @@ import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.database.FirebaseDatabase
-import com.mtailacodes.blueprintrendevouz.Manifest
 import com.mtailacodes.blueprintrendevouz.R
-import com.mtailacodes.blueprintrendevouz.R.id.map
-import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 
@@ -39,20 +31,7 @@ import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserMo
 class MapSearchActivity : FragmentActivity(), OnMapReadyCallback {
 
 
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(p0: GoogleMap?) {
-        var maps = p0 // m
-        mFusedLocationProvider.lastLocation
-                .addOnSuccessListener(this, { location ->
-                        var cameraPosition =  CameraPosition.Builder()
-                                .target( LatLng(location.latitude, location.longitude))
-                                .zoom(17f)
-                                .bearing(90f)                // Sets the orientation of the camera to east
-                                .tilt(0f)                   // Sets the tilt of the camera to 30 degrees
-                                .build()
-                        maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-                })
-    }
+
 
 
     // firebase variables
@@ -76,7 +55,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback {
         map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
         map.getMapAsync(this)
 
-        mUser = intent.getParcelableExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE)
+//        mUser = intent.getParcelableExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE) // todo need this for later
         mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     }
@@ -114,12 +93,27 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun setLocationVariable(location: Location) {
-        val mFirebaseBaseDatabase = FirebaseDatabase.getInstance()
-        val mFirebaseReference = mFirebaseBaseDatabase.reference.child(ACTIVE_USERS)
-                .child(mUser.pushID)
-                .child(mUser.UuID)
-                .child("Location")
-        mFirebaseReference.setValue(location)
+//        val mFirebaseBaseDatabase = FirebaseDatabase.getInstance()
+//        val mFirebaseReference = mFirebaseBaseDatabase.reference.child(ACTIVE_USERS)
+//                .child(mUser.pushID)
+//                .child(mUser.UuID)
+//                .child("Location")
+//        mFirebaseReference.setValue(location)
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(p0: GoogleMap?) {
+        var maps = p0 // m
+        mFusedLocationProvider.lastLocation
+                .addOnSuccessListener(this, { location ->
+                    var cameraPosition =  CameraPosition.Builder()
+                            .target( LatLng(location.latitude, location.longitude))
+                            .zoom(17f)
+                            .bearing(90f)                // Sets the orientation of the camera to east
+                            .tilt(0f)                   // Sets the tilt of the camera to 30 degrees
+                            .build()
+                    maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                })
     }
 
     private fun setupLocationListener() {

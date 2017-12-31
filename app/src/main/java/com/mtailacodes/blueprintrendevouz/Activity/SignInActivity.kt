@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.Constants
@@ -285,6 +286,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.clSignInContainer.setOnClickListener(this)
         mBinding.loginContainer.setOnClickListener(this)
         mBinding.tvMiddleSignUp.setOnClickListener(this)
+        mBinding.mockLoginButton.setOnClickListener(this)
 
         // todo - for the SignintextView animation - include the spring animation
         mBinding.etSignInPassword.setOnFocusChangeListener { _, b ->
@@ -368,12 +370,54 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             R.id.tv_MiddleSignUp ->{
                 createUserFromEmailAndPassword()
             }
+            R.id.mockLoginButton ->{
+                signInWithEmail()
+            }
         }
     }
 
+    private fun signInWithEmail() {
+        val single = RxUserUtil().loginUserWithEmailAndPassword(email = mBinding.etSignInEmail.text.toString(),
+                password = mBinding.etSignInPassword.text.toString())
+        single.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    handleSignInWithEmailAndPassword()
+                }, { throwable ->
+                    Log.d("SignInActivity", "Create user failed: ${throwable.message}")
+                })
+    }
+
+    private fun handleSignInWithEmailAndPassword() {
+//        var mNewUser = RendevouzUserModel()
+//        var mFirebaseUser = FirebaseAuth.getInstance().currentUser
+//        mNewUser.UuID = mFirebaseUser!!.uid
+//        mNewUser.emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
+//        // todo - need to include username too
+//
+//        val mFirebaseBaseDatabase = FirebaseDatabase.getInstance()
+//        val mFirebaseReference = mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).
+//                push()
+//        val pushID = mFirebaseReference.key
+//        mNewUser.pushID= pushID
+//
+//        mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).child(pushID).
+//                setValue(mNewUser.UuID).addOnCompleteListener{ task ->
+//            if (task.isSuccessful){
+//                val intent =  Intent(this, MapSearchActivity::class.java)
+//                intent.putExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE, mNewUser)
+//                startActivity(intent)
+//            } else {
+//            }
+//        }
+
+                val intent =  Intent(this, MapSearchActivity::class.java)
+                startActivity(intent)
+    }
+
     private fun createUserFromEmailAndPassword() {
-        val testTom = RxUserUtil()
-        val single = testTom.createUserWithEmailAndPassword(email = mBinding.etCreateUserEmailAddress.text.toString(),
+
+        val single = RxUserUtil().createUserWithEmailAndPassword(email = mBinding.etCreateUserEmailAddress.text.toString(),
                 password = mBinding.etCreateUserPassword.text.toString())
         single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -407,29 +451,6 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             } else {
             }
         }
-    }
-
-    private fun createUser() {
-        var emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
-        var password = mBinding.etCreateUserPassword.text.toString()
-
-        var mNewUser = RendevouzUserModel()
-
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener {
-            task: Task<AuthResult> ->
-            if (task.isSuccessful){
-                var mFirebaseUser = FirebaseAuth.getInstance().currentUser
-                mNewUser.UuID = mFirebaseUser!!.uid
-                mNewUser.emailAddress = emailAddress
-
-                // todo start new activity
-            } else {
-                Toast.makeText(applicationContext, "Create user failed", Toast.LENGTH_SHORT).show()
-                Log.d(CREATE_USER_FAILED, task.exception.toString())
-            }
-
-        }
-
     }
 
     private fun showSignInContainerAnimation() {
