@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.mtailacodes.blueprintrendevouz.Activity.LoginActivity;
+import com.mtailacodes.blueprintrendevouz.Activity.MapSearchActivity;
 import com.mtailacodes.blueprintrendevouz.Activity.SignInActivity;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityNavigationBinding;
 
@@ -53,10 +54,13 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
                 startActivity(newIntent);
                 break;
             case R.id.startActivityForREsils:
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                }
+
+                Intent intent2 = new Intent(this, MapSearchActivity.class);
+                startActivity(intent2);
 
         }
     }
