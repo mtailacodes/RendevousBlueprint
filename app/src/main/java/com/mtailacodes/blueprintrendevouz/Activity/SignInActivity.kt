@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.databinding.adapters.NumberPickerBindingAdapter.setValue
+import android.location.Location
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.design.widget.TextInputLayout
@@ -404,7 +405,6 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 intent.putExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE, mNewUser)
                 startActivity(intent)
             } else {
-
             }
         }
     }
