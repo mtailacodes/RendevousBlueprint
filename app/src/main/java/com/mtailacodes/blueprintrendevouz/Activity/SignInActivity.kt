@@ -8,8 +8,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
-import android.databinding.adapters.NumberPickerBindingAdapter.setValue
-import android.location.Location
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.design.widget.TextInputLayout
@@ -21,18 +19,14 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mtailacodes.blueprintrendevouz.R
-import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.Util.LoginActivityAnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -43,10 +37,7 @@ import rx.schedulers.Schedulers
 class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
     // tags
-    private final var TAG_EMAIL = "Email Address"
-    private final var TAG_PASSWORD = "Password"
     private var ACTIVE_USERS = "Active Users"
-    private final var CREATE_USER_FAILED = "Create User Failed"
     lateinit var mBinding: ActivitySignInBinding
 
     // two container variables
@@ -432,24 +423,27 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private fun handleCreateUserSuccess() {
         var mNewUser = RendevouzUserModel()
         var mFirebaseUser = FirebaseAuth.getInstance().currentUser
-        mNewUser.UuID = mFirebaseUser!!.uid
-        mNewUser.emailAddress = mBinding.etCreateUserEmailAddress.text.toString()
-        // todo - need to include username too
+        mNewUser.uuID = mFirebaseUser!!.uid
+        mNewUser.emailAddress = mFirebaseUser.email.toString()
 
-        val mFirebaseBaseDatabase = FirebaseDatabase.getInstance()
-        val mFirebaseReference = mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).
-                push()
-        val pushID = mFirebaseReference.key
-        mNewUser.pushID= pushID
+                var mFirestore = RxUserUtil().GlobalUserCollectionReference()
+                mFirestore.document(mNewUser.uuID).set(mNewUser).addOnSuccessListener { _ ->
+                    saveNewUserSearchSettings(mNewUser.uuID)
+                    val intent =  Intent(this, MapSearchActivity::class.java)
+                    startActivity(intent)
+                }.addOnFailureListener { _ -> Log.d("FirestoreFailure", "adsad")
 
-        mFirebaseBaseDatabase.reference.child(ACTIVE_USERS).child(pushID).
-                setValue(mNewUser.UuID).addOnCompleteListener{ task ->
-            if (task.isSuccessful){
-                val intent =  Intent(this, MapSearchActivity::class.java)
-                intent.putExtra(Constants.RENDEVOUZ_USER_MODEL_BUNDLE, mNewUser)
-                startActivity(intent)
-            } else {
-            }
+                }
+    }
+
+    private fun saveNewUserSearchSettings(uuID: String) {
+        var mSearchSettings = UserSearchSettings()
+        var mFireStoreSearchSettings = RxUserUtil().UserSettingsCollectionReference(uuID)
+        mFireStoreSearchSettings.document(uuID).set(mSearchSettings).addOnSuccessListener { _ ->
+            val intent =  Intent(this, MapSearchActivity::class.java)
+            startActivity(intent)
+        }.addOnFailureListener { _ -> Log.d("FirestoreFailure", "adsad")
+
         }
     }
 
@@ -503,8 +497,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
-
-
 }
+
 
 

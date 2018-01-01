@@ -11,6 +11,8 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mtailacodes.blueprintrendevouz.R
 
 /**
@@ -18,6 +20,8 @@ import com.mtailacodes.blueprintrendevouz.R
  */
 
 object LoginActivityAnimationUtil {
+
+    var GLOBAL_USERS = "Global Users"
 
     fun shiftContainer(x : Float = 0f, showView : View, hideView : View) : AnimatorSet {
         val mAnimatorSet = AnimatorSet()
@@ -85,6 +89,8 @@ object LoginActivityAnimationUtil {
 
         return mAnimatorSet
     }
+
+
 
 
 
