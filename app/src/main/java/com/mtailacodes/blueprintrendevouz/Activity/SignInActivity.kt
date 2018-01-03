@@ -20,10 +20,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mtailacodes.blueprintrendevouz.R
-import com.mtailacodes.blueprintrendevouz.Util.LoginActivityAnimationUtil
+import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
@@ -222,7 +221,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         var enabledTextColor  = resources.getColor(R.color.showContainer)
 
         if (createUserEmailPassed && createUserPasswordPassed){
-            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+            var mAnimator = AnimationUtil.animateLoginButton(
                     mBinding.createUserContainer, buttonDisabledColor, buttonEnabledColor,
                     mBinding.tvMiddleSignUp, disabledTextColor, enabledTextColor, 600)
             if (!signUpButtonHandled){
@@ -231,7 +230,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             }
             signUpButtonHandled = true
         } else {
-            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+            var mAnimator = AnimationUtil.animateLoginButton(
                     mBinding.createUserContainer, buttonEnabledColor, buttonDisabledColor,
                     mBinding.tvMiddleSignUp, enabledTextColor, disabledTextColor)
             mAnimator.start()
@@ -249,7 +248,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
         if (emailInput && passwordInput){
             mBinding.tvMiddleSignUp.isEnabled
-            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+            var mAnimator = AnimationUtil.animateLoginButton(
                     mBinding.loginContainer, buttonDisabledColor, buttonEnabledColor,
                     mBinding.signInTextView, disabledTextColor, enabledTextColor, 600)
             if (!loginButtonHandled){
@@ -258,7 +257,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
             loginButtonHandled = true
         } else {
-            var mAnimator = LoginActivityAnimationUtil.animateLoginButton(
+            var mAnimator = AnimationUtil.animateLoginButton(
                     mBinding.loginContainer, buttonEnabledColor, buttonDisabledColor,
                     mBinding.signInTextView, enabledTextColor, disabledTextColor)
             mAnimator.start()
@@ -283,10 +282,10 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.etSignInPassword.setOnFocusChangeListener { _, b ->
             val translateLogInButtonValue = (mBinding.loginContainer.top - mBinding.passwordLine.bottom) - mBinding.loginContainer.height/2
             if (b){
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.loginContainer, -(translateLogInButtonValue.toFloat()))
+                AnimationUtil.translateLoginButton(mBinding.loginContainer, -(translateLogInButtonValue.toFloat()))
                 editFieldFocus = true
             } else {
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.loginContainer, 0f)
+                AnimationUtil.translateLoginButton(mBinding.loginContainer, 0f)
                 editFieldFocus = false
             }
         }
@@ -294,10 +293,10 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.etSignInEmail.setOnFocusChangeListener { _, b ->
             val translateLogInButtonValue = (mBinding.loginContainer.top - mBinding.passwordLine.bottom) - mBinding.loginContainer.height/2
             if (b){
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.loginContainer, -(translateLogInButtonValue.toFloat()))
+                AnimationUtil.translateLoginButton(mBinding.loginContainer, -(translateLogInButtonValue.toFloat()))
                 editFieldFocus = true
             } else {
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.loginContainer, 0f)
+                AnimationUtil.translateLoginButton(mBinding.loginContainer, 0f)
                 editFieldFocus = false
             }
         }
@@ -305,10 +304,10 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.etCreateUserEmailAddress.setOnFocusChangeListener { _, b ->
             val translateLogInButtonValue = (mBinding.createUserContainer.top - mBinding.createUserPasswordLine.bottom) - mBinding.createUserContainer.height/2
             if (b){
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
+                AnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
                 editFieldFocus = true
             } else {
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
+                AnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
                 editFieldFocus = false
             }
         }
@@ -316,10 +315,10 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.etCreateUserPassword.setOnFocusChangeListener { _, b ->
             val translateLogInButtonValue = (mBinding.createUserContainer.top - mBinding.createUserPasswordLine.bottom) - mBinding.createUserContainer.height/2
             if (b){
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
+                AnimationUtil.translateLoginButton(mBinding.createUserContainer, -(translateLogInButtonValue.toFloat()))
                 editFieldFocus = true
             } else {
-                LoginActivityAnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
+                AnimationUtil.translateLoginButton(mBinding.createUserContainer, 0f)
                 editFieldFocus = false
             }
         }
@@ -426,12 +425,13 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         mNewUser.uuID = mFirebaseUser!!.uid
         mNewUser.emailAddress = mFirebaseUser.email.toString()
 
-                var mFirestore = RxUserUtil().GlobalUserCollectionReference()
-                mFirestore.document(mNewUser.uuID).set(mNewUser).addOnSuccessListener { _ ->
+        var mFireStore = RxUserUtil()
+            .GlobalUserCollectionReference()
+            .document(mNewUser.uuID)
+            .set(mNewUser)
+            .addOnSuccessListener { _->
                     saveNewUserSearchSettings(mNewUser.uuID)
-                    val intent =  Intent(this, MapSearchActivity::class.java)
-                    startActivity(intent)
-                }.addOnFailureListener { _ -> Log.d("FirestoreFailure", "adsad")
+                }.addOnFailureListener { _->
 
                 }
     }
@@ -448,11 +448,11 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showSignInContainerAnimation() {
-        val translationAnimatorSet = LoginActivityAnimationUtil.shiftContainer(
+        val translationAnimatorSet = AnimationUtil.shiftContainer(
                 showView = mBinding.clSignInContainer, hideView = mBinding.clSignUpContainer)
-        val showMiddleSignInTitle = LoginActivityAnimationUtil.animateTextViewTitles(
+        val showMiddleSignInTitle = AnimationUtil.animateTextViewTitles(
                 viewToShow = mBinding.tvMiddleSignUp, viewToHide = mBinding.tvMiddleSignUp)
-        val colorAnimaation = LoginActivityAnimationUtil.animateContainerColors(
+        val colorAnimaation = AnimationUtil.animateContainerColors(
                 viewToWhite = mBinding.clSignInContainer, viewToDark = mBinding.clSignUpContainer,
                 darkColor = backgroundWDark, lightColor = backgroundLight)
 
@@ -472,9 +472,9 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showSignUpContainerAnimation() {
         var calculatedXTranslation  = mBinding.signInGuideline.left - mBinding.signUpGuideline.left
-        val translationAnimatorSet = LoginActivityAnimationUtil.shiftContainer(calculatedXTranslation.toFloat(), mBinding.clSignInContainer, mBinding.clSignUpContainer)
-        val showMiddleSignUpTitle = LoginActivityAnimationUtil.animateTextViewTitles(viewToShow = mBinding.tvMiddleSignUp, viewToHide = mBinding.signInTextView)
-        val colorAnimaation = LoginActivityAnimationUtil.animateContainerColors(viewToWhite = mBinding.clSignUpContainer, viewToDark = mBinding.clSignInContainer, darkColor = backgroundWDark, lightColor = backgroundLight)
+        val translationAnimatorSet = AnimationUtil.shiftContainer(calculatedXTranslation.toFloat(), mBinding.clSignInContainer, mBinding.clSignUpContainer)
+        val showMiddleSignUpTitle = AnimationUtil.animateTextViewTitles(viewToShow = mBinding.tvMiddleSignUp, viewToHide = mBinding.signInTextView)
+        val colorAnimaation = AnimationUtil.animateContainerColors(viewToWhite = mBinding.clSignUpContainer, viewToDark = mBinding.clSignInContainer, darkColor = backgroundWDark, lightColor = backgroundLight)
 
         val finalAnimatorSet = AnimatorSet()
         finalAnimatorSet.playTogether(translationAnimatorSet, showMiddleSignUpTitle, colorAnimaation)

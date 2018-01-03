@@ -7,8 +7,8 @@ class UserSearchSettings {
 
     var gender = "default user"
     var sexIntereset = "default user"
-    var currentAge = "18"
-    var ageRangeMax = "50"
-    var ageRangeMin = "18"
+    var currentAge = 0
+    var ageRangeMax = 0
+    var ageRangeMin = 0
     var settingsCompleted = false
 }

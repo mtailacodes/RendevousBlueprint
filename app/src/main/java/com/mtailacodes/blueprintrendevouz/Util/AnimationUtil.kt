@@ -19,7 +19,7 @@ import com.mtailacodes.blueprintrendevouz.R
  * Created by matthewtaila on 12/20/17.
  */
 
-object LoginActivityAnimationUtil {
+object AnimationUtil {
 
     var GLOBAL_USERS = "Global Users"
 

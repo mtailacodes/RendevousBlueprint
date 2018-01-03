@@ -14,20 +14,14 @@ class RendevouzUserModel {
 
     constructor()
 
-    var  emailAddress  = "defaulUser"
-    var  uuID = "defaulUser"
+    var emailAddress = "defaulUser"
+    var uuID = "defaulUser"
     var username = "defaultUser"
 
     // coodinates
     internal var latLng = LatLng(0.4, 0.4)
 
-    var userSearchSettings: UserSearchSettings? = null
-
-
-
-
-
- }
+}
 
 
 
