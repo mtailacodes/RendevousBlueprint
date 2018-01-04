@@ -17,6 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView android:id="@+id/tv_Settings"
+        android:elevation="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Settings"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black100"/>
+
     <android.support.constraint.ConstraintLayout android:id="@+id/searchSettingsPlaceholder"
         android:layout_width="0dp"
         android:layout_height="0dp"

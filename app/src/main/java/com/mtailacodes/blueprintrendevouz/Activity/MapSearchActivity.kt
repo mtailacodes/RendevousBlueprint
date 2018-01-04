@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -72,7 +73,12 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
         map.getMapAsync(this)
 
+        setOnClickListeners()
         mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    private fun setOnClickListeners() {
+        mBinding.tvSettings.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -92,9 +98,10 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             data : DocumentSnapshot ->
             if (data.exists()){
                 if (data.getBoolean("settingsCompleted")){
+                    mSearchSettings = data.toObject(UserSearchSettings::class.java)
                     settingsCompleted = true
                 } else {
-                    showSettingsCardView()
+                    showSettingsCardView(0)
                 }
             } else {
                 Log.d(searchSettings_TAG, "document snapshot does not exis")
@@ -102,13 +109,40 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         }
     }
 
-    private fun showSettingsCardView() {
+    private fun showSettingsCardView(control: Int) {
         enableSearchSettingsCardView()
 
         mBinding.searchSettingsPlaceholder.visibility = VISIBLE
         var animateSettingsContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder,
                 View.ALPHA, 1f)
         animateSettingsContainer.duration = 100
+        animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                super.onAnimationStart(animation)
+                if (control == 1){
+                    if (mSearchSettings.gender == "Male"){
+                        resetView(mBinding.tvUserGenderFemale)
+                        applySelectionHighlight(mBinding.tvUserGenderMale)
+                    } else if (mSearchSettings.gender == "Female"){
+                        resetView(mBinding.tvUserGenderMale)
+                        applySelectionHighlight(mBinding.tvUserGenderFemale)
+                    }
+
+                    if (mSearchSettings.sexIntereset == "Male"){
+                        resetView(mBinding.tvUserInterestFemale)
+                        applySelectionHighlight(mBinding.tvUserInterestMale)
+                    } else if (mSearchSettings.sexIntereset == "Female"){
+                        resetView(mBinding.tvUserInterestMale)
+                        applySelectionHighlight(mBinding.tvUserInterestFemale)
+                    }
+
+                    mBinding.etUserAgeInput.setText(mSearchSettings.currentAge.toString())
+
+//                    mBinding.rbAgeRangeBar.lef(34f)
+//                    mBinding.rbAgeRangeBar.setMaxStartValue(48f)
+                }
+            }
+        })
         animateSettingsContainer.start()
     }
 
@@ -156,6 +190,10 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             R.id.tv_Save-> {
                 checkSettingsInput(mSearchSettings)
                 return
+            }
+            R.id.tv_Settings ->{
+                getUserSearchSettings()
+                showSettingsCardView(1)
             }
         }
     }
@@ -265,8 +303,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         mFirestore.document(mUser.uuID).set(mUser)
     }
 
-        @SuppressLint("MissingPermission")
-        override fun onMapReady(p0: GoogleMap?) {
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(p0: GoogleMap?) {
             var maps = p0 // m
             mFusedLocationProvider.lastLocation
                     .addOnSuccessListener(this, { location ->
