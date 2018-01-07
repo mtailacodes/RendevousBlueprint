@@ -8,6 +8,110 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <!--// top container-->
+    <!--<TextView android:id="@+id/tv_Settings"-->
+        <!--android:elevation="2dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/topContainerGuideLine"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--android:text="Settings"-->
+        <!--android:textSize="16sp"-->
+        <!--android:padding="16dp"-->
+        <!--android:textColor="@color/black100"/>-->
+    <!--<View-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="@id/topContainerGuideLine"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:elevation="1dp"/>-->
+    <!--<ImageView android:id="@+id/picturePreview"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:elevation="2dp"-->
+        <!--android:scaleType="centerInside"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/topContainerGuideLine"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/topContainerPictureGuideLine"-->
+        <!--android:layout_margin="4dp"-->
+        <!--android:visibility="invisible"/>-->
+    <!--<android.support.constraint.Guideline android:id="@+id/topContainerGuideLine"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--app:layout_constraintGuide_percent="0.1"/>-->
+    <!--<android.support.constraint.Guideline android:id="@+id/topContainerPictureGuideLine"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--app:layout_constraintGuide_percent="0.15"/>-->
+
+    <View android:id="@+id/topContainerGuideline"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="64dp"/>
+
+    <android.support.constraint.ConstraintLayout android:id="@+id/cl_ProfileSettingsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/topContainerGuideline"
+        android:elevation="1dp">
+
+        <ImageView android:id="@+id/profilePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/cl_ProfileSettingsShortcut"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#FFFFFF"/>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/cl_ProfileSettingsShortcut"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#FFFFFF">
+
+            <TextView android:id="@+id/tv_Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Settings"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:textColor="@color/black100"/>
+
+            <ImageView android:id="@+id/picturePreview"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="2dp"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="4dp"
+            android:visibility="invisible"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
     <fragment android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="0dp"
@@ -16,17 +120,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView android:id="@+id/tv_Settings"
-        android:elevation="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="Settings"
-        android:textSize="16sp"
-        android:padding="16dp"
-        android:textColor="@color/black100"/>
 
     <android.support.constraint.ConstraintLayout android:id="@+id/searchSettingsPlaceholder"
         android:layout_width="0dp"
@@ -229,12 +322,72 @@
                     android:textSize="16sp"/>
 
             </android.support.constraint.ConstraintLayout>
-
         </android.support.v7.widget.CardView>
-
-
-
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.CardView android:id="@+id/cv_PromptUserImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="12dp"
+        android:elevation="3dp"
+        android:alpha="0"
+        android:visibility="gone"
+        android:scaleX="0.2"
+        android:scaleY="0.2">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView android:id="@+id/tv_PromptTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/border_bottom_primary"
+                android:text="Introduce yourself"
+                android:textColor="@color/hideContainer"
+                android:textSize="16sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView android:id="@+id/tv_PromptDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_PromptTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"
+                android:text="Before you can interact with other users, you must post a picture."
+                android:layout_marginTop="32dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView android:id="@+id/tv_TakeAPicture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_PromptDescription"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/border_top_light"
+                android:text="TAKE A PICTURE"
+                android:layout_marginTop="32dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/failedRed"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
 
 
 </android.support.constraint.ConstraintLayout>

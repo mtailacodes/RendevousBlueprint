@@ -18,6 +18,8 @@ import com.mtailacodes.blueprintrendevouz.Activity.MapSearchActivity;
 import com.mtailacodes.blueprintrendevouz.Activity.SignInActivity;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityNavigationBinding;
 
+import junit.framework.Test;
+
 public class NavigationActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "Navigation Activity";
@@ -58,9 +60,11 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
 //                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 //                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 //                }
+                Intent intent3 = new Intent(this, TestActivity.class);
+                startActivity(intent3);
 
-                Intent intent2 = new Intent(this, MapSearchActivity.class);
-                startActivity(intent2);
+//                Intent intent2 = new Intent(this, MapSearchActivity.class);
+//                startActivity(intent2);
 
         }
     }

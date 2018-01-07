@@ -1,15 +1,11 @@
 package com.mtailacodes.blueprintrendevouz.Util
 
-import android.animation.AnimatorSet
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.provider.ContactsContract
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
+import android.view.animation.*
 import android.widget.TextView
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -89,6 +85,72 @@ object AnimationUtil {
 
         return mAnimatorSet
     }
+
+    fun handleCaptureImageCardview(cardView : CardView, finalValue : Float = 1f, duration: Long = 300): AnimatorSet {
+
+        var animatorSet = AnimatorSet()
+
+        var scaleX = ObjectAnimator.ofFloat(cardView, View.SCALE_X, 0.2f, 1f)
+        var scaleY = ObjectAnimator.ofFloat(cardView, View.SCALE_Y, 0.2f, 1f)
+        var alpha = ObjectAnimator.ofFloat(cardView, View.ALPHA, 0f, 1f)
+
+        animatorSet.playTogether(scaleX, scaleY, alpha)
+        animatorSet.duration = duration
+        animatorSet.interpolator = OvershootInterpolator(1.2f)
+
+        return animatorSet
+    }
+
+    fun translateY (view : View,
+                    translationYValue : Float,
+                    interpolator: Interpolator = DecelerateInterpolator(),
+                    duration: Long = 500,
+                    startDelay: Long = 0): ObjectAnimator{
+
+        var objectAnimator = ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, translationYValue)
+        objectAnimator.duration = duration
+        objectAnimator.interpolator = interpolator
+        objectAnimator.startDelay = startDelay
+
+        return objectAnimator
+    }
+
+    fun scaleY (view : View,
+                      heightToValue : Float = 0f,
+                      interpolator: Interpolator = DecelerateInterpolator(),
+                      duration: Long = 500,
+                      startDelay : Long = 0): ObjectAnimator{
+        view.pivotY = 0f
+        var valueAnimator = ObjectAnimator.ofFloat(view, View.SCALE_Y, heightToValue)
+        valueAnimator.duration = duration
+        valueAnimator.startDelay = startDelay
+        valueAnimator.interpolator = interpolator
+
+        return valueAnimator
+    }
+
+    fun alpha (view : View,
+                    alphaValue : Float,
+                    interpolator: Interpolator = DecelerateInterpolator(),
+                    duration: Long = 300,
+                    startDelay: Long = 0): ObjectAnimator{
+
+        var objectAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, alphaValue)
+        objectAnimator.duration = duration
+        objectAnimator.interpolator = interpolator
+        objectAnimator.startDelay = startDelay
+
+        return objectAnimator
+    }
+
+    fun combineToAnimatorSet (mAnimatorList : ArrayList<Animator>): AnimatorSet{
+        var animatorSet = AnimatorSet()
+        for (item in mAnimatorList) {
+            animatorSet.play(item)
+        }
+        return animatorSet
+    }
+
 
 
 

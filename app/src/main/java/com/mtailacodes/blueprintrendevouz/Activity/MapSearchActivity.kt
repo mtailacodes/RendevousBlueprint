@@ -6,23 +6,30 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
-import android.text.Editable
+import android.support.v4.content.FileProvider
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -34,9 +41,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by matthewtaila on 12/25/17.
@@ -47,19 +59,27 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     //Activity variables
     val activityName_TAG = "MapSearchActivity: "
     val searchSettings_TAG = "Search Settings Data"
+    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
 
+
+    //camera variables
+     lateinit var photoFile: File
+    lateinit var timeStamp: String
+    var canShowPic = false;
 
     // firebase variables
     var mUser = RendevouzUserModel()
     var USER_PERMISSION_FINE_LOCATION = 0
 
     var settingsCompleted = false
+    var imageStored = false
 
     // location variables
     private lateinit var mLocationManager: LocationManager
     private lateinit var mLocationListener: LocationListener
     lateinit var map: MapFragment
     lateinit var mFusedLocationProvider: FusedLocationProviderClient
+    var mAnimationList : ArrayList<Animator> = ArrayList()
 
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
@@ -79,6 +99,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     private fun setOnClickListeners() {
         mBinding.tvSettings.setOnClickListener(this)
+        mBinding.picturePreview.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -89,6 +110,26 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         if (!settingsCompleted){
             getUserSearchSettings()
         }
+
+        if (!imageStored){
+            handleCaptureImageCardView(1f)
+        }
+    }
+
+    private fun handleCaptureImageCardView(finalFloat: Float, hide: Boolean = false) {
+        mBinding.cvPromptUserImage.visibility = VISIBLE
+        var animatorSet = AnimationUtil.handleCaptureImageCardview(mBinding.cvPromptUserImage)
+        animatorSet.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                if (hide){
+                    mBinding.cvPromptUserImage.visibility = GONE
+                    mBinding.tvTakeAPicture.setOnClickListener(null)
+                }
+                mBinding.tvTakeAPicture.setOnClickListener(this@MapSearchActivity)
+            }
+        })
+        animatorSet.start()
     }
 
     private fun getUserSearchSettings() {
@@ -135,11 +176,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
                         resetView(mBinding.tvUserInterestMale)
                         applySelectionHighlight(mBinding.tvUserInterestFemale)
                     }
-
                     mBinding.etUserAgeInput.setText(mSearchSettings.currentAge.toString())
-
-//                    mBinding.rbAgeRangeBar.lef(34f)
-//                    mBinding.rbAgeRangeBar.setMaxStartValue(48f)
                 }
             }
         })
@@ -195,7 +232,99 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
                 getUserSearchSettings()
                 showSettingsCardView(1)
             }
+            R.id.tv_TakeAPicture->{
+                launchCamera()
+            }
+            R.id.picturePreview->{
+                if (canShowPic){
+                    showProfilePicAndSettingsContainer()
+                }
+            }
         }
+    }
+
+    private fun showProfilePicAndSettingsContainer() {
+
+        var displayMetrics =  DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        var width = displayMetrics.widthPixels
+
+        mBinding.profilePic.layoutParams.height = width
+        mBinding.profilePic.layoutParams.width = width
+
+        mAnimationList.clear()
+
+        mAnimationList.add(AnimationUtil.translateY(view = mBinding.clProfileSettingsContainer,
+                translationYValue = width.toFloat(),
+                startDelay = 175))
+        mAnimationList.add(AnimationUtil.scaleY(view = mBinding.clProfileSettingsShortcut,
+                heightToValue =  0f,
+                startDelay = 125))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.tvSettings,
+                alphaValue = 0f,
+                duration = 150))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.picturePreview,
+                duration = 150,
+                alphaValue = 0f))
+
+        var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+        mAnimatorSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                super.onAnimationStart(animation)
+                Glide.with(this@MapSearchActivity).load(photoFile!!.path).into(mBinding.profilePic)
+            }
+        })
+        mAnimatorSet.start()
+    }
+
+    private fun launchCamera() {
+
+        var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE) // creata a camera intent
+
+        photoFile = getPhotoFileUri(generateTimeStamp())
+
+        var fileProvider = FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+
+    }
+
+    private fun generateTimeStamp(): String {
+        var stamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        timeStamp = stamp + ".jpeg"
+        return timeStamp
+    }
+
+    private fun getPhotoFileUri(s: String): File {
+        var imageDirectory : File
+        lateinit var file: File
+        if (isExternalStorageAvailable()){
+            imageDirectory = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MYAPP")
+            if (!imageDirectory.exists() && !imageDirectory.mkdirs()){
+                Log.d("MYAPP", "failed to create directory")
+            }
+             file = File(imageDirectory.path + File.separator + s)
+        }
+        return file
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            handleCaptureImageCardView(0f, hide = true)
+            mBinding.picturePreview.visibility = VISIBLE
+            canShowPic = true
+            Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
+        }
+
+    }
+
+    private fun isExternalStorageAvailable(): Boolean {
+        var state = Environment.getExternalStorageState()
+        return state == Environment.MEDIA_MOUNTED
     }
 
     private fun checkSettingsInput(searchSettings: UserSearchSettings) {
@@ -229,6 +358,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         // todo - add on success listener - onSuccess - hide cardview and show map
     }
 
+    // todo refactor this
     private fun hideSettingsCardview() {
 
         var scaleY = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.SCALE_Y, 0f)
@@ -351,6 +481,5 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             }
         }
     }
-
 
 }
