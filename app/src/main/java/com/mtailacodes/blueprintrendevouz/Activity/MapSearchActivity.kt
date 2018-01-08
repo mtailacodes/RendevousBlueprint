@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
@@ -43,6 +44,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
+import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
 import java.io.File
@@ -54,18 +56,17 @@ import kotlin.collections.ArrayList
  * Created by matthewtaila on 12/25/17.
  */
 
-class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickListener{
+class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickListener, PromptSettingsFragment.UserSearchSettingsListener{
+
 
     //Activity variables
-    val activityName_TAG = "MapSearchActivity: "
     val searchSettings_TAG = "Search Settings Data"
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
 
-
     //camera variables
-     lateinit var photoFile: File
+    lateinit var photoFile: File
     lateinit var timeStamp: String
-    var canShowPic = false;
+    var canShowPic = false
 
     // firebase variables
     var mUser = RendevouzUserModel()
@@ -97,22 +98,45 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    private fun setOnClickListeners() {
-        mBinding.tvSettings.setOnClickListener(this)
-        mBinding.picturePreview.setOnClickListener(this)
+    override fun onStart() {
+        super.onStart()
+        val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
+        if (locationPermission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    USER_PERMISSION_FINE_LOCATION)
+        } else {
+            setupLocationListener()
+            registerLocationListener()
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         mUser = RxUserUtil().getUserModel()
+        //todo - maybe a RxUtil method that returns a userSearchSetting object -
+        // todo - use that to set the user.searchSettings / or dont
+        // todo - user the search Model to determine what to do for the if statement below
 
         if (!settingsCompleted){
             getUserSearchSettings()
+        } else {
+            if (!imageStored) {
+                handleCaptureImageCardView(1f)
+            }
         }
+    }
 
-        if (!imageStored){
-            handleCaptureImageCardView(1f)
+    private fun setOnClickListeners() {
+        mBinding.tvSettings.setOnClickListener(this)
+        mBinding.picturePreview.setOnClickListener(this)
+    }
+
+    override fun searchSettingsValid(passed: Boolean) {
+        if (passed){
+            hideSettingsCardview()
         }
     }
 
@@ -151,8 +175,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     }
 
     private fun showSettingsCardView(control: Int) {
-        enableSearchSettingsCardView()
-
         mBinding.searchSettingsPlaceholder.visibility = VISIBLE
         var animateSettingsContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder,
                 View.ALPHA, 1f)
@@ -160,74 +182,17 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {
                 super.onAnimationStart(animation)
-                if (control == 1){
-                    if (mSearchSettings.gender == "Male"){
-                        resetView(mBinding.tvUserGenderFemale)
-                        applySelectionHighlight(mBinding.tvUserGenderMale)
-                    } else if (mSearchSettings.gender == "Female"){
-                        resetView(mBinding.tvUserGenderMale)
-                        applySelectionHighlight(mBinding.tvUserGenderFemale)
-                    }
-
-                    if (mSearchSettings.sexIntereset == "Male"){
-                        resetView(mBinding.tvUserInterestFemale)
-                        applySelectionHighlight(mBinding.tvUserInterestMale)
-                    } else if (mSearchSettings.sexIntereset == "Female"){
-                        resetView(mBinding.tvUserInterestMale)
-                        applySelectionHighlight(mBinding.tvUserInterestFemale)
-                    }
-                    mBinding.etUserAgeInput.setText(mSearchSettings.currentAge.toString())
-                }
+                val fragment = PromptSettingsFragment()
+                var fragmentTransaction = supportFragmentManager.beginTransaction()
+                        .replace(R.id.zzxxx, fragment)
+                        .commit()
             }
         })
         animateSettingsContainer.start()
     }
 
-    private fun enableSearchSettingsCardView() {
-        mBinding.tvUserGenderMale.setOnClickListener(this)
-        mBinding.tvUserGenderFemale.setOnClickListener(this)
-        mBinding.tvUserInterestMale.setOnClickListener(this)
-        mBinding.tvUserInterestFemale.setOnClickListener(this)
-        mBinding.tvSave.setOnClickListener(this)
-        mBinding.searchSettingsPlaceholder.setOnClickListener ({  _->  })
-
-        mBinding.rbAgeRangeBar.setOnRangeSeekbarChangeListener { minValue, maxValue ->
-            mBinding.tvAgeRangeMin.text = minValue.toString()
-            mBinding.tvAgeRangeMax.text = maxValue.toString()
-            // todo  need to change drawable for the rings
-        }
-    }
-
     override fun onClick(view: View) {
         when(view.id){
-            R.id.tv_UserGenderMale -> {
-                resetView(mBinding.tvUserGenderFemale)
-                applySelectionHighlight(mBinding.tvUserGenderMale)
-                mSearchSettings.gender = "Male"
-                return
-            }
-            R.id.tv_UserGenderFemale -> {
-                resetView(mBinding.tvUserGenderMale)
-                applySelectionHighlight(mBinding.tvUserGenderFemale)
-                mSearchSettings.gender = "Female"
-                return
-            }
-            R.id.tv_UserInterestMale -> {
-                resetView(mBinding.tvUserInterestFemale)
-                applySelectionHighlight(mBinding.tvUserInterestMale)
-                mSearchSettings.sexIntereset= "Male"
-                return
-            }
-            R.id.tv_UserInterestFemale -> {
-                resetView(mBinding.tvUserInterestMale)
-                applySelectionHighlight(mBinding.tvUserInterestFemale)
-                mSearchSettings.sexIntereset= "Female"
-                return
-            }
-            R.id.tv_Save-> {
-                checkSettingsInput(mSearchSettings)
-                return
-            }
             R.id.tv_Settings ->{
                 getUserSearchSettings()
                 showSettingsCardView(1)
@@ -279,7 +244,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     private fun launchCamera() {
 
-        var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE) // creata a camera intent
+        var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         photoFile = getPhotoFileUri(generateTimeStamp())
 
@@ -287,10 +252,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
         if (intent.resolveActivity(getPackageManager()) != null) {
-            // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
-
     }
 
     private fun generateTimeStamp(): String {
@@ -319,7 +282,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             canShowPic = true
             Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
         }
-
     }
 
     private fun isExternalStorageAvailable(): Boolean {
@@ -327,96 +289,31 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         return state == Environment.MEDIA_MOUNTED
     }
 
-    private fun checkSettingsInput(searchSettings: UserSearchSettings) {
-        var pass = false
-
-        // todo maybe add animations to show which fields are set correctly - not necesary right now but when the UI is done we can think about that
-
-        pass = searchSettings.gender == "Male" || searchSettings.gender == "Female"
-
-        pass = searchSettings.sexIntereset ==  "Male" || searchSettings.sexIntereset == "Female"
-
-        if (mBinding.etUserAgeInput.toString().isEmpty()){
-            pass = false
-        }  else {
-            pass = Integer.parseInt(mBinding.etUserAgeInput.text.toString()) >= 18
-        }
-
-        mSearchSettings.currentAge = Integer.parseInt(mBinding.etUserAgeInput.text.toString())
-        mSearchSettings.ageRangeMin = Integer.parseInt(mBinding.tvAgeRangeMin.text.toString())
-        mSearchSettings.ageRangeMax = Integer.parseInt(mBinding.tvAgeRangeMax.text.toString())
-
-        mSearchSettings.settingsCompleted = pass
-
-        var mFirestore = RxUserUtil().UserSettingsCollectionReference(mUser.uuID)
-        mFirestore .document(mUser.uuID).set(mSearchSettings)
-            .addOnSuccessListener{ _ ->
-                hideSettingsCardview()
-            }.addOnFailureListener { e ->
-                Log.d("FirestoreFailure", e.localizedMessage)
-        }
-        // todo - add on success listener - onSuccess - hide cardview and show map
-    }
-
-    // todo refactor this
     private fun hideSettingsCardview() {
+        mAnimationList.clear()
 
-        var scaleY = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.SCALE_Y, 0f)
-        var scaleX = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.SCALE_X, 0f)
-        var alphaCardview = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.ALPHA, 0f)
+        mAnimationList.add(AnimationUtil.scaleY(view = mBinding.cvSearchSettingsContainer,
+                heightToValue =  0f, duration = 200))
+        mAnimationList.add(AnimationUtil.scaleX(view = mBinding.cvSearchSettingsContainer,
+                heightToValue =  0f, duration = 200))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.cvSearchSettingsContainer,
+                alphaValue =  0f, duration = 200))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.searchSettingsPlaceholder,
+                alphaValue =  0f, duration = 400))
 
-        var cardviewAnimatorSet = AnimatorSet()
-        cardviewAnimatorSet.playTogether(scaleX, scaleY, alphaCardview)
-        cardviewAnimatorSet.interpolator = AccelerateInterpolator()
-        cardviewAnimatorSet.duration = 200
-
-        var alphaContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder, View.ALPHA, 0f)
-        alphaContainer.interpolator = AccelerateInterpolator()
-        alphaContainer.duration = 400
-
-        var finalAnimatorSet = AnimatorSet()
-        finalAnimatorSet.playTogether(alphaContainer, cardviewAnimatorSet)
-        finalAnimatorSet.addListener(object : AnimatorListenerAdapter(){
+        var promptSettingsCardViewAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+        promptSettingsCardViewAnimatorSet.interpolator = AccelerateInterpolator()
+        promptSettingsCardViewAnimatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-                var scaleY = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.SCALE_Y, 1f)
-                var scaleX = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.SCALE_X, 1f)
-                var alphaCardview = ObjectAnimator.ofFloat(mBinding.cvSearchSettingsContainer, View.ALPHA, 1f)
-
-                var cardviewAnimatorSet = AnimatorSet()
-                cardviewAnimatorSet.playTogether(scaleX, scaleY, alphaCardview)
-                cardviewAnimatorSet.duration = 0
-                cardviewAnimatorSet.start()
-
                 mBinding.searchSettingsPlaceholder.visibility = GONE
-
+                mBinding.cvSearchSettingsContainer.visibility = GONE
+                if (!imageStored) {
+                    handleCaptureImageCardView(1f)
+                }
             }
         })
-        finalAnimatorSet.start()
-    }
-
-    private fun applySelectionHighlight(view: TextView) {
-        view.setTextColor(ContextCompat.getColor(this, R.color.green))
-    }
-
-    private fun resetView(view: TextView) {
-        view.setTextColor(ContextCompat.getColor(this, R.color.black100))
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
-
-        if (locationPermission == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    USER_PERMISSION_FINE_LOCATION)
-        } else {
-            setupLocationListener()
-            registerLocationListener()
-        }
+        promptSettingsCardViewAnimatorSet.start()
     }
 
     @SuppressLint("MissingPermission")
@@ -435,21 +332,22 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(p0: GoogleMap?) {
-            var maps = p0 // m
-            mFusedLocationProvider.lastLocation
-                    .addOnSuccessListener(this, { location ->
-                        var cameraPosition =  CameraPosition.Builder()
-                                .target( LatLng(location.latitude, location.longitude))
-                                .zoom(17f)
-                                .bearing(90f)                // Sets the orientation of the camera to east
-                                .tilt(0f)                   // Sets the tilt of the camera to 30 degrees
-                                .build()
-                        maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        var maps = p0 // m
+        maps!!.uiSettings.setAllGesturesEnabled(false)
+        mFusedLocationProvider.lastLocation.addOnSuccessListener(this, { location ->
+            var cameraPosition =  CameraPosition.Builder()
+                    .target( LatLng(location.latitude, location.longitude))
+                    .zoom(17f)
+                    .bearing(90f)
+                    .tilt(0f)
+                    .build()
 
-                        if (mUser.uuID == FirebaseAuth.getInstance().currentUser!!.uid){
-                            setLocationVariable(location = location)
-                        }
-                    })
+            maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+            if (mUser.uuID == FirebaseAuth.getInstance().currentUser!!.uid){
+                setLocationVariable(location = location)
+            }
+        })
     }
 
     private fun setupLocationListener() {

@@ -129,6 +129,20 @@ object AnimationUtil {
         return valueAnimator
     }
 
+    fun scaleX (view : View,
+                heightToValue : Float = 0f,
+                interpolator: Interpolator = DecelerateInterpolator(),
+                duration: Long = 500,
+                startDelay : Long = 0): ObjectAnimator{
+        view.pivotY = 0f
+        var valueAnimator = ObjectAnimator.ofFloat(view, View.SCALE_X, heightToValue)
+        valueAnimator.duration = duration
+        valueAnimator.startDelay = startDelay
+        valueAnimator.interpolator = interpolator
+
+        return valueAnimator
+    }
+
     fun alpha (view : View,
                     alphaValue : Float,
                     interpolator: Interpolator = DecelerateInterpolator(),
@@ -150,10 +164,4 @@ object AnimationUtil {
         }
         return animatorSet
     }
-
-
-
-
-
-
 }
