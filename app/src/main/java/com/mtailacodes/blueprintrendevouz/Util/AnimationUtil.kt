@@ -102,7 +102,7 @@ object AnimationUtil {
     }
 
     fun translateY (view : View,
-                    translationYValue : Float,
+                    translationYValue : Float = 0f,
                     interpolator: Interpolator = DecelerateInterpolator(),
                     duration: Long = 500,
                     startDelay: Long = 0): ObjectAnimator{

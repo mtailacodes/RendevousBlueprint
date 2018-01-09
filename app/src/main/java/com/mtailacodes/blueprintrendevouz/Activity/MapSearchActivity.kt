@@ -3,7 +3,6 @@ package com.mtailacodes.blueprintrendevouz.Activity
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,17 +17,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
-import android.widget.TextView
+import android.view.animation.AnimationSet
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -43,6 +44,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
+import com.mtailacodes.blueprintrendevouz.Util.OnSwipeTouchListener
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
@@ -80,7 +82,10 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     private lateinit var mLocationListener: LocationListener
     lateinit var map: MapFragment
     lateinit var mFusedLocationProvider: FusedLocationProviderClient
+
+//    activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
+    var profileCanSwipeUp = false
 
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
@@ -122,10 +127,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
         if (!settingsCompleted){
             getUserSearchSettings()
-        } else {
-            if (!imageStored) {
-                handleCaptureImageCardView(1f)
-            }
         }
     }
 
@@ -165,6 +166,9 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
                 if (data.getBoolean("settingsCompleted")){
                     mSearchSettings = data.toObject(UserSearchSettings::class.java)
                     settingsCompleted = true
+                    if (!imageStored) {
+                        handleCaptureImageCardView(1f)
+                    }
                 } else {
                     showSettingsCardView(0)
                 }
@@ -220,26 +224,67 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         mAnimationList.clear()
 
         mAnimationList.add(AnimationUtil.translateY(view = mBinding.clProfileSettingsContainer,
-                translationYValue = width.toFloat(),
-                startDelay = 175))
+                translationYValue = width.toFloat(), startDelay = 175))
+        mAnimationList.add(AnimationUtil.translateY(view = mBinding.one,
+                translationYValue = width.toFloat() + resources.getDimension(R.dimen.settingsItemList), duration = 600, startDelay = 275))
+        mAnimationList.add(AnimationUtil.translateY(view = mBinding.four,
+                translationYValue = width.toFloat() + (resources.getDimension(R.dimen.settingsItemList))*2, duration = 600, startDelay = 325))
+        mAnimationList.add(AnimationUtil.translateY(view = mBinding.three,
+                translationYValue = width.toFloat() + (resources.getDimension(R.dimen.settingsItemList))*3, duration = 600, startDelay = 375))
         mAnimationList.add(AnimationUtil.scaleY(view = mBinding.clProfileSettingsShortcut,
-                heightToValue =  0f,
-                startDelay = 125))
-        mAnimationList.add(AnimationUtil.alpha(view = mBinding.tvSettings,
-                alphaValue = 0f,
+                heightToValue =  0f, startDelay = 125, duration = 300))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.tvSettings, alphaValue = 0f,
                 duration = 150))
-        mAnimationList.add(AnimationUtil.alpha(view = mBinding.picturePreview,
-                duration = 150,
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.picturePreview, duration = 150,
                 alphaValue = 0f))
 
         var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+        mAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+
         mAnimatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {
                 super.onAnimationStart(animation)
+                mBinding.clProfileSettingsContainer.elevation = 8f
+                mBinding.one.elevation = 6f
+                mBinding.four.elevation = 4f
+                mBinding.three.elevation = 2f
                 Glide.with(this@MapSearchActivity).load(photoFile!!.path).into(mBinding.profilePic)
+                profileCanSwipeUp = true
+                setGestureListener()
             }
         })
         mAnimatorSet.start()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setGestureListener() {
+        mBinding.profilePic.setOnTouchListener(object: OnSwipeTouchListener(this){
+            override fun onSwipeUp() {
+                if (profileCanSwipeUp){
+
+                    mAnimationList.clear()
+
+                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.clProfileSettingsContainer,
+                            startDelay = 60, duration = 350))
+                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.one,  startDelay = 20,
+                            duration = 350))
+                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.four, startDelay = 10,
+                            duration = 350))
+                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.three, duration = 350))
+
+                    mAnimationList.add(AnimationUtil.scaleY(view = mBinding.clProfileSettingsShortcut,
+                            heightToValue =  1f, startDelay = 350, duration = 0))
+                    mAnimationList.add(AnimationUtil.alpha(view = mBinding.tvSettings,
+                            alphaValue = 1f, duration = 350, startDelay = 350))
+                    mAnimationList.add(AnimationUtil.alpha(view = mBinding.picturePreview,
+                            duration = 350, startDelay = 350, alphaValue = 1f))
+
+                    var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+                    mAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+                    mAnimatorSet.start()
+                }
+            }
+        })
     }
 
     private fun launchCamera() {

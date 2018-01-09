@@ -7,6 +7,7 @@
     <dimen name="sideLoginTextView">16sp</dimen>
     <dimen name="middleLoginTextView">36sp</dimen>
     <dimen name="profilePicSquare">300dp</dimen>
+    <dimen name="settingsItemList">64dp</dimen>
 
 
 </resources>
