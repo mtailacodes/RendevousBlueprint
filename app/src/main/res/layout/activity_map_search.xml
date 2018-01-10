@@ -78,26 +78,28 @@
             android:background="#FFFFFF">
 
             <TextView android:id="@+id/tv_Settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="Settings"
-            android:textSize="16sp"
-            android:padding="16dp"
-            android:textColor="@color/black100"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Settings"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:textColor="@color/black100"/>
 
-            <ImageView android:id="@+id/picturePreview"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:elevation="2dp"
-            android:scaleType="centerInside"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="4dp"
-            android:visibility="invisible"/>
+            <com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/picturePreview"
+                android:transitionName="@string/profilePictureTransition"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:elevation="2dp"
+                app:tiv_rounding="1"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="4dp"
+                android:visibility="invisible"/>
 
         </android.support.constraint.ConstraintLayout>
 

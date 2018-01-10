@@ -8,5 +8,6 @@
 
 
     <string name="google_maps_api_key">AIzaSyDL6gX0mckMFx3cBXMJqfnyRGe56g0DuSc</string>
+    <string name="profilePictureTransition">profilePictureTransition</string>
 
 </resources>
