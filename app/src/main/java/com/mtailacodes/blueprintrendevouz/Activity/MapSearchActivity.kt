@@ -1,5 +1,6 @@
 package com.mtailacodes.blueprintrendevouz.Activity
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -68,7 +69,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     // firebase variables
     var mUser = RendevouzUserModel()
-    var USER_PERMISSION_FINE_LOCATION = 0
+    var USER_PERMISSION_FINE_LOCATION = 11
+    var USER_PERMISSION_COARSE_LOCATION = 21
 
     var settingsCompleted = false
     var imageStored = false
@@ -81,7 +83,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
 //    activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
-    var profileCanSwipeUp = false
 
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
@@ -90,24 +91,31 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
 
-        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
-
-        map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
-        map.getMapAsync(this)
+        checkUserPermissionGrantStatus()
 
         setOnClickListeners()
-        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun checkUserPermissionGrantStatus() {
         val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
+        val coarsePermission = ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION)
+
         if (locationPermission == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                     USER_PERMISSION_FINE_LOCATION)
-        } else {
+        } else if (coarsePermission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    USER_PERMISSION_COARSE_LOCATION)
+        } else{
+            mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+
+            map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
+            map.getMapAsync(this)
+
+            mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
             setupLocationListener()
             registerLocationListener()
         }
@@ -211,37 +219,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             }
         }
     }
-
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun setGestureListener() {
-//        mBinding.profilePic.setOnTouchListener(object: OnSwipeTouchListener(this){
-//            override fun onSwipeUp() {
-//                if (profileCanSwipeUp){
-//
-//                    mAnimationList.clear()
-//
-//                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.clProfileSettingsContainer,
-//                            startDelay = 60, duration = 350))
-//                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.one,  startDelay = 20,
-//                            duration = 350))
-//                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.four, startDelay = 10,
-//                            duration = 350))
-//                    mAnimationList.add(AnimationUtil.translateY(view = mBinding.three, duration = 350))
-//
-//                    mAnimationList.add(AnimationUtil.scaleY(view = mBinding.clProfileSettingsShortcut,
-//                            heightToValue =  1f, startDelay = 350, duration = 0))
-//                    mAnimationList.add(AnimationUtil.alpha(view = mBinding.tvSettings,
-//                            alphaValue = 1f, duration = 350, startDelay = 350))
-//                    mAnimationList.add(AnimationUtil.alpha(view = mBinding.picturePreview,
-//                            duration = 350, startDelay = 350, alphaValue = 1f))
-//
-//                    var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
-//                    mAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
-//                    mAnimatorSet.start()
-//                }
-//            }
-//        })
-//    }
 
     private fun launchCamera() {
 
@@ -371,8 +348,15 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         when (requestCode){
             USER_PERMISSION_FINE_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    setupLocationListener()
-                    registerLocationListener()
+                    checkUserPermissionGrantStatus()
+                } else {
+                    // todo prevent location based stuff
+                }
+                return
+            }
+            USER_PERMISSION_COARSE_LOCATION ->{
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    checkUserPermissionGrantStatus()
                 } else {
                     // todo prevent location based stuff
                 }
