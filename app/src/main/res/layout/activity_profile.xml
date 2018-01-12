@@ -1,37 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-    <android.support.constraint.Guideline android:id="@+id/profilePicGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5"/>
+        <android.support.constraint.ConstraintLayout android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/iv_ProfilePicImageView"
-        android:transitionName="@string/profilePictureTransition"
-        app:tiv_rounding="0"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/profilePicGuideline"
-        android:scaleType="centerCrop"/>
+            <android.support.constraint.Guideline android:id="@+id/profilePicGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5"/>
 
-    <android.support.v7.widget.CardView android:id="@+id/testView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/failedRed"
-        android:layout_marginBottom="16dp"></android.support.v7.widget.CardView>
+            <com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/iv_ProfilePicImageView"
+                android:transitionName="@string/profilePictureTransition"
+                app:tiv_rounding="0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/profilePicGuideline"
+                android:scaleType="centerCrop"/>
 
+            <android.support.constraint.ConstraintLayout android:id="@+id/testView"
+                android:layout_width="0dp"
+                android:layout_height="800dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                android:background="#FFFFFF">
 
+                <TextView android:id="@+id/tv_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/black100"
+                    android:textSize="16sp"
+                    android:text="Matthew, "/>
 
-</android.support.constraint.ConstraintLayout>
+                <TextView android:id="@+id/tv_userAge"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    android:text=" 30"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/tv_userName"
+                    app:layout_constraintTop_toTopOf="parent" />
+                
+                <ImageView android:id="@+id/iv_locationIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_userName"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/icon_location_pin"/>
+
+                <TextView android:id="@+id/tv_userLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Novi, MI"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_locationIcon"
+                    android:gravity="bottom"
+                    android:paddingBottom="2dp" />
+
+                <View android:id="@+id/topBreaker"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_userLocation"
+                    android:layout_marginTop="24dp"
+                    android:background="#eeeeee"/>
+
+                <TextView android:id="@+id/tv_sessionDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/topBreaker"
+                    app:layout_constraintBottom_toBottomOf="@+id/descriptionBreaker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:text="Out in HopCat celebrating my birthday"
+                    android:textSize="14sp"
+                    android:textColor="#DE000000"/>
+
+                <View android:id="@+id/descriptionBreaker"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/topBreaker"
+                    android:layout_marginTop="60dp"
+                    android:background="#eeeeee"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/settingsBreaker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:text="Settings"
+                    android:textSize="14sp"
+                    android:textColor="#DE000000"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_right_chevron"
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/settingsBreaker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="16dp" />
+
+                <View android:id="@+id/settingsBreaker"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionBreaker"
+                    android:layout_marginTop="60dp"
+                    android:background="#eeeeee"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/notificationsBreaker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:text="Notifications"
+                    android:textSize="14sp"
+                    android:textColor="#DE000000"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_right_chevron"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/notificationsBreaker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="16dp" />
+
+                <View android:id="@+id/notificationsBreaker"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"
+                    android:layout_marginTop="60dp"
+                    android:background="#eeeeee"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/extra"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:text="Notifications"
+                    android:textSize="14sp"
+                    android:textColor="#DE000000"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_right_chevron"
+                    app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"
+                    app:layout_constraintBottom_toTopOf="@+id/extra"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="16dp" />
+
+                <View android:id="@+id/extra"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"
+                    android:layout_marginTop="60dp"
+                    android:background="#eeeeee"/>
+
+            </android.support.constraint.ConstraintLayout>
+            
+           </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </layout>
