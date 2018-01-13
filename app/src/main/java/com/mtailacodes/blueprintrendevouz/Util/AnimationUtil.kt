@@ -4,6 +4,7 @@ import android.animation.*
 import android.provider.ContactsContract
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
+import android.util.TypedValue
 import android.view.View
 import android.view.animation.*
 import android.widget.TextView
@@ -119,8 +120,8 @@ object AnimationUtil {
                       heightToValue : Float = 0f,
                       interpolator: Interpolator = DecelerateInterpolator(),
                       duration: Long = 500,
-                      startDelay : Long = 0): ObjectAnimator{
-        view.pivotY = 0f
+                      startDelay : Long = 0, pivot: Float = 0f): ObjectAnimator{
+        view.pivotY = pivot
         var valueAnimator = ObjectAnimator.ofFloat(view, View.SCALE_Y, heightToValue)
         valueAnimator.duration = duration
         valueAnimator.startDelay = startDelay
@@ -133,8 +134,8 @@ object AnimationUtil {
                 heightToValue : Float = 0f,
                 interpolator: Interpolator = DecelerateInterpolator(),
                 duration: Long = 500,
-                startDelay : Long = 0): ObjectAnimator{
-        view.pivotY = 0f
+                startDelay : Long = 0, pivot: Float = 0f): ObjectAnimator{
+        view.pivotY = pivot
         var valueAnimator = ObjectAnimator.ofFloat(view, View.SCALE_X, heightToValue)
         valueAnimator.duration = duration
         valueAnimator.startDelay = startDelay
@@ -164,4 +165,48 @@ object AnimationUtil {
         }
         return animatorSet
     }
+
+    fun scaleSearchSettingsTextField(selectedView : TextView, unselectedView: TextView,
+                                     selectedColor: Int, unselectedColor: Int, firstSelection: Boolean): AnimatorSet {
+
+        var mAnimatorSet = AnimatorSet()
+
+        var enlargeSelectedView = ValueAnimator.ofFloat(14f, 16f)
+        enlargeSelectedView.addUpdateListener{ valueAnimator ->
+            var value = valueAnimator.animatedValue as Float
+            selectedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+        }
+
+        var deselectedView = ValueAnimator.ofFloat(16f, 14f)
+        deselectedView.addUpdateListener{ valueAnimator ->
+            var value = valueAnimator.animatedValue as Float
+            unselectedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+        }
+
+        var changeSelectedColor = ValueAnimator.ofArgb(unselectedColor, selectedColor)
+        changeSelectedColor.addUpdateListener { valueAnimator ->
+            var value : Int = valueAnimator.animatedValue as Int
+            selectedView.setTextColor(value)
+        }
+
+        var changeUnselectedColor = ValueAnimator.ofArgb(selectedColor, unselectedColor)
+        changeUnselectedColor.addUpdateListener { valueAnimator ->
+            var value : Int = valueAnimator.animatedValue as Int
+            unselectedView.setTextColor(value)
+        }
+
+        enlargeSelectedView.duration = 300
+        enlargeSelectedView.interpolator = OvershootInterpolator(1.5f)
+        deselectedView.duration = 0
+        deselectedView.interpolator = AccelerateInterpolator()
+
+        if (firstSelection){
+            mAnimatorSet.playTogether(enlargeSelectedView, changeSelectedColor)
+        } else {
+            mAnimatorSet.playTogether(enlargeSelectedView, deselectedView, changeSelectedColor, changeUnselectedColor)
+        }
+        return mAnimatorSet
+    }
+
+
 }
