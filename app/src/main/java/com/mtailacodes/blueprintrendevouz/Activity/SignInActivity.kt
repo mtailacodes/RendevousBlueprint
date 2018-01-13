@@ -20,7 +20,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivitySignInBinding
@@ -85,7 +84,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     if (p0.toString().length >= 6){
                         createUserPasswordPassed = true
-                        setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.green), mBinding.createUserPasswordLine)
+                        setEditFieldColor(mBinding.createUserPasswordInputContainer, resources.getColor(R.color.passGreen), mBinding.createUserPasswordLine)
                         checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
                     } else if (p0.toString().isNotEmpty() && p0.toString().length < 6){
                         createUserPasswordPassed = false
@@ -109,7 +108,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
                         createUserEmailPassed = true
-                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.green), mBinding.createUserEmailLine)
+                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.passGreen), mBinding.createUserEmailLine)
                         checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
                     } else {
                         createUserEmailPassed = false
@@ -122,7 +121,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 if (p1 != p2) {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
                         createUserEmailPassed = true
-                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.green), mBinding.createUserEmailLine)
+                        setEditFieldColor(mBinding.createUserEmailInputContainer, resources.getColor(R.color.passGreen), mBinding.createUserEmailLine)
                         checkCreateUserInput(createUserEmailPassed, createUserPasswordPassed)
                     } else {
                         signUpButtonHandled = false
@@ -144,7 +143,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     if (p0.toString().length >= 6){
                         passwordInputPassed = true
-                        setEditFieldColor(mBinding.signInLayout, resources.getColor(R.color.green), mBinding.passwordLine)
+                        setEditFieldColor(mBinding.signInLayout, resources.getColor(R.color.passGreen), mBinding.passwordLine)
                         checkLogInInputs(emailInputPassed, passwordInputPassed)
                     } else if (p0.toString().isNotEmpty() && p0.toString().length < 6){
                         setEditFieldColor(mBinding.signInLayout, resources.getColor(R.color.failedRed), mBinding.passwordLine)
@@ -168,7 +167,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
                         emailInputPassed = true
-                        setEditFieldColor(mBinding.signInName, resources.getColor(R.color.green), mBinding.emailLine)
+                        setEditFieldColor(mBinding.signInName, resources.getColor(R.color.passGreen), mBinding.emailLine)
                         checkLogInInputs(emailInputPassed, passwordInputPassed)
                     } else {
                         emailInputPassed = false
@@ -182,7 +181,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                 if (p1 != p2) {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
                         emailInputPassed = true
-                        setEditFieldColor(mBinding.signInName, resources.getColor(R.color.green), mBinding.emailLine)
+                        setEditFieldColor(mBinding.signInName, resources.getColor(R.color.passGreen), mBinding.emailLine)
                         checkLogInInputs(emailInputPassed, passwordInputPassed)
                     } else {
                         loginButtonHandled = false
@@ -214,7 +213,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun checkCreateUserInput(createUserEmailPassed: Boolean, createUserPasswordPassed: Boolean) {
-        var buttonEnabledColor  = resources.getColor(R.color.green)
+        var buttonEnabledColor  = resources.getColor(R.color.passGreen)
         var buttonDisabledColor  = resources.getColor(R.color.showContainer)
 
         var disabledTextColor  = resources.getColor(R.color.black100)
@@ -240,7 +239,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
     fun checkLogInInputs (emailInput : Boolean, passwordInput : Boolean){
 
-        var buttonEnabledColor  = resources.getColor(R.color.green)
+        var buttonEnabledColor  = resources.getColor(R.color.passGreen)
         var buttonDisabledColor  = resources.getColor(R.color.showContainer)
 
         var disabledTextColor  = resources.getColor(R.color.black100)
@@ -403,6 +402,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
                 val intent =  Intent(this, MapSearchActivity::class.java)
                 startActivity(intent)
+                finish()
     }
 
     private fun createUserFromEmailAndPassword() {
