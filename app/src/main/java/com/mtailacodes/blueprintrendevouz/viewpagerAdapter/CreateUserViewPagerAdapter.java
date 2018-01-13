@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.mtailacodes.blueprintrendevouz.fragments.CreateUserFirstFragment;
 import com.mtailacodes.blueprintrendevouz.fragments.CreateUserSecondFragment;
 
 /**
@@ -30,7 +29,8 @@ public class CreateUserViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return CreateUserFirstFragment.newInstance(mFirebaseUser);
+//                return CreateUserFirstFragment.newInstance(mFirebaseUser);
+                return CreateUserSecondFragment.newInstance(mFirebaseUser);
             case 1:
                 return CreateUserSecondFragment.newInstance(mFirebaseUser);
             default:

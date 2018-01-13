@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <TextView android:id="@+id/tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black87"
+            android:textSize="16sp"
+            android:text="Matthew, "/>
+
+        <TextView android:id="@+id/tv_userAge"
+            android:layout_width="24dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="16dp"
+            android:text=" 30"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_userName"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView android:id="@+id/iv_locationIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_userName"
+            android:scaleType="center"
+            app:layout_constraintTop_toBottomOf="@+id/tv_userName"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/icon_location_pin"/>
+
+        <TextView android:id="@+id/tv_userLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Novi, MI"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_locationIcon"
+            android:gravity="bottom"
+            android:paddingBottom="2dp" />
+
+    <View android:id="@+id/descriptionBreaker"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#eeeeee"/>
+
+    </android.support.constraint.ConstraintLayout>
+

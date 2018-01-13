@@ -5,26 +5,33 @@ import android.animation.AnimatorListenerAdapter
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.OvershootInterpolator
+import android.widget.LinearLayout
 import com.appeaser.imagetransitionlibrary.ImageTransitionUtil
 import com.bumptech.glide.Glide
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
+import com.mtailacodes.blueprintrendevouz.adapter.HeterogenousProfileSettingsAdapter
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityProfileBinding
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSettings.*
 import java.io.File
 
 /**
  * Created by matthewtaila on 1/8/18.
  */
-class ProfileActivity: AppCompatActivity(){
+class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.OnItemClickListener{
+
 
     private lateinit var photoFile: File
     private lateinit var mBinding: ActivityProfileBinding
 
     //    activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
+    var mProfileSettingsList = ArrayList<ProfileSettingsHeader>()
     var guideline = 0
     var top = 0
     var fabPivotX = 0
@@ -32,9 +39,12 @@ class ProfileActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
+
         setEnterSharedElementCallback(ImageTransitionUtil.DEFAULT_SHARED_ELEMENT_CALLBACK)
+
         photoFile = intent.extras.get("profilePic") as File
-        Glide.with(this).load(photoFile.path).into(mBinding.ivProfilePicImageView)
+
+        Glide.with(this).load(photoFile.path)!!.into(mBinding.ivProfilePicImageView)
 
         mBinding.ivProfilePicImageView.viewTreeObserver.addOnGlobalLayoutListener(
                 object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -61,6 +71,26 @@ class ProfileActivity: AppCompatActivity(){
                         onEnterAnimation()
                     }
                 })
+
+        generateProfileSettingsList()
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        var layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        mBinding.rvProfileSetting.layoutManager = layoutManager
+        var mSettingsAdapter = HeterogenousProfileSettingsAdapter(mProfileSettingsList, this)
+        mBinding.rvProfileSetting.adapter = mSettingsAdapter
+    }
+
+    private fun generateProfileSettingsList() {
+        mProfileSettingsList.add(ProfileHightlight())
+        mProfileSettingsList.add(SessionDescription("Hnaging out with Oscar"))
+        mProfileSettingsList.add(ProfileSettingsBreak())
+        mProfileSettingsList.add(ProfileSettings("Profile information"))
+        mProfileSettingsList.add(ProfileSettings("Search settings"))
+        mProfileSettingsList.add(ProfileSettings("Notification settings"))
+        mProfileSettingsList.add(ProfileSettingsBreak())
     }
 
     private fun onEnterAnimation() {
@@ -105,5 +135,16 @@ class ProfileActivity: AppCompatActivity(){
         })
         hideFAB.start()
         super.onBackPressed()
+    }
+
+    override fun onItemClick(profileSetting: ProfileSettingsHeader) {
+        when (profileSetting.headerType){
+            3->{
+                Log.i("Settings", profileSetting.description)
+            }
+            11->{
+                Log.i("Settings", "Break")
+            }
+        }
     }
 }
