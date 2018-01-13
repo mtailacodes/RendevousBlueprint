@@ -1,16 +1,17 @@
 package com.mtailacodes.blueprintrendevouz.Activity
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.view.ViewPropertyAnimator
 import android.view.ViewTreeObserver
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import com.appeaser.imagetransitionlibrary.ImageTransitionUtil
 import com.bumptech.glide.Glide
 import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityProfileBinding
 import java.io.File
 
@@ -22,8 +23,11 @@ class ProfileActivity: AppCompatActivity(){
     private lateinit var photoFile: File
     private lateinit var mBinding: ActivityProfileBinding
 
+    //    activity variables
+    var mAnimationList : ArrayList<Animator> = ArrayList()
     var guideline = 0
     var top = 0
+    var fabPivotX = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,24 +53,57 @@ class ProfileActivity: AppCompatActivity(){
                     }
                 })
 
+        mBinding.fabCamera.viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        mBinding.fabCamera.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        fabPivotX = mBinding.fabCamera.width/2
+                        onEnterAnimation()
+                    }
+                })
     }
 
     private fun onEnterAnimation() {
-        var asdasd = (top - guideline).toFloat()
-        var batner = ObjectAnimator.ofFloat(mBinding.testView,
-                View.TRANSLATION_Y,
-                - asdasd)
-        batner.duration = 400
-        batner.start()
-    }
 
-    override fun onResume() {
-        super.onResume()
+        var settingsContainerTranslateYValue = (top - guideline).toFloat()
+        var translateContent = AnimationUtil.translateY(mBinding.testView, duration = 400,
+                translationYValue = -settingsContainerTranslateYValue)
 
+        mAnimationList.clear()
+
+        mAnimationList.add(AnimationUtil.scaleY(mBinding.fabCamera, duration = 200,
+                heightToValue = 1f, startDelay = 75, pivot = fabPivotX.toFloat(),
+                interpolator = OvershootInterpolator(1.7f)))
+        mAnimationList.add(AnimationUtil.scaleX(mBinding.fabCamera, duration = 200,
+                heightToValue = 1f, startDelay = 75, pivot = fabPivotX.toFloat(),
+                interpolator = OvershootInterpolator(1.7f)))
+        mAnimationList.add(AnimationUtil.alpha(mBinding.fabCamera, duration = 150,
+                alphaValue = 1f, interpolator = AccelerateInterpolator()))
+
+        var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+
+        translateContent.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                mAnimatorSet.start()
+            }
+        })
+        translateContent.start()
     }
 
     override fun onBackPressed() {
-        supportFinishAfterTransition()
+        var hideFAB = AnimationUtil.alpha(mBinding.fabCamera, duration = 50, alphaValue = 0f)
+        hideFAB.addListener(object: AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                supportFinishAfterTransition()
+            }
+            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
+                super.onAnimationStart(animation, isReverse)
+                mBinding.fabCamera.z = 0f
+            }
+        })
+        hideFAB.start()
         super.onBackPressed()
     }
 }
