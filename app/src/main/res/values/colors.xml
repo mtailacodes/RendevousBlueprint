@@ -2,15 +2,21 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#162029</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#e74c3c</color>
 
     <!--login activity colors-->
     <color name="black100">#000000</color>
+    <color name="black87">#DE000000</color>
+    <color name="black65">#A6000000</color>
+
+
+
+    <color name="darkLineBreakGrey">#e2e2e2</color>
     <color name="showContainer">#FFFFFF</color>
     <color name="hideContainer">#22313F</color>
     <color name="topBar">#162029</color>
     <color name="grey1">#eeeeee</color>
-    <color name="green">#2ecc71</color>
+    <color name="passGreen">#2D9A5B</color>
     <color name="failedRed">#c0392b</color>
 
 
