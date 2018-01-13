@@ -92,43 +92,12 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
 
         checkUserPermissionGrantStatus()
-
         setOnClickListeners()
-    }
-
-    private fun checkUserPermissionGrantStatus() {
-        val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
-        val coarsePermission = ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION)
-
-        if (locationPermission == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    USER_PERMISSION_FINE_LOCATION)
-        } else if (coarsePermission == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    USER_PERMISSION_COARSE_LOCATION)
-        } else{
-            mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
-
-            map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
-            map.getMapAsync(this)
-
-            mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-            setupLocationListener()
-            registerLocationListener()
-        }
     }
 
     override fun onResume() {
         super.onResume()
-
         mUser = RxUserUtil().getUserModel()
-        //todo - maybe a RxUtil method that returns a userSearchSetting object -
-        // todo - use that to set the user.searchSettings / or dont
-        // todo - user the search Model to determine what to do for the if statement below
-
         if (!settingsCompleted){
             getUserSearchSettings()
         }
@@ -147,18 +116,25 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     private fun handleCaptureImageCardView(finalFloat: Float, hide: Boolean = false) {
         mBinding.cvPromptUserImage.visibility = VISIBLE
-        var animatorSet = AnimationUtil.handleCaptureImageCardview(mBinding.cvPromptUserImage)
-        animatorSet.addListener(object : AnimatorListenerAdapter(){
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-                if (hide){
-                    mBinding.cvPromptUserImage.visibility = GONE
-                    mBinding.tvTakeAPicture.setOnClickListener(null)
+        if (!hide){
+            var animatorSet = AnimationUtil.handleCaptureImageCardview(mBinding.cvPromptUserImage)
+            animatorSet.addListener(object : AnimatorListenerAdapter(){
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    if (hide){
+                        mBinding.cvPromptUserImage.visibility = GONE
+                        mBinding.tvTakeAPicture.setOnClickListener(null)
+                    } else {
+                        mBinding.tvTakeAPicture.setOnClickListener(this@MapSearchActivity)
+                    }
                 }
-                mBinding.tvTakeAPicture.setOnClickListener(this@MapSearchActivity)
-            }
-        })
-        animatorSet.start()
+            })
+            animatorSet.start()
+        } else {
+            mBinding.cvPromptUserImage.visibility = GONE
+            mBinding.tvTakeAPicture.setOnClickListener(null)
+        }
+
     }
 
     private fun getUserSearchSettings() {
@@ -190,7 +166,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {
                 super.onAnimationStart(animation)
-                val fragment = PromptSettingsFragment()
+                val fragment = PromptSettingsFragment.newInstance(settingsCompleted)
                 var fragmentTransaction = supportFragmentManager.beginTransaction()
                         .replace(R.id.zzxxx, fragment)
                         .commit()
@@ -256,8 +232,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             handleCaptureImageCardView(0f, hide = true)
+            imageStored = true
             mBinding.picturePreview.visibility = VISIBLE
-            canShowPic = true
             Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
         }
     }
@@ -341,6 +317,31 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         }
     }
 
+    // user permissions functions
+    private fun checkUserPermissionGrantStatus() {
+        val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
+        val coarsePermission = ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION)
+
+        if (locationPermission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    USER_PERMISSION_FINE_LOCATION)
+        } else if (coarsePermission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    USER_PERMISSION_COARSE_LOCATION)
+        } else{
+            mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+
+            map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
+            map.getMapAsync(this)
+
+            mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            setupLocationListener()
+            registerLocationListener()
+        }
+    }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
