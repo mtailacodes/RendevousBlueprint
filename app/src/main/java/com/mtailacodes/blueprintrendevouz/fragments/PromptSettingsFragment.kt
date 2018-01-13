@@ -15,8 +15,7 @@ import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.databinding.FragmentPromptSettingsBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
-import android.widget.AdapterView.OnItemSelectedListener
-
+import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 
 
 /**
@@ -24,14 +23,20 @@ import android.widget.AdapterView.OnItemSelectedListener
  */
 class PromptSettingsFragment: android.support.v4.app.Fragment(), View.OnClickListener{
 
+    open var SETTINGS_COMPLETED: String = "SETTINGS COMPLETED CONDITION"
     lateinit var mBinding: FragmentPromptSettingsBinding
     var mSearchSettings =  UserSearchSettings()
     var mUser = RendevouzUserModel()
     var mSearchSettingsListener : UserSearchSettingsListener? = null
+    var firstSelection = true;
 
     companion object {
-        fun newInstance(): PromptSettingsFragment {
-            return PromptSettingsFragment()
+        fun newInstance(settingsCompleted: Boolean): PromptSettingsFragment {
+            var mFragment = PromptSettingsFragment()
+            var args = Bundle()
+            args.putBoolean("SETTINGS COMPLETED CONDITION", settingsCompleted)
+            mFragment.arguments = args
+            return mFragment
         }
     }
 
@@ -73,26 +78,26 @@ class PromptSettingsFragment: android.support.v4.app.Fragment(), View.OnClickLis
 
         when(view.id){
         R.id.tv_UserGenderMale -> {
-            resetView(mBinding.tvUserGenderFemale)
-            applySelectionHighlight(mBinding.tvUserGenderMale)
+            animateSelectedTextView(mBinding.tvUserGenderMale, mBinding.tvUserGenderFemale)
+            firstSelection = false
             mSearchSettings.gender = "Male"
             return
         }
         R.id.tv_UserGenderFemale -> {
-            resetView(mBinding.tvUserGenderMale)
-            applySelectionHighlight(mBinding.tvUserGenderFemale)
+            animateSelectedTextView(mBinding.tvUserGenderFemale, mBinding.tvUserGenderMale)
+            firstSelection = false
             mSearchSettings.gender = "Female"
             return
             }
         R.id.tv_UserInterestMale -> {
-            resetView(mBinding.tvUserInterestFemale)
-            applySelectionHighlight(mBinding.tvUserInterestMale)
+            animateSelectedTextView(mBinding.tvUserInterestMale, mBinding.tvUserInterestFemale)
+            firstSelection = false
             mSearchSettings.sexIntereset= "Male"
             return
             }
         R.id.tv_UserInterestFemale -> {
-            resetView(mBinding.tvUserInterestMale)
-            applySelectionHighlight(mBinding.tvUserInterestFemale)
+            animateSelectedTextView(mBinding.tvUserInterestFemale, mBinding.tvUserInterestMale)
+            firstSelection = false
             mSearchSettings.sexIntereset= "Female"
             return
             }
@@ -103,12 +108,13 @@ class PromptSettingsFragment: android.support.v4.app.Fragment(), View.OnClickLis
         }
     }
 
-    private fun applySelectionHighlight(view: TextView) {
-        view.setTextColor(ContextCompat.getColor(activity, R.color.green))
-    }
+    private fun animateSelectedTextView(tvUserGenderMale: TextView, tvUserGenderFemale: TextView) {
+        var selectedColor: Int = resources.getColor(R.color.passGreen)
+        var unselectedColor: Int = resources.getColor(R.color.black65)
+        var mAnimatorSet = AnimationUtil.scaleSearchSettingsTextField(tvUserGenderMale, tvUserGenderFemale,
+                selectedColor, unselectedColor, firstSelection)
+        mAnimatorSet.start()
 
-    private fun resetView(view: TextView) {
-        view.setTextColor(ContextCompat.getColor(activity, R.color.black100))
     }
 
     private fun checkSettingsInput(searchSettings: UserSearchSettings): Boolean {
