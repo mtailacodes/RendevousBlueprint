@@ -15,7 +15,6 @@ import com.mtailacodes.blueprintrendevouz.MyApplication;
 import com.mtailacodes.blueprintrendevouz.R;
 import com.mtailacodes.blueprintrendevouz.Util.Tags;
 import com.mtailacodes.blueprintrendevouz.databinding.FragmentCreateUserSecondBinding;
-import com.mtailacodes.blueprintrendevouz.models.user.user.ParentUser;
 
 import io.reactivex.functions.Consumer;
 
@@ -46,9 +45,9 @@ public class CreateUserSecondFragment extends Fragment implements View.OnClickLi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object object) throws Exception {
-                        if (object instanceof ParentUser){
-                            Log.i("Second Parent", String.valueOf(((ParentUser) object).getmFirebaseUser().getEmail()));
-                        }
+//                        if (object instanceof ParentUser){
+//                            Log.i("Second Parent", String.valueOf(((ParentUser) object).getmFirebaseUser().getEmail()));
+//                        }
                     }
                 });
     }

@@ -18,7 +18,6 @@ import com.mtailacodes.blueprintrendevouz.MyApplication;
 import com.mtailacodes.blueprintrendevouz.R;
 import com.mtailacodes.blueprintrendevouz.Util.Tags;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityLoginBinding;
-import com.mtailacodes.blueprintrendevouz.models.user.user.ParentUser;
 
 import io.reactivex.functions.Consumer;
 
@@ -59,16 +58,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object object) throws Exception {
-
-                        if (object instanceof ParentUser){
-                            ParentUser user = (ParentUser) object;
-                            if (user.getmFirebaseUser() != null){
-                                // todo - have another function here called to broadcast to the second fragment to update it's firebase User. Maybe send the ParentUser object
-                                Log.i("main Activity", String.valueOf(user.getmFirebaseUser().getEmail()));
-                                mBinding.vpCreateUserViewPager.setCurrentItem(2);
-                                mBinding.siCreateUserStepIndicator.setCurrentStep(1);
-                            }
-                        }
 
 
                         if (object instanceof String) {
