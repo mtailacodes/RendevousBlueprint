@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -234,7 +235,10 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             handleCaptureImageCardView(0f, hide = true)
             imageStored = true
             mBinding.picturePreview.visibility = VISIBLE
-            Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
+            var bMap = BitmapFactory.decodeFile(photoFile!!.path)
+            mBinding.picturePreview.setImageBitmap(bMap)
+
+//            Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
         }
     }
 

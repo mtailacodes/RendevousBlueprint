@@ -9,5 +9,7 @@
     <dimen name="profilePicSquare">300dp</dimen>
     <dimen name="settingsItemList">64dp</dimen>
 
+    <dimen name="searchSettingsTitleTranslationValue">40dp</dimen>
+
 
 </resources>
