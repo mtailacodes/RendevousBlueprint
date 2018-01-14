@@ -86,11 +86,10 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
         var profileSettings = mSettingsList[position] as ProfileSettings
         profileSettingsViewholder.settingsTitle.text = profileSettings.description
         profileSettingsViewholder.container.setOnClickListener { _ ->
-             fun onClick(p0: View?) {
                 if (mItemListener != null){
-                    mItemListener.onItemClick(profileSettings)
+                    mItemListener.onItemClick(profileSettings, profileSettingsViewholder, position)
                 }
-            }
+
         }
     }
 
@@ -128,7 +127,7 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface OnItemClickListener{
-        fun onItemClick(profileSetting: ProfileSettingsHeader)
+        fun onItemClick(profileSetting: ProfileSettingsHeader, viewHolder: RecyclerView.ViewHolder, position: Int)
     }
 
 }

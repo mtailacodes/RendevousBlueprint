@@ -2,10 +2,15 @@ package com.mtailacodes.blueprintrendevouz.Activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
@@ -18,7 +23,9 @@ import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.adapter.HeterogenousProfileSettingsAdapter
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityProfileBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSettings.*
+import com.mtailacodes.blueprintrendevouz.viewholder.SettingsViewholder
 import java.io.File
+import java.text.FieldPosition
 
 /**
  * Created by matthewtaila on 1/8/18.
@@ -137,9 +144,35 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
         super.onBackPressed()
     }
 
-    override fun onItemClick(profileSetting: ProfileSettingsHeader) {
+    override fun onItemClick(profileSetting: ProfileSettingsHeader, viewHolder: RecyclerView.ViewHolder, position: Int) {
         when (profileSetting.headerType){
             3->{
+                if (profileSetting.description.equals( "Search settings")){
+                    var holder = viewHolder as SettingsViewholder
+                    holder.container.transitionName = "searchSettingsActivity"
+
+                    var hideFAB = AnimationUtil.alpha(mBinding.fabCamera, duration = 50, alphaValue = 0f)
+                    var hidePic = AnimationUtil.alpha(mBinding.ivProfilePicImageView, duration = 50, alphaValue = 0f)
+
+                    var animatorSet = AnimatorSet()
+                    animatorSet.playTogether(hidePic, hideFAB)
+                    animatorSet.addListener(object: AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                            super.onAnimationEnd(animation, isReverse)
+                            mBinding.fabCamera.z = 0f
+                            var intent = Intent(this@ProfileActivity, SearchSettingsActivity::class.java)
+                            var options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    this@ProfileActivity, viewHolder.container,
+                                    "searchSettingsActivity")
+                            startActivity(intent, options.toBundle())
+                        }
+                    })
+                    animatorSet.start()
+
+
+
+
+                }
                 Log.i("Settings", profileSetting.description)
             }
             11->{
