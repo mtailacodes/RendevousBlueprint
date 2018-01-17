@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView android:id="@+id/cv_SettingsTitle"
         android:layout_width="0dp"
         android:layout_height="96dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,6 +32,15 @@
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView android:id="@+id/rv_SearchSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_SettingsTitle">
+
+    </android.support.v7.widget.RecyclerView>
 
 
 

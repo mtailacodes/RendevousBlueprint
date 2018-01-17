@@ -77,7 +77,7 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
                 configureProfileSettingsViewholder(profileSettingsViewholder, position)
             }
             SETTINGS_BREAK -> {
-                var breakSettingsViewholder= holder as ProfileSettingsBreakViewholer
+                var breakSettingsViewholder = holder as ProfileSettingsBreakViewholer
             }
         }
     }
@@ -123,8 +123,6 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
             return -1
         }
     }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface OnItemClickListener{
         fun onItemClick(profileSetting: ProfileSettingsHeader, viewHolder: RecyclerView.ViewHolder, position: Int)
