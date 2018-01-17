@@ -400,9 +400,9 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 //            }
 //        }
 
-                val intent =  Intent(this, MapSearchActivity::class.java)
+                val intent =  Intent(this, SearchSettingsActivity::class.java)
                 startActivity(intent)
-                finish()
+//                finish()
     }
 
     private fun createUserFromEmailAndPassword() {
