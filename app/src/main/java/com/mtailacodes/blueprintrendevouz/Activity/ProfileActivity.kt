@@ -23,6 +23,7 @@ import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.adapter.HeterogenousProfileSettingsAdapter
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityProfileBinding
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSettings.*
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
 import com.mtailacodes.blueprintrendevouz.viewholder.SettingsViewholder
 import java.io.File
 import java.text.FieldPosition
@@ -42,6 +43,7 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
     var guideline = 0
     var top = 0
     var fabPivotX = 0
+    lateinit var mSearchSettings : UserSearchSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,7 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
         setEnterSharedElementCallback(ImageTransitionUtil.DEFAULT_SHARED_ELEMENT_CALLBACK)
 
         photoFile = intent.extras.get("profilePic") as File
-
+        mSearchSettings = intent.extras.get("SearchSettings") as UserSearchSettings
         Glide.with(this).load(photoFile.path)!!.into(mBinding.ivProfilePicImageView)
 
         mBinding.ivProfilePicImageView.viewTreeObserver.addOnGlobalLayoutListener(
@@ -169,6 +171,7 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
 //                    })
 //                    animatorSet.start()
                     var intent = Intent(this@ProfileActivity, SearchSettingsActivity::class.java)
+                    intent.putExtra("SearchSettings", mSearchSettings)
                     startActivity(intent)
 
                 }
