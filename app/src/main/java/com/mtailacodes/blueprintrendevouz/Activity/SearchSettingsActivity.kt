@@ -1,9 +1,6 @@
 package com.mtailacodes.blueprintrendevouz.Activity
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +14,7 @@ import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.adapter.SearchSettingsHetAdapter
 import com.mtailacodes.blueprintrendevouz.databinding.ActivitySearchSettingsBinding
 import android.transition.TransitionManager
+import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSettings.ProfileSettings
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.searchSettings.SearchSettings
 import com.mtailacodes.blueprintrendevouz.viewholder.GenderInterestViewholder
@@ -43,14 +41,11 @@ class SearchSettingsActivity: AppCompatActivity(), SearchSettingsHetAdapter.OnIt
     }
 
     private fun generateList() {
-        var asd = SearchSettings
-        asd.type = SearchSettings.BREAK
 
-        var searchSetting2= SearchSettings
-        searchSetting2.type = SearchSettings.GENDER_INTEREST
-
-        mSearchSettingsItems.add(asd)
-
+        mSearchSettingsItems.add(SearchSettings(Constants.BREAK))
+        mSearchSettingsItems.add(SearchSettings(Constants.GENDER_INTEREST))
+        mSearchSettingsItems.add(SearchSettings(Constants.AGE_RANGE))
+        mSearchSettingsItems.add(SearchSettings(Constants.DISTANCE_RANGE))
 
         setupRecyclerView()
     }
@@ -83,8 +78,8 @@ class SearchSettingsActivity: AppCompatActivity(), SearchSettingsHetAdapter.OnIt
 
     override fun onItemClick(itemView: View, position: Int, holder: ParentSearchSettingsViewholder) {
 
-        var backgroundLight = resources.getColor(R.color.showContainer)
-        var backgroundWDark = resources.getColor(R.color.e)
+        var backgroundLight = resources.getColor(R.color.selectedSearchSettingItem)
+        var backgroundWDark = resources.getColor(R.color.unselectedSearchSettingItem)
 
         var position = holder.adapterPosition
 
@@ -103,11 +98,55 @@ class SearchSettingsActivity: AppCompatActivity(), SearchSettingsHetAdapter.OnIt
                     super.onAnimationStart(animation)
                     holder.subContainer.visibility = View.GONE
                     mAdapter.notifyItemChanged(position, COLLAPSE)
+                    expandedPosition = -1
                 }
             })
             toDark.start()
 
-        } else {
+        }  else if (expandedPosition != -1 && expandedPosition != position){
+            var holder2 : ParentSearchSettingsViewholder =  mBinding.rvSearchSettings.findViewHolderForAdapterPosition(expandedPosition) as ParentSearchSettingsViewholder
+
+            val toDark = ValueAnimator.ofObject(ArgbEvaluator(), backgroundLight, backgroundWDark)
+            toDark.addUpdateListener { valueAnimator ->
+                var value : Int = valueAnimator.animatedValue as Int
+                holder2.container.setBackgroundColor(value) // todo - user proper syntax - ask tom why it wont work when you take out set
+            }
+            toDark.addListener(object : AnimatorListenerAdapter(){
+                override fun onAnimationStart(animation: Animator?) {
+                    super.onAnimationStart(animation)
+                    holder2.subContainer.visibility = View.GONE
+                    mAdapter.notifyItemChanged(expandedPosition, COLLAPSE)
+                }
+                override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                    super.onAnimationEnd(animation, isReverse)
+                    expandedPosition = position
+
+                }
+            })
+
+
+            val toLight = ValueAnimator.ofObject(ArgbEvaluator(),  backgroundWDark, backgroundLight)
+            toLight.addUpdateListener { valueAnimator ->
+                var value : Int = valueAnimator.animatedValue as Int
+                holder.container.setBackgroundColor(value) // todo - user proper syntax - ask tom why it wont work when you take out set
+            }
+            toLight.addListener(object : AnimatorListenerAdapter(){
+                override fun onAnimationStart(animation: Animator?) {
+                    super.onAnimationStart(animation)
+                    mAdapter.notifyItemChanged(expandedPosition, EXPAND)
+                }
+                override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                    super.onAnimationEnd(animation, isReverse)
+                    expandedPosition = position
+                }
+            })
+
+            var animatorSet = AnimatorSet()
+            animatorSet.playTogether(toLight, toDark)
+            animatorSet.start()
+
+
+        } else if (expandedPosition == -1){
             expandedPosition = position
 
             val toDark = ValueAnimator.ofObject(ArgbEvaluator(), backgroundWDark, backgroundLight)

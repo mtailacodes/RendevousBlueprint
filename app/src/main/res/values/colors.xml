@@ -18,7 +18,8 @@
     <color name="grey1">#eeeeee</color>
     <color name="passGreen">#2D9A5B</color>
     <color name="failedRed">#c0392b</color>
-
+    <color name="unselectedSearchSettingItem">#fcfcfc</color>
+    <color name="selectedSearchSettingItem">#FFFFFF</color>
 
 
 </resources>

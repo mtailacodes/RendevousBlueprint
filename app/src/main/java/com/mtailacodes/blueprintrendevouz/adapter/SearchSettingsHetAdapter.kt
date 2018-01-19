@@ -12,12 +12,11 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.Util.Constants
+import com.mtailacodes.blueprintrendevouz.Util.Constants.GENDER_INTEREST
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSettings.ProfileSettings
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.searchSettings.SearchSettings
-import com.mtailacodes.blueprintrendevouz.viewholder.GenderInterestViewholder
-import com.mtailacodes.blueprintrendevouz.viewholder.ParentSearchSettingsViewholder
-import com.mtailacodes.blueprintrendevouz.viewholder.ProfileHightlightViewholder
-import com.mtailacodes.blueprintrendevouz.viewholder.ProfileSettingsBreakViewholer
+import com.mtailacodes.blueprintrendevouz.viewholder.*
 
 /**
  * Created by matthewtaila on 1/14/18.
@@ -36,20 +35,40 @@ class SearchSettingsHetAdapter(context: Context, mSettingsList: ArrayList<Search
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType){
-            SearchSettings.GENDER_INTEREST -> {
+            Constants.GENDER_INTEREST -> {
                 var genderInterestViewholder = holder as GenderInterestViewholder
                 configureGenderInterestViewholder(genderInterestViewholder, position)
             }
-            SearchSettings.BREAK -> {
+            Constants.AGE_RANGE-> {
+                var genderRangeViewholder = holder as AgeRangeViewholder
+                configureAgeRangeViewholder(genderRangeViewholder, position)
+            }
+            Constants.DISTANCE_RANGE-> {
+                var distanceRangeViewholder = holder as SearchDistanceViewholder
+                configureSearchDistanceViewholder(distanceRangeViewholder, position)
+            }
+            Constants.BREAK -> {
                 var breakViewholder = holder as ProfileSettingsBreakViewholer
             }
         }
     }
 
+    private fun configureSearchDistanceViewholder(distanceRangeViewholder: SearchDistanceViewholder, position: Int) {
+        distanceRangeViewholder.container.setOnClickListener({ view ->
+            mListener.onItemClick(view, position, distanceRangeViewholder)
+        })
+    }
+
+    private fun configureAgeRangeViewholder(genderRangeViewholder: AgeRangeViewholder, position: Int) {
+        genderRangeViewholder.container.setOnClickListener({ view ->
+            mListener.onItemClick(view, position, genderRangeViewholder)
+        })
+    }
+
     private fun configureGenderInterestViewholder(genderInterestViewholder: GenderInterestViewholder, position: Int) {
         genderInterestViewholder.container.setOnClickListener({ view ->
             mListener.onItemClick(view, position, genderInterestViewholder)
-        } )
+        })
     }
 
 
@@ -58,13 +77,25 @@ class SearchSettingsHetAdapter(context: Context, mSettingsList: ArrayList<Search
         var inflator = LayoutInflater.from(parent.context)
 
         when (viewType) {
-            SearchSettings.GENDER_INTEREST -> {
+            Constants.GENDER_INTEREST -> {
                 var genderInterestLayout = inflator.inflate(R.layout.item_list_gender_interest,
                         parent, false)
                 mViewHolder = GenderInterestViewholder(genderInterestLayout)
                 return mViewHolder
             }
-            SearchSettings.BREAK -> {
+            Constants.AGE_RANGE-> {
+                var ageRangeLayout = inflator.inflate(R.layout.item_list_age_range_search_setting,
+                        parent, false)
+                mViewHolder = AgeRangeViewholder(ageRangeLayout)
+                return mViewHolder
+            }
+            Constants.DISTANCE_RANGE -> {
+                var distanceRangeLayout = inflator.inflate(R.layout.item_list_search_distance,
+                        parent, false)
+                mViewHolder = SearchDistanceViewholder(distanceRangeLayout)
+                return mViewHolder
+            }
+            Constants.BREAK -> {
                 var breakLayout = inflator.inflate(R.layout.item_list_break,
                         parent, false)
                 mViewHolder = ProfileSettingsBreakViewholer(breakLayout)
@@ -80,11 +111,17 @@ class SearchSettingsHetAdapter(context: Context, mSettingsList: ArrayList<Search
 
     override fun getItemViewType(position: Int): Int {
         when (mSearchSettingsItems[position].type){
-            SearchSettings.GENDER_INTEREST ->{
-                return SearchSettings.GENDER_INTEREST
+            Constants.GENDER_INTEREST ->{
+                return Constants.GENDER_INTEREST
             }
-            SearchSettings.BREAK->{
-                return SearchSettings.BREAK
+            Constants.BREAK ->{
+                return Constants.BREAK
+            }
+            Constants.AGE_RANGE ->{
+                return Constants.AGE_RANGE
+            }
+            Constants.DISTANCE_RANGE ->{
+                return Constants.DISTANCE_RANGE
             }
         }
         return -1
