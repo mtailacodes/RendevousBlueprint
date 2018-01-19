@@ -62,11 +62,11 @@ class SearchSettingsActivity: AppCompatActivity(){
                 duration = 500))
         mAnimationList.add(AnimationUtil.alpha(mBinding.tvSettingsTitle, duration = 700, startDelay = 200,
                 alphaValue = 1f))
-        mAnimationList.add(AnimationUtil.alpha(mBinding.clGenderInterestContainer, duration = 600, startDelay = 200,
+        mAnimationList.add(AnimationUtil.alpha(mBinding.clGenderInterestContainer, duration = 300, startDelay = 200,
                 alphaValue = 1f))
-        mAnimationList.add(AnimationUtil.alpha(mBinding.clAgeRangeContainer, duration = 600, startDelay = 400,
+        mAnimationList.add(AnimationUtil.alpha(mBinding.clAgeRangeContainer, duration = 300, startDelay = 400,
                 alphaValue = 1f))
-        mAnimationList.add(AnimationUtil.alpha(mBinding.clDistanceRangeContainer, duration = 600, startDelay = 600,
+        mAnimationList.add(AnimationUtil.alpha(mBinding.clDistanceRangeContainer, duration = 300, startDelay = 600,
                 alphaValue = 1f))
 
         var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
