@@ -44,6 +44,7 @@
         <activity android:name=".TestActivity"></activity>
         <activity android:name=".Activity.ProfileActivity"></activity>
         <activity android:name=".Activity.RangeBarActivity"></activity>
+        <activity android:name=".Activity.NotificationSettingsActivity"></activity>
         <activity android:name=".Activity.SearchSettingsActivity" android:theme="@style/SearchSetting">
         </activity>
 

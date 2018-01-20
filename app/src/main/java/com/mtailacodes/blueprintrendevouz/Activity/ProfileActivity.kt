@@ -174,8 +174,10 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
                     intent.putExtra("SearchSettings", mSearchSettings)
                     startActivity(intent)
 
+                } else if (profileSetting.description == "Notification settings"){
+                    var intent = Intent(this@ProfileActivity, NotificationSettingsActivity::class.java)
+                    startActivity(intent)
                 }
-                Log.i("Settings", profileSetting.description)
             }
             11->{
                 Log.i("Settings", "Break")
