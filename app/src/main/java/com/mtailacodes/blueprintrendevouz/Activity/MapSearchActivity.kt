@@ -179,13 +179,17 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onClick(view: View) {
         when(view.id){
             R.id.tv_Settings ->{
-                getUserSearchSettings()
-                showSettingsCardView(1)
+//                getUserSearchSettings()
+//                showSettingsCardView(1)
+
+                var intent = Intent(this@MapSearchActivity, SearchSettingsActivity::class.java)
+                intent.putExtra("SearchSettings", mSearchSettings)
+                startActivity(intent)
             }
-            R.id.tv_TakeAPicture->{
+            R.id.tv_TakeAPicture ->{
                 launchCamera()
             }
-            R.id.picturePreview->{
+             R.id.picturePreview ->{
                 var intent = Intent(this, ProfileActivity::class.java)
                 intent.putExtra("SearchSettings", mSearchSettings)
                 intent.putExtra("profilePic", photoFile)
