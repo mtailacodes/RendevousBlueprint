@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <!--// guidelines-->
+        <android.support.constraint.Guideline android:id="@+id/iconGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.075"/>
+        <android.support.constraint.Guideline android:id="@+id/titleGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <!--// Username Views-->
+        <ImageView android:id="@+id/iv_Username"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="@+id/iconGuideline"
+            app:layout_constraintEnd_toEndOf="@+id/iconGuideline"
+            app:layout_constraintTop_toTopOf="@+id/tv_UsernameTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UsernameTitle"
+            app:srcCompat="@drawable/icon_username" />
+        <TextView android:id="@+id/tv_UsernameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/titleGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UsernameBreak"
+            android:text="Username"
+            android:textColor="@color/black87"
+            android:textSize="20sp"/>
+        <TextView android:id="@+id/tv_UsernameValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UsernameTitle"
+            android:text="Matthew "
+            android:layout_marginEnd="44dp"
+            android:textColor="#8e8e8e"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_right_chevron"
+            app:layout_constraintTop_toTopOf="@+id/tv_UsernameValue"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UsernameValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"/>
+        <View android:id="@+id/v_UsernameBreak"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="64dp"
+            android:background="#eeeeee"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
+        <View android:id="@+id/v_UsernameContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UsernameBreak"/>
+
+        <!--// Age Views-->
+        <ImageView android:id="@+id/iv_Age"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="@+id/iconGuideline"
+            app:layout_constraintEnd_toEndOf="@+id/iconGuideline"
+            app:layout_constraintTop_toTopOf="@+id/tv_UserAgeTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UserAgeTitle"
+            app:srcCompat="@drawable/icon_calendar" />
+        <TextView android:id="@+id/tv_UserAgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/titleGuideline"
+            app:layout_constraintTop_toTopOf="@+id/v_UsernameBreak"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UserAgeBreak"
+            android:text="Birth date"
+            android:textColor="@color/black87"
+            android:textSize="20sp"/>
+        <TextView android:id="@+id/tv_UserAgeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_UserAgeTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UserAgeTitle"
+            android:text="5th April, 87  - 30 "
+            android:layout_marginEnd="48dp"
+            android:textColor="#8e8e8e"
+            android:textSize="16sp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_right_chevron"
+            app:layout_constraintTop_toTopOf="@+id/tv_UserAgeValue"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UserAgeValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"/>
+        <View android:id="@+id/v_UserAgeBreak"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_UsernameBreak"
+            android:background="#eeeeee"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="64dp"/>
+        <View android:id="@+id/v_UserAgeContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_UsernameContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UserAgeBreak"/>
+
+        <!--// Session Views-->
+        <android.support.constraint.ConstraintLayout android:id="@+id/v_UserSessionContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_UserAgeContainer">
+
+            <android.support.constraint.Guideline android:id="@+id/iconGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.075"/>
+            <android.support.constraint.Guideline android:id="@+id/titleGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.13"/>
+
+            <ImageView android:id="@+id/iv_Session"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintStart_toStartOf="@+id/iconGuideline1"
+                app:layout_constraintEnd_toEndOf="@+id/iconGuideline1"
+                app:layout_constraintTop_toTopOf="@+id/tv_UserSessionDescriptionTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_UserSessionDescriptionTitle"
+                app:srcCompat="@drawable/icon_session"
+                android:layout_marginStart="16dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_right_chevron"
+                app:layout_constraintTop_toTopOf="@+id/tv_UserSessionDescriptionTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_UserSessionDescriptionTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"/>
+            <TextView android:id="@+id/tv_UserSessionDescriptionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/titleGuideline1"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Your current activity"
+
+                android:layout_marginTop="24dp"
+                android:textColor="@color/black87"
+                android:textSize="20sp"/>
+            <TextView android:id="@+id/tv_UserUserSessionDescriptionValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/tv_UserSessionDescriptionTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:textAlignment="textStart"
+                app:layout_constraintTop_toBottomOf="@+id/tv_UserSessionDescriptionTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="Out in Royak Oak celebrating my 30th birthday. Come say hello :)"
+                android:textColor="#8e8e8e"
+                android:textSize="16sp"/>
+            <View android:id="@+id/v_UserSessionBreak"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#eeeeee"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <!--// Email/Password Views-->
+        <ImageView android:id="@+id/iv_Email"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="@+id/iconGuideline"
+            app:layout_constraintEnd_toEndOf="@+id/iconGuideline"
+            app:layout_constraintTop_toTopOf="@+id/tv_UserEmailTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UserEmailTitle"
+            app:srcCompat="@drawable/icon_fingerprint" />
+        <TextView android:id="@+id/tv_UserEmailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/titleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/v_UserSessionContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UserEmailBreak"
+            android:text="Email and Password "
+            android:textColor="@color/black87"
+            android:textSize="20sp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_right_chevron"
+            app:layout_constraintTop_toTopOf="@+id/tv_UserEmailTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_UserEmailTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"/>
+        <View android:id="@+id/v_UserEmailBreak"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_UserSessionContainer"
+            android:background="#eeeeee"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="64dp"/>
+        <View android:id="@+id/v_UserEmailContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_UserSessionContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/v_UserEmailBreak"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

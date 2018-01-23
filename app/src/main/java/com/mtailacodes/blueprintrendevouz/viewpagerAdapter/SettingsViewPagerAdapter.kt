@@ -3,6 +3,7 @@ package com.mtailacodes.blueprintrendevouz.viewpagerAdapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.mtailacodes.blueprintrendevouz.fragments.PersonalSettingsFragment
 import com.mtailacodes.blueprintrendevouz.fragments.SearchSettingsFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
 
@@ -22,7 +23,7 @@ class SettingsViewPagerAdapter: FragmentPagerAdapter{
         lateinit var mFragment : Fragment
         when(position){
             0 -> { mFragment = SearchSettingsFragment.newInstance(mSearchSettings) }
-            1 -> { mFragment = SearchSettingsFragment.newInstance(mSearchSettings) }
+            1 -> { mFragment = PersonalSettingsFragment.newInstance() }
             2 -> { mFragment =  SearchSettingsFragment.newInstance(mSearchSettings) }
         }
         return mFragment

@@ -20,6 +20,7 @@
     <color name="failedRed">#c0392b</color>
     <color name="unselectedSearchSettingItem">#fcfcfc</color>
     <color name="selectedSearchSettingItem">#FFFFFF</color>
+    <color name="iconPurple">#BF55EC</color>
 
 
 </resources>
