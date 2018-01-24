@@ -45,6 +45,7 @@ import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
+import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
 import java.io.File
@@ -84,16 +85,22 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
 //    activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
-
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
-
         checkUserPermissionGrantStatus()
         setOnClickListeners()
+        showCard()
+    }
+
+    private fun showCard() {
+        val fragment = UserCardFragment.newInstance()
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+                .replace(R.id.userListFragment, fragment)
+                .commit()
     }
 
     override fun onResume() {

@@ -14,6 +14,7 @@ class RendevouzUserModel() : Parcelable {
     var emailAddress = "defaulUser"
     var uuID = "defaulUser"
     var username = "defaultUser"
+    var stub = 0
 
     // coodinates
     internal var latLng = LatLng(0.4, 0.4)
@@ -22,6 +23,7 @@ class RendevouzUserModel() : Parcelable {
         emailAddress = parcel.readString()
         uuID = parcel.readString()
         username = parcel.readString()
+        stub = parcel.readInt()
         latLng = parcel.readParcelable(LatLng::class.java.classLoader)
     }
 
@@ -29,6 +31,7 @@ class RendevouzUserModel() : Parcelable {
         parcel.writeString(emailAddress)
         parcel.writeString(uuID)
         parcel.writeString(username)
+        parcel.writeInt(stub)
         parcel.writeParcelable(latLng, flags)
     }
 
@@ -45,6 +48,7 @@ class RendevouzUserModel() : Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 
 }
 
