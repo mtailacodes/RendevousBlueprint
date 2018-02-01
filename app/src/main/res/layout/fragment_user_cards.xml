@@ -5,14 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/rv_UserCards"
+    <com.yuyakaido.android.cardstackview.CardStackView android:id="@+id/swipeRecyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:clipToPadding="false"
+        app:visibleCount="3"
+        app:swipeThreshold="0.75"
+        app:translationDiff="12"
+        app:scaleDiff="0.02"
+        app:stackFrom="top"
+        app:elevationEnabled="true"
+        app:swipeEnabled="true"
+        app:swipeDirection="freedom_no_bottom"
+        app:leftOverlay="@layout/overlay_left"
+        app:rightOverlay="@layout/overlay_right"
+        app:topOverlay="@layout/overlay_top" />
 
-    </android.support.v7.widget.RecyclerView>
+    <!--<android.support.v7.widget.RecyclerView android:id="@+id/rv_UserCards"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent">-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
 
 </android.support.constraint.ConstraintLayout>
 </layout>

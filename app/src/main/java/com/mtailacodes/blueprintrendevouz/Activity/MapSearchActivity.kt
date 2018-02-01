@@ -43,6 +43,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
+import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
@@ -190,7 +191,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 //                showSettingsCardView(1)
 
                 var intent = Intent(this@MapSearchActivity, SearchSettingsActivity::class.java)
-                intent.putExtra("SearchSettings", mSearchSettings)
+                intent.putExtra(Constants.USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
+                intent.putExtra(Constants.SETTINGS_VIEWPAGER_LANDING, 0)
                 startActivity(intent)
             }
             R.id.tv_TakeAPicture ->{

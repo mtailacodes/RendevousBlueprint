@@ -42,7 +42,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/profilePicGuideline"
                 android:scaleType="centerCrop"/>
 
-            <android.support.constraint.ConstraintLayout android:id="@+id/testView"
+            <android.support.constraint.ConstraintLayout android:id="@+id/cl_SettingsRVContainer"
                 android:layout_width="0dp"
                 android:layout_height="800dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,67 +58,6 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                 </android.support.v7.widget.RecyclerView>
-
-
-
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"-->
-                    <!--app:layout_constraintBottom_toTopOf="@+id/notificationsBreaker"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--android:layout_marginStart="16dp"-->
-                    <!--android:text="Notifications"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:textColor="#DE000000"/>-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:src="@drawable/icon_right_chevron"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"-->
-                    <!--app:layout_constraintBottom_toTopOf="@+id/notificationsBreaker"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--android:layout_marginEnd="16dp" />-->
-
-                <!--<View android:id="@+id/notificationsBreaker"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/settingsBreaker"-->
-                    <!--android:layout_marginTop="60dp"-->
-                    <!--android:background="#eeeeee"/>-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"-->
-                    <!--app:layout_constraintBottom_toTopOf="@+id/extra"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--android:layout_marginStart="16dp"-->
-                    <!--android:text="Notifications"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:textColor="#DE000000"/>-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:src="@drawable/icon_right_chevron"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"-->
-                    <!--app:layout_constraintBottom_toTopOf="@+id/extra"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--android:layout_marginEnd="16dp" />-->
-
-                <!--<View android:id="@+id/extra"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/notificationsBreaker"-->
-                    <!--android:layout_marginTop="60dp"-->
-                    <!--android:background="#eeeeee"/>-->
 
             </android.support.constraint.ConstraintLayout>
             
