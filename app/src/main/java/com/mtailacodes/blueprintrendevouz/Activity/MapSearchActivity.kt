@@ -200,7 +200,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             }
              R.id.picturePreview ->{
                 var intent = Intent(this, ProfileActivity::class.java)
-                intent.putExtra("SearchSettings", mSearchSettings)
+                intent.putExtra(Constants.USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
                 intent.putExtra("profilePic", photoFile)
 
                 var options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,

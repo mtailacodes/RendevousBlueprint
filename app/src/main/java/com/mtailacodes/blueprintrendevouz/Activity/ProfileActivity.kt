@@ -43,6 +43,7 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
+        mSearchSettings = UserSearchSettings()
 
         setEnterSharedElementCallback(ImageTransitionUtil.DEFAULT_SHARED_ELEMENT_CALLBACK) // animate the photo
 
@@ -52,7 +53,7 @@ class ProfileActivity: AppCompatActivity(), HeterogenousProfileSettingsAdapter.O
         Glide.with(this).load(photoFile.path)!!.into(mBinding.ivProfilePicImageView)
 
         // instead of making another API call, the userSearchSettings gets passed to this activity from the MapSearchSettingsActivity
-        mSearchSettings = intent.extras.get(Constants.USER_SEARCH_SETTINGS_OBJECT) as UserSearchSettings
+        mSearchSettings = intent.extras.get(Constants.USER_SEARCH_SETTINGS_OBJECT)!! as UserSearchSettings
 
         // set the profilePictureAnimationGuideline value - which will be later used to determine the translateY value when OnEnterAnimation is called
         mBinding.ivProfilePicImageView.viewTreeObserver.addOnGlobalLayoutListener(
