@@ -94,7 +94,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
         checkUserPermissionGrantStatus()
         setOnClickListeners()
-        showCard()
+//        showCard()
     }
 
     private fun showCard() {
@@ -107,9 +107,29 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onResume() {
         super.onResume()
         mUser = RxUserUtil().getUserModel()
-        if (!settingsCompleted){
-            getUserSearchSettings()
+        if (mUser.requiresOnboarding){
+            startUserOnBoardingProcess()
         }
+
+
+        // todo fix the logic below
+//        if (!settingsCompleted){
+//            getUserSearchSettings()
+//        }
+    }
+
+    private fun startUserOnBoardingProcess() {
+        mBinding.clOnBoardUserContainer.visibility = VISIBLE
+
+
+
+
+        // todo - B. Create the fragment with the viewpager and 3 fragments in the xml and correct packages
+        // todo - C. Work on the animation to introduce the onBoardingProcess
+        // todo - D. 1st viewpager fragment - just an introduction
+        // todo - E. 2nd viewpager fragment - should be "About me" fragment - hit's and updates API
+        // todo - F. 3rd viewpager fragment - should be "Search Settings" fragment - hit's and updates API
+
     }
 
     private fun setOnClickListeners() {

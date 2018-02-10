@@ -157,6 +157,50 @@
         app:layout_constraintBottom_toBottomOf="parent">
     </FrameLayout>
 
+    <android.support.constraint.ConstraintLayout android:id="@+id/cl_OnBoardUserContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#e05c5c"
+        android:elevation="6dp"
+        android:visibility="gone">
+
+        <!--// ViewPagerGuideline - allows for dynamic/responsive layouts-->
+        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardHorizontal20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2"/>
+        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardHorizontal80"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8"/>
+        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardVertical15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15"/>
+        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardVertical85"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85"/>
+
+        <fragment android:id="@+id/onBoardingFragment"
+            android:name="com.mtailacodes.blueprintrendevouz.fragments.OnBoardingFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/gl_OnBoardVertical15"
+            app:layout_constraintEnd_toEndOf="@id/gl_OnBoardVertical85"
+            app:layout_constraintTop_toTopOf="@id/gl_OnBoardHorizontal20"
+            app:layout_constraintBottom_toBottomOf="@id/gl_OnBoardHorizontal80" />
+
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>
 
 </layout>
