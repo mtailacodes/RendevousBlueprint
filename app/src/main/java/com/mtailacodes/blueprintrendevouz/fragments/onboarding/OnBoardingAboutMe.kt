@@ -68,7 +68,8 @@ class OnBoardingAboutMe : Fragment(), View.OnClickListener, DatePickerFragment.E
                 if (userNamePassed && birthdatePassed){
                     mUser.username = mBinding.etUserNameInput.text.toString()
                     var mFireStore = RxUserUtil().GlobalUserCollectionReference().document(mUser.uuID)
-                    mFireStore.update("username", mUser.username,
+                    mFireStore.update("requiresOnboarding", false,
+                            "username", mUser.username,
                                 "birthDay", mUser.birthDay,
                                         "birthMonth", mUser.birthMonth,
                                         "birthYear", mUser.birthYear,

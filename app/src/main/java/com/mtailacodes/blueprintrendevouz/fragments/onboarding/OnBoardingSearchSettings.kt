@@ -3,7 +3,6 @@ package com.mtailacodes.blueprintrendevouz.fragments.onboarding
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +57,8 @@ class OnBoardingSearchSettings : Fragment(), View.OnClickListener {
                 mSearchSettings.sexIntereset = mBinding.spGenderSpinner.selectedItem.toString()
                 mSearchSettings.settingsCompleted = true
 
+//                var mFireStore = RxUserUtil().GlobalUserCollectionReference().document(FirebaseAuth.getInstance().currentUser!!.uid)
+//                mFireStore.update()
 
                 var uuID = FirebaseAuth.getInstance().currentUser!!.uid
                 var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)

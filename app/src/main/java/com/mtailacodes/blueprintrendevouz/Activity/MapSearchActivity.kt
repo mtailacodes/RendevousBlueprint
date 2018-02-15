@@ -28,6 +28,8 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewAnimationUtils
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -60,24 +62,24 @@ import kotlin.collections.ArrayList
  * Created by matthewtaila on 12/25/17.
  */
 
-class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickListener, PromptSettingsFragment.UserSearchSettingsListener{
+class MapSearchActivity : FragmentActivity(),
+        OnMapReadyCallback,
+        View.OnClickListener,
+        PromptSettingsFragment.UserSearchSettingsListener{
 
 
     //Activity variables
-    val searchSettings_TAG = "Search Settings Data"
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
 
     //camera variables
     lateinit var photoFile: File
     lateinit var timeStamp: String
-    var canShowPic = false
 
     // firebase variables
     var mUser = RendevouzUserModel()
     var USER_PERMISSION_FINE_LOCATION = 11
     var USER_PERMISSION_COARSE_LOCATION = 21
 
-    var settingsCompleted = false
     var imageStored = false
 
     // location variables
@@ -94,55 +96,73 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
+        startListeningForEventBus()
+        checkUserPermissionGrantStatus()
+        setOnClickListeners()
+//        showCard()
+    }
 
+    private fun startListeningForEventBus() {
         (application as MyApplication)
                 .bus()
                 .toObservable()
                 .subscribe { `object` ->
                     if (`object` is String) {
                         when (`object`.toString()) {
-                            "USER_SEARCH_SETTINGS_STORED" ->{
-                                mBinding.clOnBoardUserContainer.visibility = GONE
+                            "USER_SEARCH_SETTINGS_STORED"->{
+                                var anim = ViewAnimationUtils.createCircularReveal(mBinding.clOnBoardUserContainer,
+                                        (mBinding.clOnBoardUserContainer.right)/2,
+                                        (mBinding.clOnBoardUserContainer.bottom)/2,
+                                        (mBinding.clOnBoardUserContainer.height).toFloat(),
+                                        0f)
+                                anim.interpolator = AccelerateDecelerateInterpolator()
+                                anim.duration = 450
+                                anim.addListener(object: AnimatorListenerAdapter(){
+                                    override fun onAnimationEnd(animation: Animator?) {
+                                        super.onAnimationEnd(animation)
+                                        mBinding.clOnBoardUserContainer.visibility = View.GONE
+                                        handleCaptureImageCardView(1f)
+                                    }
+                                })
+                                anim.start()
                             }
                         }
                     }
                 }
-
-        checkUserPermissionGrantStatus()
-        setOnClickListeners()
-        showCard()
     }
 
     private fun showCard() {
         val fragment = UserCardFragment.newInstance()
-        var fragmentTransaction = supportFragmentManager.beginTransaction()
-                .replace(R.id.userListFragment, fragment)
-                .commit()
+        supportFragmentManager.beginTransaction().replace(R.id.userListFragment, fragment).commit()
     }
 
     override fun onResume() {
         super.onResume()
-        mUser = RxUserUtil().getUserModel()
+
+        var mUserRef = RxUserUtil().getUserDocument()
+        mUserRef.get().addOnSuccessListener {
+            data : DocumentSnapshot ->
+            if (data.exists()){
+                mUser.emailAddress = data.getString("emailAddress")
+                mUser.uuID = data.getString("uuID")
+                mUser.username = data.getString("username")
+                mUser.requiresOnboarding = data.getBoolean("requiresOnboarding")
+                directUser(mUser)
+            }
+        }
+    }
+
+    private fun directUser(mUser: RendevouzUserModel) {
         if (mUser.requiresOnboarding){
             startUserOnBoardingProcess()
+        } else {
+            // todo - check to see if image is already taken within 24 hours
+            handleCaptureImageCardView(1f)
         }
-
-
-        // todo fix the logic below
-//        if (!settingsCompleted){
-//            getUserSearchSettings()
-//        }
     }
 
     private fun startUserOnBoardingProcess() {
         mBinding.clOnBoardUserContainer.visibility = VISIBLE
-
-        // todo - B. Create the fragment with the viewpager and 3 fragments in the xml and correct packages
-        // todo - C. Work on the animation to introduce the onBoardingProcess
-        // todo - D. 1st viewpager fragment - just an introduction
-        // todo - E. 2nd viewpager fragment - should be "About me" fragment - hit's and updates API
-        // todo - F. 3rd viewpager fragment - should be "Search Settings" fragment - hit's and updates API
-
     }
 
     private fun setOnClickListeners() {
@@ -179,43 +199,44 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     }
 
-    private fun getUserSearchSettings() {
-        var uuID = FirebaseAuth.getInstance().currentUser!!.uid
-        var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
-        mFirestore.document(uuID).get().addOnSuccessListener {
-            data : DocumentSnapshot ->
-            if (data.exists()){
-                if (data.getBoolean("settingsCompleted")){
-                    mSearchSettings = data.toObject(UserSearchSettings::class.java)
-                    settingsCompleted = true
-                    if (!imageStored) {
-                        handleCaptureImageCardView(1f)
-                    }
-                } else {
-                    showSettingsCardView(0)
-                }
-            } else {
-                Log.d(searchSettings_TAG, "document snapshot does not exis")
-            }
-        }
-    }
+//
+//    private fun getUserSearchSettings() {
+//        var uuID = FirebaseAuth.getInstance().currentUser!!.uid
+//        var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
+//        mFirestore.document(uuID).get().addOnSuccessListener {
+//            data : DocumentSnapshot ->
+//            if (data.exists()){
+//                if (data.getBoolean("settingsCompleted")){
+//                    mSearchSettings = data.toObject(UserSearchSettings::class.java)
+//                    settingsCompleted = true
+//                    if (!imageStored) {
+//                        handleCaptureImageCardView(1f)
+//                    }
+//                } else {
+//                    showSettingsCardView(0)
+//                }
+//            } else {
+//                Log.d(searchSettings_TAG, "document snapshot does not exis")
+//            }
+//        }
+//    }
 
-    private fun showSettingsCardView(control: Int) {
-        mBinding.searchSettingsPlaceholder.visibility = VISIBLE
-        var animateSettingsContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder,
-                View.ALPHA, 1f)
-        animateSettingsContainer.duration = 100
-        animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                super.onAnimationStart(animation)
-                val fragment = PromptSettingsFragment.newInstance(settingsCompleted)
-                var fragmentTransaction = supportFragmentManager.beginTransaction()
-                        .replace(R.id.zzxxx, fragment)
-                        .commit()
-            }
-        })
-        animateSettingsContainer.start()
-    }
+//    private fun showSettingsCardView(control: Int) {
+//        mBinding.searchSettingsPlaceholder.visibility = VISIBLE
+//        var animateSettingsContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder,
+//                View.ALPHA, 1f)
+//        animateSettingsContainer.duration = 100
+//        animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
+//            override fun onAnimationStart(animation: Animator?) {
+//                super.onAnimationStart(animation)
+//                val fragment = PromptSettingsFragment.newInstance(settingsCompleted)
+//                var fragmentTransaction = supportFragmentManager.beginTransaction()
+//                        .replace(R.id.zzxxx, fragment)
+//                        .commit()
+//            }
+//        })
+//        animateSettingsContainer.start()
+//    }
 
     override fun onClick(view: View) {
         when(view.id){
