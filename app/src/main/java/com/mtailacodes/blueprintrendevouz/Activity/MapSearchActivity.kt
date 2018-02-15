@@ -41,6 +41,8 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.GeoPoint
+import com.mtailacodes.blueprintrendevouz.MyApplication
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.Util.Constants
@@ -92,9 +94,23 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
+
+        (application as MyApplication)
+                .bus()
+                .toObservable()
+                .subscribe { `object` ->
+                    if (`object` is String) {
+                        when (`object`.toString()) {
+                            "USER_SEARCH_SETTINGS_STORED" ->{
+                                mBinding.clOnBoardUserContainer.visibility = GONE
+                            }
+                        }
+                    }
+                }
+
         checkUserPermissionGrantStatus()
         setOnClickListeners()
-//        showCard()
+        showCard()
     }
 
     private fun showCard() {
@@ -120,9 +136,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     private fun startUserOnBoardingProcess() {
         mBinding.clOnBoardUserContainer.visibility = VISIBLE
-
-
-
 
         // todo - B. Create the fragment with the viewpager and 3 fragments in the xml and correct packages
         // todo - C. Work on the animation to introduce the onBoardingProcess
@@ -316,10 +329,12 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     private fun setLocationVariable(location: Location) {
         var latLng = LatLng(location.latitude, location.longitude)
+        var locationFirestore = GeoPoint(location.latitude, location.longitude)
         mUser.latLng = latLng
 
         var mFirestore = RxUserUtil().GlobalUserCollectionReference()
-        mFirestore.document(mUser.uuID).set(mUser)
+        mFirestore.document(mUser.uuID).update("latLng", locationFirestore)
+
     }
 
     @SuppressLint("MissingPermission")

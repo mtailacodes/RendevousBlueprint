@@ -28,4 +28,7 @@ object Constants {
     val SEARCH_TITLE = "Search Settings"
     val PROFILE_TITLE= "Profile Settings"
     val NOTIFICATION_TITLE = "Notification Settings"
+
+    // onboarding Animations
+    var ONBOARDING_ON_ENTRY_ANIMATION_DURATION = 450 as Long
 }

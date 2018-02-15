@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <View android:id="@+id/v_AboutMeHeaderBreaker"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="56dp"
+            android:background="#e05c5c" />
+
+        <View android:id="@+id/v_NextBreaker"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="56dp"
+            android:background="#e05c5c" />
+
+        <TextView android:id="@+id/tv_AboutMeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/v_AboutMeHeaderBreaker"
+            android:text="Search Settings"
+            android:textSize="22sp" />
+
+        <TextView android:id="@+id/tv_Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/v_NextBreaker"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Finish"
+            android:textSize="22sp" />
+
+        <android.support.constraint.Guideline android:id="@+id/gl_userInputViewStartGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.4"/>
+
+        <TextView android:id="@+id/tv_GenderInterest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/v_AboutMeHeaderBreaker"
+            app:layout_constraintBottom_toTopOf="@+id/tv_AgeRange"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="Interested in: "
+            android:textSize="18sp"
+            android:textColor="@color/black87"
+            app:layout_constraintVertical_chainStyle="spread"/>
+
+        <Spinner android:id="@+id/sp_GenderSpinner"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/gl_userInputViewStartGuideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_GenderInterest"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_GenderInterest"
+            android:paddingStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:prompt="@id/sp_GenderSpinner"
+            android:entries="@array/gender_interest_array"
+            android:background="@drawable/background_grey_edit_text"
+            android:textColor="#ff0000" />
+
+        <TextView android:id="@+id/tv_AgeRange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_GenderInterest"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_DistanceRange"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="Age Range"
+            android:textSize="18sp"
+            android:textColor="@color/black87"
+            app:layout_constraintVertical_chainStyle="spread"/>
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar android:id="@+id/ageRangeBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/gl_userInputViewStartGuideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_AgeRange"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:corner_radius="5"
+            app:min_value="18"
+            app:max_value="60"
+            app:gap="1"
+            app:bar_color="#ECECEC"
+            app:bar_highlight_color="#E26A6A"
+            app:left_thumb_color="#F1A9A0"
+            app:right_thumb_color="#F1A9A0"
+            app:left_thumb_color_pressed="#F1A9A0"
+            app:right_thumb_color_pressed="#F1A9A0"
+            app:data_type="_integer"/>
+
+        <TextView android:id="@+id/tv_MinAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/ageRangeBar"
+            app:layout_constraintStart_toStartOf="@+id/ageRangeBar"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="8dp"
+            android:text="18"
+            android:textSize="14sp" />
+
+        <TextView android:id="@+id/tv_MaxAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/ageRangeBar"
+            app:layout_constraintEnd_toEndOf="@+id/ageRangeBar"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="60"
+            android:textSize="14sp"/>
+
+        <TextView android:id="@+id/tv_DistanceRange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_AgeRange"
+            app:layout_constraintBottom_toTopOf="@+id/v_NextBreaker"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="Max Distance"
+            android:textSize="18sp"
+            android:textColor="@color/black87"
+            app:layout_constraintVertical_chainStyle="spread"/>
+
+        <Spinner android:id="@+id/sp_DistanceSpinner"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/gl_userInputViewStartGuideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_DistanceRange"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_DistanceRange"
+            android:paddingStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:prompt="@id/sp_GenderSpinner"
+            android:entries="@array/max_distance_array"
+            android:background="@drawable/background_grey_edit_text"
+            android:textColor="#ff0000" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

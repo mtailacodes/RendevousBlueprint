@@ -1,5 +1,6 @@
 package com.mtailacodes.blueprintrendevouz.Activity
 
+import android.provider.SyncStateContract.Helpers.update
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
