@@ -5,8 +5,8 @@ package com.mtailacodes.blueprintrendevouz.models.user.user.login.ProfileSetting
  */
 class ProfileHightlight: ProfileSettingsHeader(1){
 
-    lateinit var userName: String
-    lateinit var userAge: String
-    lateinit var userLocation: String
+    var userName: String = ""
+    var userAge: String = "defaultAge"
+    var userLocation: String = "defaultLocation"
 
 }

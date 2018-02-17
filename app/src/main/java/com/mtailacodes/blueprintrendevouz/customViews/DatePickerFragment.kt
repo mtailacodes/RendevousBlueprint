@@ -39,7 +39,7 @@ open class DatePickerFragment(textView: TextView, userModel: RendevouzUserModel,
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         mUserModel.birthYear  = p1
-        mUserModel.birthMonth  = p2
+        mUserModel.birthMonth  = p2 + 1
         mUserModel.birthDay  = p3
         tv.text = "$p3/$p2/$p1"
         sendBackResult()

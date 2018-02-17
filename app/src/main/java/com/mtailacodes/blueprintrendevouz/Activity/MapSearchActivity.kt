@@ -156,8 +156,11 @@ class MapSearchActivity : FragmentActivity(),
         if (mUser.requiresOnboarding){
             startUserOnBoardingProcess()
         } else {
+            var  mSearchSettings = getUserSearchSettings()
             // todo - check to see if image is already taken within 24 hours
-            handleCaptureImageCardView(1f)
+            if(!imageStored) {
+                handleCaptureImageCardView(1f)
+            }
         }
     }
 
@@ -178,6 +181,7 @@ class MapSearchActivity : FragmentActivity(),
 
     private fun handleCaptureImageCardView(finalFloat: Float, hide: Boolean = false) {
         mBinding.cvPromptUserImage.visibility = VISIBLE
+
         if (!hide){
             var animatorSet = AnimationUtil.handleCaptureImageCardview(mBinding.cvPromptUserImage)
             animatorSet.addListener(object : AnimatorListenerAdapter(){
@@ -199,27 +203,22 @@ class MapSearchActivity : FragmentActivity(),
 
     }
 
-//
-//    private fun getUserSearchSettings() {
-//        var uuID = FirebaseAuth.getInstance().currentUser!!.uid
-//        var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
-//        mFirestore.document(uuID).get().addOnSuccessListener {
-//            data : DocumentSnapshot ->
-//            if (data.exists()){
-//                if (data.getBoolean("settingsCompleted")){
-//                    mSearchSettings = data.toObject(UserSearchSettings::class.java)
-//                    settingsCompleted = true
-//                    if (!imageStored) {
-//                        handleCaptureImageCardView(1f)
-//                    }
-//                } else {
-//                    showSettingsCardView(0)
-//                }
-//            } else {
-//                Log.d(searchSettings_TAG, "document snapshot does not exis")
-//            }
-//        }
-//    }
+
+    private fun getUserSearchSettings() : UserSearchSettings {
+        var uuID = FirebaseAuth.getInstance().currentUser!!.uid
+        var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
+        mFirestore.document(uuID).get().addOnSuccessListener {
+            data : DocumentSnapshot ->
+            if (data.exists()){
+                if (data.getBoolean("settingsCompleted")){
+                    mSearchSettings = data.toObject(UserSearchSettings::class.java)
+                }
+            } else {
+                Log.d(javaClass.simpleName, "document snapshot does not exis")
+            }
+        }
+        return mSearchSettings
+    }
 
 //    private fun showSettingsCardView(control: Int) {
 //        mBinding.searchSettingsPlaceholder.visibility = VISIBLE
@@ -245,8 +244,8 @@ class MapSearchActivity : FragmentActivity(),
 //                showSettingsCardView(1)
 
                 var intent = Intent(this@MapSearchActivity, SearchSettingsActivity::class.java)
-                intent.putExtra(Constants.USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
-                intent.putExtra(Constants.SETTINGS_VIEWPAGER_LANDING, 0)
+                intent.putExtra(Constants().USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
+                intent.putExtra(Constants().SETTINGS_VIEWPAGER_LANDING, 0)
                 startActivity(intent)
             }
             R.id.tv_TakeAPicture ->{
@@ -254,8 +253,8 @@ class MapSearchActivity : FragmentActivity(),
             }
              R.id.picturePreview ->{
                 var intent = Intent(this, ProfileActivity::class.java)
-                intent.putExtra(Constants.USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
-                intent.putExtra("profilePic", photoFile)
+                intent.putExtra("ADSAD", mSearchSettings)
+                intent.putExtra("PHOTO", photoFile)
 
                 var options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                         mBinding.picturePreview,
@@ -351,10 +350,12 @@ class MapSearchActivity : FragmentActivity(),
     private fun setLocationVariable(location: Location) {
         var latLng = LatLng(location.latitude, location.longitude)
         var locationFirestore = GeoPoint(location.latitude, location.longitude)
+        mUser.geoLocation = locationFirestore
         mUser.latLng = latLng
 
         var mFirestore = RxUserUtil().GlobalUserCollectionReference()
         mFirestore.document(mUser.uuID).update("latLng", locationFirestore)
+        mFirestore.document(mUser.uuID).update("geoLocation", locationFirestore)
 
     }
 

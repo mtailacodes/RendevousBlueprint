@@ -100,9 +100,10 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
 
     private fun configureProfileHightlightViewholder(profileHighlightViewholder: ProfileHightlightViewholder,
                                                      position: Int) {
-        profileHighlightViewholder.tv_userName.text = "Tom, "
-        profileHighlightViewholder.tv_userAge.text = " 26"
-        profileHighlightViewholder.tv_userLocation.text = "Southfield, MI"
+        var profileHighlight = mSettingsList[position] as ProfileHightlight
+        profileHighlightViewholder.tv_userName.text = profileHighlight.userName + ","
+        profileHighlightViewholder.tv_userAge.text = profileHighlight.userAge
+        profileHighlightViewholder.tv_userLocation.text = profileHighlight.userLocation
 
     }
 

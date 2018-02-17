@@ -62,10 +62,10 @@ class SearchSettingsActivity: AppCompatActivity(), View.OnClickListener{
     }
 
     private fun getUserSettings() {
-        mSearchSettings = intent.extras.get(Constants.USER_SEARCH_SETTINGS_OBJECT) as UserSearchSettings
+        mSearchSettings = intent.extras.get(Constants().USER_SEARCH_SETTINGS_OBJECT) as UserSearchSettings
     }
     private fun getViewpagerLandingPage() {
-        landing = intent.extras.get(Constants.SETTINGS_VIEWPAGER_LANDING) as Int
+        landing = intent.extras.get(Constants().SETTINGS_VIEWPAGER_LANDING) as Int
     }
 
     private fun onEnterActivityAnimation() {
@@ -93,9 +93,9 @@ class SearchSettingsActivity: AppCompatActivity(), View.OnClickListener{
         // setup titles for tab layout
         var mViewPagerSmartTab = FragmentPagerItemAdapter(
                 supportFragmentManager, FragmentPagerItems.with(this)
-                .add(Constants.SEARCH_TITLE, SearchSettingsFragment::class.java)
-                .add(Constants.PROFILE_TITLE, SearchSettingsFragment::class.java)
-                .add(Constants.NOTIFICATION_TITLE, SearchSettingsFragment::class.java)
+                .add(Constants().SEARCH_TITLE, SearchSettingsFragment::class.java)
+                .add(Constants().PROFILE_TITLE, SearchSettingsFragment::class.java)
+                .add(Constants().NOTIFICATION_TITLE, SearchSettingsFragment::class.java)
                 .create())
 
         mBinding.vpSettingsViewpager.adapter = mViewPagerSmartTab

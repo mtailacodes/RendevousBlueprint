@@ -6,7 +6,7 @@ import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSetti
  * Created by matthewtaila on 12/30/17.
  */
 
-object Constants {
+class Constants {
 
      var GOOGLE_MAPS_API_KEY = "AIzaSyDL6gX0mckMFx3cBXMJqfnyRGe56g0DuSc"
      var RENDEVOUZ_USER_MODEL_BUNDLE = "Rendevouz user model bundle"
@@ -30,5 +30,5 @@ object Constants {
     val NOTIFICATION_TITLE = "Notification Settings"
 
     // onboarding Animations
-    var ONBOARDING_ON_ENTRY_ANIMATION_DURATION = 450 as Long
+    val ONBOARDING_ON_ENTRY_ANIMATION_DURATION = 450.toLong()
 }
