@@ -87,7 +87,7 @@ object AnimationUtil {
         return mAnimatorSet
     }
 
-    fun handleCaptureImageCardview(cardView : CardView, finalValue : Float = 1f, duration: Long = 300): AnimatorSet {
+    fun handleCaptureImageCardview(cardView : CardView, finalValue : Float = 1f, duration: Long = 450): AnimatorSet {
 
         var animatorSet = AnimatorSet()
 
@@ -97,7 +97,7 @@ object AnimationUtil {
 
         animatorSet.playTogether(scaleX, scaleY, alpha)
         animatorSet.duration = duration
-        animatorSet.interpolator = OvershootInterpolator(1.2f)
+        animatorSet.interpolator = OvershootInterpolator(1.4f)
 
         return animatorSet
     }

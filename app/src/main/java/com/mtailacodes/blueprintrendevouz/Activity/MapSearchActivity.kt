@@ -111,7 +111,7 @@ class MapSearchActivity : FragmentActivity(),
 //        showCard()
     }
 
-    fun slideIn(view: View, from: Float, to: Float) {
+    private fun slideIn(view: View, from: Float, to: Float) {
         val animator = ValueAnimator.ofFloat(from, to)
         animator.addUpdateListener {
             animator -> view.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
@@ -164,6 +164,12 @@ class MapSearchActivity : FragmentActivity(),
         var finalAnimatorSet = AnimatorSet()
         finalAnimatorSet.playTogether(iconsAnimatorSet, headerAnimatorSet)
         finalAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+        finalAnimatorSet.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                handleCaptureImageCardView(1f)
+            }
+        })
         finalAnimatorSet.start()
 
     }
@@ -362,7 +368,7 @@ class MapSearchActivity : FragmentActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-//            handleCaptureImageCardView(0f, hide = true)
+            handleCaptureImageCardView(0f, hide = true)
             imageStored = true
             mBinding.picturePreview.visibility = VISIBLE
             var bMap = BitmapFactory.decodeFile(photoFile!!.path)
