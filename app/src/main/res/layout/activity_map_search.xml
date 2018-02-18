@@ -10,10 +10,11 @@
 
     <android.support.v7.widget.CardView android:id="@+id/cv_ProfileSettingsShortcut"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="2dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,12 +24,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Settings"
                 android:textSize="16sp"
-                android:padding="16dp"
-                android:textColor="@color/black100"/>
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black87"/>
+
+            <ImageView android:id="@+id/iv_SettingsIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:layout_constraintTop_toTopOf="@+id/picturePreview"
+                app:layout_constraintBottom_toBottomOf="@+id/picturePreview"
+                app:layout_constraintStart_toStartOf="@+id/tv_Settings"
+                app:layout_constraintEnd_toEndOf="@+id/tv_Settings"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_settings"
+                android:tint="@color/hideContainer"/>
+
+            <TextView android:id="@+id/tv_YouProfilePic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/tv_Settings"
+                app:layout_constraintStart_toStartOf="@+id/picturePreview"
+                app:layout_constraintEnd_toEndOf="@+id/picturePreview"
+                android:text="You"
+                android:textSize="16sp"
+                android:textColor="@color/black87"/>
 
             <com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/picturePreview"
                 android:transitionName="@string/profilePictureTransition"
@@ -37,11 +59,33 @@
                 android:elevation="2dp"
                 app:tiv_rounding="1"
                 android:scaleType="centerCrop"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_YouProfilePic"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:visibility="invisible"/>
+                android:src="@drawable/icon_user"/>
+
+            <TextView android:id="@+id/tv_MatchesHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/tv_Settings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Connections"
+                android:textSize="16sp"
+                android:textColor="@color/black87"/>
+
+            <ImageView android:id="@+id/iv_MatchesIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:layout_constraintTop_toTopOf="@+id/iv_SettingsIcon"
+                app:layout_constraintStart_toStartOf="@+id/tv_MatchesHeader"
+                app:layout_constraintEnd_toEndOf="@+id/tv_MatchesHeader"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_connections"
+                android:tint="@color/hideContainer"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -51,7 +95,7 @@
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/cv_ProfileSettingsShortcut"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/userListFragment"/>

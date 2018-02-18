@@ -2,9 +2,7 @@ package com.mtailacodes.blueprintrendevouz.Activity
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
+import android.animation.*
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -24,11 +22,13 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.CardView
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewAnimationUtils
+import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import com.bumptech.glide.Glide
@@ -96,10 +96,76 @@ class MapSearchActivity : FragmentActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
+
+        mBinding.root.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                slideIn(mBinding.cvProfileSettingsShortcut, -1f, 0f)
+                mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
+                return false
+            }
+        })
+
         startListeningForEventBus()
         checkUserPermissionGrantStatus()
         setOnClickListeners()
 //        showCard()
+    }
+
+    fun slideIn(view: View, from: Float, to: Float) {
+        val animator = ValueAnimator.ofFloat(from, to)
+        animator.addUpdateListener {
+            animator -> view.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
+        }
+        animator.duration = 450
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
+                super.onAnimationStart(animation, isReverse)
+                staggeredHeaderNavAnimation()
+            }
+        })
+        animator.start()
+    }
+
+    private fun staggeredHeaderNavAnimation() {
+        var viewsList : ArrayList<View> = ArrayList()
+
+        viewsList.add(mBinding.picturePreview)
+        viewsList.add(mBinding.ivMatchesIcon)
+        viewsList.add(mBinding.ivSettingsIcon)
+
+        var iconsAnimatorSet = AnimatorSet()
+
+        for (v in viewsList){
+            val animator = ValueAnimator.ofFloat(-0.25f, 0f)
+            animator.addUpdateListener {
+                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
+            }
+            iconsAnimatorSet.play(animator)
+        }
+        iconsAnimatorSet.duration = 650
+
+        viewsList.clear()
+
+        viewsList.add(mBinding.tvSettings)
+        viewsList.add(mBinding.tvMatchesHeader)
+        viewsList.add(mBinding.tvYouProfilePic)
+
+        var headerAnimatorSet = AnimatorSet()
+        for (v in viewsList){
+            val animator = ValueAnimator.ofFloat(-0.4f, 0f)
+            animator.addUpdateListener {
+                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
+            }
+            headerAnimatorSet.play(animator)
+        }
+        headerAnimatorSet.duration = 750
+
+        var finalAnimatorSet = AnimatorSet()
+        finalAnimatorSet.playTogether(iconsAnimatorSet, headerAnimatorSet)
+        finalAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+        finalAnimatorSet.start()
+
     }
 
     private fun startListeningForEventBus() {
@@ -121,7 +187,7 @@ class MapSearchActivity : FragmentActivity(),
                                     override fun onAnimationEnd(animation: Animator?) {
                                         super.onAnimationEnd(animation)
                                         mBinding.clOnBoardUserContainer.visibility = View.GONE
-                                        handleCaptureImageCardView(1f)
+//                                        handleCaptureImageCardView(1f)
                                     }
                                 })
                                 anim.start()
@@ -159,7 +225,7 @@ class MapSearchActivity : FragmentActivity(),
             var  mSearchSettings = getUserSearchSettings()
             // todo - check to see if image is already taken within 24 hours
             if(!imageStored) {
-                handleCaptureImageCardView(1f)
+//                handleCaptureImageCardView(1f)
             }
         }
     }
@@ -240,9 +306,6 @@ class MapSearchActivity : FragmentActivity(),
     override fun onClick(view: View) {
         when(view.id){
             R.id.tv_Settings ->{
-//                getUserSearchSettings()
-//                showSettingsCardView(1)
-
                 var intent = Intent(this@MapSearchActivity, SearchSettingsActivity::class.java)
                 intent.putExtra(Constants().USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
                 intent.putExtra(Constants().SETTINGS_VIEWPAGER_LANDING, 0)
@@ -299,7 +362,7 @@ class MapSearchActivity : FragmentActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            handleCaptureImageCardView(0f, hide = true)
+//            handleCaptureImageCardView(0f, hide = true)
             imageStored = true
             mBinding.picturePreview.visibility = VISIBLE
             var bMap = BitmapFactory.decodeFile(photoFile!!.path)
@@ -334,7 +397,7 @@ class MapSearchActivity : FragmentActivity(),
                 mBinding.searchSettingsPlaceholder.visibility = GONE
                 mBinding.cvSearchSettingsContainer.visibility = GONE
                 if (!imageStored) {
-                    handleCaptureImageCardView(1f)
+//                    handleCaptureImageCardView(1f)
                 }
             }
         })
