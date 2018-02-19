@@ -9,7 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -22,7 +24,6 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.CardView
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -31,16 +32,13 @@ import android.view.ViewAnimationUtils
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
@@ -53,9 +51,13 @@ import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 /**
@@ -67,9 +69,14 @@ class MapSearchActivity : FragmentActivity(),
         View.OnClickListener,
         PromptSettingsFragment.UserSearchSettingsListener{
 
+    var index = 0
+    lateinit var maps: GoogleMap
+
 
     //Activity variables
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
+    lateinit var marker : Marker
+    var markerMatch : Marker? = null
 
     //camera variables
     lateinit var photoFile: File
@@ -90,6 +97,7 @@ class MapSearchActivity : FragmentActivity(),
 
 //    activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
+    var stubList : ArrayList<RendevouzUserModel> = ArrayList()
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
 
@@ -105,11 +113,57 @@ class MapSearchActivity : FragmentActivity(),
             }
         })
 
+        generateStubData()
+
         startListeningForEventBus()
         checkUserPermissionGrantStatus()
         setOnClickListeners()
 //        showCard()
     }
+
+    private fun generateStubData() {
+        var one = RendevouzUserModel()
+        one.geoLocation = GeoPoint(42.524619, -83.430075)
+
+        var two = RendevouzUserModel()
+        two.geoLocation = GeoPoint(42.515855, -83.43080040000001)
+
+        var three = RendevouzUserModel()
+        three.geoLocation = GeoPoint(42.5175607, -83.42887560000003)
+
+        var four = RendevouzUserModel()
+        four.geoLocation = GeoPoint(42.524089, -83.431467)
+
+        var five = RendevouzUserModel()
+        five.geoLocation = GeoPoint(42.523875, -83.432658)
+
+        var six = RendevouzUserModel()
+        six.geoLocation = GeoPoint(42.524808, -83.428721)
+
+        var seven = RendevouzUserModel()
+        seven.geoLocation = GeoPoint(42.523543, -83.429601)
+
+        var eight = RendevouzUserModel()
+        eight.geoLocation = GeoPoint(42.525449, -83.431371)
+
+        var nine = RendevouzUserModel()
+        nine.geoLocation = GeoPoint(42.526810, -83.430116)
+
+        var ten = RendevouzUserModel()
+        ten.geoLocation = GeoPoint(42.526415, -83.431521)
+
+        stubList.add(one)
+        stubList.add(two)
+        stubList.add(three)
+        stubList.add(four)
+        stubList.add(five)
+        stubList.add(six)
+        stubList.add(seven)
+        stubList.add(eight)
+        stubList.add(nine)
+        stubList.add(ten)
+    }
+
 
     private fun slideIn(view: View, from: Float, to: Float) {
         val animator = ValueAnimator.ofFloat(from, to)
@@ -267,7 +321,7 @@ class MapSearchActivity : FragmentActivity(),
                     }
                 }
             })
-            animatorSet.start()
+//            animatorSet.start()
         } else {
             mBinding.cvPromptUserImage.visibility = GONE
             mBinding.tvTakeAPicture.setOnClickListener(null)
@@ -429,23 +483,76 @@ class MapSearchActivity : FragmentActivity(),
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(p0: GoogleMap?) {
-        var maps = p0 // m
+    override fun onMapReady(p0: GoogleMap) {
+        maps = p0 // m
         maps!!.uiSettings.setAllGesturesEnabled(false)
+        maps.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.google_map_style))
         mFusedLocationProvider.lastLocation.addOnSuccessListener(this, { location ->
             var cameraPosition =  CameraPosition.Builder()
                     .target( LatLng(location.latitude, location.longitude))
-                    .zoom(17f)
-                    .bearing(90f)
+                    .zoom(13.5f)
                     .tilt(0f)
                     .build()
 
-            maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
+            maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), object : GoogleMap.CancelableCallback {
+                override fun onFinish() {
+                    marker = maps.addMarker(MarkerOptions()
+                            .position(LatLng(location.latitude, location.longitude)))
+                    var x = resources.getDrawable(R.drawable.stub_marker)
+                    var bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
+                    var canvas = Canvas(bitmap)
+                    x.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+                    x.draw(canvas)
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                    showEveryTen()
+                }
+                override fun onCancel() {
+                }
+            })
             if (mUser.uuID == FirebaseAuth.getInstance().currentUser!!.uid){
                 setLocationVariable(location = location)
             }
         })
+    }
+
+    private fun showEveryTen() {
+        var x  = Observable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (markerMatch != null){
+                        markerMatch!!.remove()
+                    }
+                    updateUser(index)
+                    index++
+                }
+
+    }
+
+    private fun updateUser(index: Int) {
+
+
+        markerMatch = maps.addMarker(MarkerOptions()
+                .position(LatLng(stubList[index%10].geoLocation.latitude, stubList[index%10].geoLocation.longitude)))
+
+        var y = resources.getDrawable(R.drawable.stub_marker_2)
+        var bitmapy = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
+        var canvasy = Canvas(bitmapy)
+        y.setBounds(0, 0, canvasy.getWidth(), canvasy.getHeight())
+        y.draw(canvasy)
+
+        markerMatch!!.setIcon(BitmapDescriptorFactory.fromBitmap(bitmapy))
+        markerMatch!!.alpha = 0f
+        val animator = ValueAnimator.ofFloat(0f, 1f)
+        animator.addUpdateListener {
+            animator -> markerMatch!!. alpha = animator.animatedValue as Float
+        }
+        animator.duration = 1000
+        animator.start()
+
+
     }
 
     private fun setupLocationListener() {
