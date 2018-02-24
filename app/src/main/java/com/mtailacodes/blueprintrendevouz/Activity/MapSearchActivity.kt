@@ -46,6 +46,7 @@ import com.mtailacodes.blueprintrendevouz.MyApplication
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.Util.Constants
+import com.mtailacodes.blueprintrendevouz.Util.MapUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
@@ -64,18 +65,16 @@ import kotlin.collections.ArrayList
  * Created by matthewtaila on 12/25/17.
  */
 
-class MapSearchActivity : FragmentActivity(),
-        OnMapReadyCallback,
-        View.OnClickListener,
+class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickListener,
         PromptSettingsFragment.UserSearchSettingsListener{
 
     var index = 0
-    lateinit var maps: GoogleMap
+    var maps: GoogleMap? = null
 
 
     //Activity variables
-    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
-    lateinit var marker : Marker
+    private val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1
+    var marker : Marker? = null
     var markerMatch : Marker? = null
 
     //camera variables
@@ -113,55 +112,12 @@ class MapSearchActivity : FragmentActivity(),
             }
         })
 
-        generateStubData()
+        stubList = MapUtil.generateStubData()
 
         startListeningForEventBus()
         checkUserPermissionGrantStatus()
         setOnClickListeners()
 //        showCard()
-    }
-
-    private fun generateStubData() {
-        var one = RendevouzUserModel()
-        one.geoLocation = GeoPoint(42.524619, -83.430075)
-
-        var two = RendevouzUserModel()
-        two.geoLocation = GeoPoint(42.515855, -83.43080040000001)
-
-        var three = RendevouzUserModel()
-        three.geoLocation = GeoPoint(42.5175607, -83.42887560000003)
-
-        var four = RendevouzUserModel()
-        four.geoLocation = GeoPoint(42.524089, -83.431467)
-
-        var five = RendevouzUserModel()
-        five.geoLocation = GeoPoint(42.523875, -83.432658)
-
-        var six = RendevouzUserModel()
-        six.geoLocation = GeoPoint(42.524808, -83.428721)
-
-        var seven = RendevouzUserModel()
-        seven.geoLocation = GeoPoint(42.523543, -83.429601)
-
-        var eight = RendevouzUserModel()
-        eight.geoLocation = GeoPoint(42.525449, -83.431371)
-
-        var nine = RendevouzUserModel()
-        nine.geoLocation = GeoPoint(42.526810, -83.430116)
-
-        var ten = RendevouzUserModel()
-        ten.geoLocation = GeoPoint(42.526415, -83.431521)
-
-        stubList.add(one)
-        stubList.add(two)
-        stubList.add(three)
-        stubList.add(four)
-        stubList.add(five)
-        stubList.add(six)
-        stubList.add(seven)
-        stubList.add(eight)
-        stubList.add(nine)
-        stubList.add(ten)
     }
 
 
@@ -470,96 +426,23 @@ class MapSearchActivity : FragmentActivity(),
                 0f, mLocationListener)
     }
 
-    private fun setLocationVariable(location: Location) {
-        var latLng = LatLng(location.latitude, location.longitude)
-        var locationFirestore = GeoPoint(location.latitude, location.longitude)
-        mUser.geoLocation = locationFirestore
-        mUser.latLng = latLng
-
-        var mFirestore = RxUserUtil().GlobalUserCollectionReference()
-        mFirestore.document(mUser.uuID).update("latLng", locationFirestore)
-        mFirestore.document(mUser.uuID).update("geoLocation", locationFirestore)
-
-    }
-
     @SuppressLint("MissingPermission")
-    override fun onMapReady(p0: GoogleMap) {
-        maps = p0 // m
-        maps!!.uiSettings.setAllGesturesEnabled(false)
-        maps.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.google_map_style))
-        mFusedLocationProvider.lastLocation.addOnSuccessListener(this, { location ->
-            var cameraPosition =  CameraPosition.Builder()
-                    .target( LatLng(location.latitude, location.longitude))
-                    .zoom(13.5f)
-                    .tilt(0f)
-                    .build()
-
-
-            maps!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), object : GoogleMap.CancelableCallback {
-                override fun onFinish() {
-                    marker = maps.addMarker(MarkerOptions()
-                            .position(LatLng(location.latitude, location.longitude)))
-                    var x = resources.getDrawable(R.drawable.stub_marker)
-                    var bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
-                    var canvas = Canvas(bitmap)
-                    x.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
-                    x.draw(canvas)
-                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                    showEveryTen()
-                }
-                override fun onCancel() {
-                }
-            })
-            if (mUser.uuID == FirebaseAuth.getInstance().currentUser!!.uid){
-                setLocationVariable(location = location)
-            }
-        })
+    override fun onMapReady(p0: GoogleMap?) {
+        maps = MapUtil.buildGoogleMapFrag(p0!!, this)
+        MapUtil.setupCameraPosition(mFusedLocationProvider, this, maps!!)
     }
 
-    private fun showEveryTen() {
-        var x  = Observable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (markerMatch != null){
-                        markerMatch!!.remove()
-                    }
-                    updateUser(index)
-                    index++
-                }
-
-    }
-
-    private fun updateUser(index: Int) {
-
-
-        markerMatch = maps.addMarker(MarkerOptions()
-                .position(LatLng(stubList[index%10].geoLocation.latitude, stubList[index%10].geoLocation.longitude)))
-
-        var y = resources.getDrawable(R.drawable.stub_marker_2)
-        var bitmapy = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
-        var canvasy = Canvas(bitmapy)
-        y.setBounds(0, 0, canvasy.getWidth(), canvasy.getHeight())
-        y.draw(canvasy)
-
-        markerMatch!!.setIcon(BitmapDescriptorFactory.fromBitmap(bitmapy))
-        markerMatch!!.alpha = 0f
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.addUpdateListener {
-            animator -> markerMatch!!. alpha = animator.animatedValue as Float
-        }
-        animator.duration = 1000
-        animator.start()
-
-
+    open fun setupUserMarkers(location: Location){
+        marker = maps!!.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)))
+        markerMatch = MapUtil.setupUsersAroundMeMarker(this)
+        MapUtil.showEveryTen(this)
     }
 
     private fun setupLocationListener() {
         mLocationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 if (mUser.uuID == FirebaseAuth.getInstance().currentUser!!.uid){
-                    setLocationVariable(location = location)
+                    MapUtil.updateUserLocation(location)
                 }
             }
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -573,25 +456,25 @@ class MapSearchActivity : FragmentActivity(),
         val locationPermission = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
         val coarsePermission = ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION)
 
-        if (locationPermission == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    USER_PERMISSION_FINE_LOCATION)
-        } else if (coarsePermission == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    USER_PERMISSION_COARSE_LOCATION)
-        } else{
-            mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+        when {
+                locationPermission == PackageManager.PERMISSION_DENIED -> {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                        USER_PERMISSION_FINE_LOCATION)
+                }
+                coarsePermission == PackageManager.PERMISSION_DENIED -> {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                            USER_PERMISSION_COARSE_LOCATION)
+                }
+                else-> {
+                mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+                map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
+                map.getMapAsync(this)
+                mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                setupLocationListener()
+                registerLocationListener()
+                }
+            }
 
-            map = (fragmentManager.findFragmentById(R.id.map) as MapFragment)
-            map.getMapAsync(this)
-
-            mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-            setupLocationListener()
-            registerLocationListener()
-        }
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
