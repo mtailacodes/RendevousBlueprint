@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.mtailacodes.blueprintrendevouz.customViews.CurveContainer android:id="@+id/curveParentContainer"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent">
+
+            <TextView android:id="@+id/tv_Settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Settings"
+                android:textSize="16sp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black87"/>
+
+            <ImageView android:id="@+id/iv_SettingsIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_Settings"
+                app:layout_constraintEnd_toEndOf="@+id/tv_Settings"
+                app:layout_constraintTop_toBottomOf="@+id/tv_Settings"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_settings"
+                android:tint="@color/hideContainer"/>
+
+            <TextView android:id="@+id/tv_MatchesHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/tv_Settings"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:text="Connections"
+                android:textSize="16sp"
+                android:textColor="@color/black87"/>
+
+            <ImageView android:id="@+id/iv_MatchesIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_MatchesHeader"
+                app:layout_constraintStart_toStartOf="@+id/tv_MatchesHeader"
+                app:layout_constraintEnd_toEndOf="@+id/tv_MatchesHeader"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_connections"
+                android:tint="@color/hideContainer"/>
+
+
+        </com.mtailacodes.blueprintrendevouz.customViews.CurveContainer>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

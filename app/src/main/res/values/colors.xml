@@ -13,6 +13,7 @@
     <color name="e">#eeeeee</color>
     <color name="darkLineBreakGrey">#e2e2e2</color>
     <color name="showContainer">#FFFFFF</color>
+    <color name="shadowGrey">#999999</color>
     <color name="hideContainer">#22313F</color>
     <color name="topBar">#162029</color>
     <color name="grey1">#eeeeee</color>

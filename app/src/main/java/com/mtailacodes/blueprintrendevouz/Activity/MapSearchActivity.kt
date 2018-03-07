@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.drm.DrmStore.Action.PREVIEW
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -49,6 +50,7 @@ import com.mtailacodes.blueprintrendevouz.Util.Constants
 import com.mtailacodes.blueprintrendevouz.Util.MapUtil
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityMapSearchBinding
 import com.mtailacodes.blueprintrendevouz.fragments.PromptSettingsFragment
+import com.mtailacodes.blueprintrendevouz.fragments.TopContainerFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
@@ -78,13 +80,13 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     var markerMatch : Marker? = null
 
     //camera variables
-    lateinit var photoFile: File
-    lateinit var timeStamp: String
+    private var photoFile: File? = null
+    private lateinit var timeStamp: String
 
     // firebase variables
-    var mUser = RendevouzUserModel()
-    var USER_PERMISSION_FINE_LOCATION = 11
-    var USER_PERMISSION_COARSE_LOCATION = 21
+    private var mUser = RendevouzUserModel()
+    private var USER_PERMISSION_FINE_LOCATION = 11
+    private var USER_PERMISSION_COARSE_LOCATION = 21
 
     var imageStored = false
 
@@ -106,8 +108,9 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
         mBinding.root.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                slideIn(mBinding.cvProfileSettingsShortcut, -1f, 0f)
+                slideIn(mBinding.topContainerFrame, -1f, 0f)
                 mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
+
                 return false
             }
         })
@@ -118,15 +121,23 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         checkUserPermissionGrantStatus()
         setOnClickListeners()
 //        showCard()
+        setupTopContainer()
+    }
+
+    private fun setupTopContainer() {
+        var fragmentManager = supportFragmentManager.beginTransaction()
+        fragmentManager.replace(R.id.topContainerFrame, TopContainerFragment())
+        fragmentManager.commit()
+
     }
 
 
     private fun slideIn(view: View, from: Float, to: Float) {
         val animator = ValueAnimator.ofFloat(from, to)
         animator.addUpdateListener {
-            animator -> view.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
+            animator -> view.translationY = (animator.animatedValue as Float) * view.measuredHeight
         }
-        animator.duration = 450
+        animator.duration = 600
         animator.interpolator = AccelerateDecelerateInterpolator()
         animator.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
@@ -141,38 +152,21 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         var viewsList : ArrayList<View> = ArrayList()
 
         viewsList.add(mBinding.picturePreview)
-        viewsList.add(mBinding.ivMatchesIcon)
-        viewsList.add(mBinding.ivSettingsIcon)
 
         var iconsAnimatorSet = AnimatorSet()
 
         for (v in viewsList){
-            val animator = ValueAnimator.ofFloat(-0.25f, 0f)
+            val animator = ValueAnimator.ofFloat(-1f, 0f)
             animator.addUpdateListener {
-                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
+                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.topContainerFrame.measuredHeight
             }
             iconsAnimatorSet.play(animator)
         }
         iconsAnimatorSet.duration = 650
 
-        viewsList.clear()
-
-        viewsList.add(mBinding.tvSettings)
-        viewsList.add(mBinding.tvMatchesHeader)
-        viewsList.add(mBinding.tvYouProfilePic)
-
-        var headerAnimatorSet = AnimatorSet()
-        for (v in viewsList){
-            val animator = ValueAnimator.ofFloat(-0.4f, 0f)
-            animator.addUpdateListener {
-                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.cvProfileSettingsShortcut.measuredHeight
-            }
-            headerAnimatorSet.play(animator)
-        }
-        headerAnimatorSet.duration = 750
 
         var finalAnimatorSet = AnimatorSet()
-        finalAnimatorSet.playTogether(iconsAnimatorSet, headerAnimatorSet)
+        finalAnimatorSet.playTogether(iconsAnimatorSet)
         finalAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
         finalAnimatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
@@ -207,6 +201,16 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
                                     }
                                 })
                                 anim.start()
+                            }
+                            TopContainerFragment().HIDE_CONTAINER->{
+                                mBinding.picturePreview.visibility = GONE
+                            }
+                            TopContainerFragment().SHOW_CONTAINER->{
+                                mBinding.picturePreview.visibility = VISIBLE
+                                if (photoFile != null){
+                                    var bMap = BitmapFactory.decodeFile(photoFile!!.path)
+                                    mBinding.picturePreview.setImageBitmap(bMap)
+                                }
                             }
                         }
                     }
@@ -302,23 +306,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         return mSearchSettings
     }
 
-//    private fun showSettingsCardView(control: Int) {
-//        mBinding.searchSettingsPlaceholder.visibility = VISIBLE
-//        var animateSettingsContainer = ObjectAnimator.ofFloat(mBinding.searchSettingsPlaceholder,
-//                View.ALPHA, 1f)
-//        animateSettingsContainer.duration = 100
-//        animateSettingsContainer.addListener(object : AnimatorListenerAdapter() {
-//            override fun onAnimationStart(animation: Animator?) {
-//                super.onAnimationStart(animation)
-//                val fragment = PromptSettingsFragment.newInstance(settingsCompleted)
-//                var fragmentTransaction = supportFragmentManager.beginTransaction()
-//                        .replace(R.id.zzxxx, fragment)
-//                        .commit()
-//            }
-//        })
-//        animateSettingsContainer.start()
-//    }
-
     override fun onClick(view: View) {
         when(view.id){
             R.id.tv_Settings ->{
@@ -383,7 +370,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             mBinding.picturePreview.visibility = VISIBLE
             var bMap = BitmapFactory.decodeFile(photoFile!!.path)
             mBinding.picturePreview.setImageBitmap(bMap)
-
 //            Glide.with(this).load(photoFile!!.path).apply(RequestOptions.circleCropTransform()).into(mBinding.picturePreview)
         }
     }
