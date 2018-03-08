@@ -8,11 +8,20 @@
 
         <com.mtailacodes.blueprintrendevouz.customViews.CurveContainer android:id="@+id/curveParentContainer"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="112dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@android:color/transparent">
+
+            <com.mtailacodes.blueprintrendevouz.customViews.CustomImageView android:id="@+id/cv_CustomImageView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="16dp"
+                android:visibility="gone"/>
 
             <TextView android:id="@+id/tv_Settings"
                 android:layout_width="wrap_content"

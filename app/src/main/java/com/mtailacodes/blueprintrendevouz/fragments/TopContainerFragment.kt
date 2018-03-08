@@ -12,6 +12,8 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import com.mtailacodes.blueprintrendevouz.MyApplication
 import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.R.id.tv_Settings
+import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
 import com.mtailacodes.blueprintrendevouz.databinding.FragmentTopContainerBinding
 
 
@@ -26,6 +28,8 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
     val HIDE_CONTAINER = "HIDE PICTURE PREVIEW"
     val SHOW_CONTAINER = "SHOW PICTURE PREVIEW"
     val containerMaxHeight = 1200
+    var mAnimationList : ArrayList<Animator> = ArrayList()
+    var mViewsList : ArrayList<View> = ArrayList()
 
     companion object {
         fun newInstance(): TopContainerFragment {
@@ -43,6 +47,14 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         staggeredHeaderNavAnimation()
         mBinding.curveParentContainer.setOnClickListener(this)
+        generateViewsList() // view to be animated when user interacts with the container
+    }
+
+    private fun generateViewsList() {
+        mViewsList.add(mBinding.tvSettings)
+        mViewsList.add(mBinding.ivSettingsIcon)
+        mViewsList.add(mBinding.tvMatchesHeader)
+        mViewsList.add(mBinding.ivMatchesIcon)
     }
 
     override fun onClick(p0: View) {
@@ -134,6 +146,18 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
                         .bus()
                         .send(SHOW_CONTAINER)
             }
+
+            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
+                super.onAnimationStart(animation, isReverse)
+                mAnimationList.clear()
+                for (view in mViewsList) {
+                    mAnimationList.add(AnimationUtil.alpha(view = view, alphaValue =  1f))
+                }
+                var hideContainerSettingsShortcutViews = AnimationUtil.combineToAnimatorSet(mAnimationList)
+                hideContainerSettingsShortcutViews.duration = 200
+                hideContainerSettingsShortcutViews.interpolator = AccelerateInterpolator()
+                hideContainerSettingsShortcutViews.start()
+            }
         })
         animatorSet.start()
         down = false
@@ -172,6 +196,16 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
                 (activity.application as MyApplication)
                         .bus()
                         .send(HIDE_CONTAINER)
+
+                mAnimationList.clear()
+                for (view in mViewsList) {
+                    mAnimationList.add(AnimationUtil.alpha(view = view, alphaValue =  0f))
+                }
+                var hideContainerSettingsShortcutViews = AnimationUtil.combineToAnimatorSet(mAnimationList)
+                hideContainerSettingsShortcutViews.duration = 200
+                hideContainerSettingsShortcutViews.interpolator = AccelerateInterpolator()
+                hideContainerSettingsShortcutViews.start()
+
             }
         })
         animatorSet.start()

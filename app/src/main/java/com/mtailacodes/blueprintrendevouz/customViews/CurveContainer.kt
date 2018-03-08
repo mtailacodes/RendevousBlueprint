@@ -17,7 +17,7 @@ class CurveContainer : ConstraintLayout{
     var xHeight = 0f
     var biezerYValue = 75
     var biezerYDefaultVal2 = 75
-    var sideControl = 0f
+    var sideControl = 0.75f
     var sideControlDefaultValue = 0.75f
     var sideControlMaxValue = 0.95f
 
