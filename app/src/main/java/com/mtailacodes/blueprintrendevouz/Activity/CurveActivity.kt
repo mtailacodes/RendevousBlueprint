@@ -41,61 +41,61 @@ class CurveActivity: AppCompatActivity(), View.OnClickListener {
     }
 
     private fun pullUp() {
-        var params = mBinding.curveContainer.layoutParams
-        mBinding.curveContainer.layoutParams = params
-
-        val heightAnimator = ValueAnimator.ofInt( 1200, 263)
-        heightAnimator.addUpdateListener { animator ->
-            params.height = animator.animatedValue as Int
-            mBinding.curveContainer.layoutParams = params
-        }
-
-        val curveAnimator = ValueAnimator.ofInt( 0, 100)
-        curveAnimator.addUpdateListener { animator ->
-            mBinding.curveContainer.setBiezerY(animator.animatedValue as Int)
-        }
-
-        var animatorSet = AnimatorSet()
-        animatorSet.playTogether(curveAnimator, heightAnimator)
-        animatorSet.duration = 200
-        animatorSet.interpolator = AccelerateDecelerateInterpolator()
-        animatorSet.addListener(object : AnimatorListenerAdapter(){
-            override fun onAnimationStart(animation: Animator?) {
-                super.onAnimationStart(animation)
-//                mBinding.cardview.visibility = View.GONE
-            }
-        })
-        animatorSet.start()
+//        var params = mBinding.curveContainer.layoutParams
+//        mBinding.curveContainer.layoutParams = params
+//
+//        val heightAnimator = ValueAnimator.ofInt( 1200, 263)
+//        heightAnimator.addUpdateListener { animator ->
+//            params.height = animator.animatedValue as Int
+//            mBinding.curveContainer.layoutParams = params
+//        }
+//
+//        val curveAnimator = ValueAnimator.ofInt( 0, 100)
+//        curveAnimator.addUpdateListener { animator ->
+//            mBinding.curveContainer.setBiezerY(animator.animatedValue as Int)
+//        }
+//
+//        var animatorSet = AnimatorSet()
+//        animatorSet.playTogether(curveAnimator, heightAnimator)
+//        animatorSet.duration = 200
+//        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+//        animatorSet.addListener(object : AnimatorListenerAdapter(){
+//            override fun onAnimationStart(animation: Animator?) {
+//                super.onAnimationStart(animation)
+////                mBinding.cardview.visibility = View.GONE
+//            }
+//        })
+//        animatorSet.start()
         down = false
     }
 
     private fun pullDown() {
-        var params = mBinding.curveContainer.layoutParams
-        var currentHeight = (mBinding.curveContainer.xHeight).toInt()
-        mBinding.curveContainer.layoutParams = params
-
-        val heightAnimator = ValueAnimator.ofInt(currentHeight, 1200)
-        heightAnimator.addUpdateListener { animator ->
-            params.height = animator.animatedValue as Int
-            mBinding.curveContainer.layoutParams = params
-        }
-
-        val curveAnimator = ValueAnimator.ofInt(mBinding.curveContainer.biezerYValue, 0)
-        curveAnimator.addUpdateListener { animator ->
-            mBinding.curveContainer.setBiezerY(animator.animatedValue as Int)
-        }
-
-        var animatorSet = AnimatorSet()
-        animatorSet.playTogether(curveAnimator, heightAnimator)
-        animatorSet.duration = 200
-        animatorSet.interpolator = AccelerateDecelerateInterpolator()
-        animatorSet.addListener(object : AnimatorListenerAdapter(){
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-//                mBinding.cardview.visibility = View.VISIBLE
-            }
-        })
-        animatorSet.start()
+//        var params = mBinding.curveContainer.layoutParams
+//        var currentHeight = (mBinding.curveContainer.xHeight).toInt()
+//        mBinding.curveContainer.layoutParams = params
+//
+//        val heightAnimator = ValueAnimator.ofInt(currentHeight, 1200)
+//        heightAnimator.addUpdateListener { animator ->
+//            params.height = animator.animatedValue as Int
+//            mBinding.curveContainer.layoutParams = params
+//        }
+//
+//        val curveAnimator = ValueAnimator.ofInt(mBinding.curveContainer.biezerYValue, 0)
+//        curveAnimator.addUpdateListener { animator ->
+//            mBinding.curveContainer.setBiezerY(animator.animatedValue as Int)
+//        }
+//
+//        var animatorSet = AnimatorSet()
+//        animatorSet.playTogether(curveAnimator, heightAnimator)
+//        animatorSet.duration = 200
+//        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+//        animatorSet.addListener(object : AnimatorListenerAdapter(){
+//            override fun onAnimationEnd(animation: Animator?) {
+//                super.onAnimationEnd(animation)
+////                mBinding.cardview.visibility = View.VISIBLE
+//            }
+//        })
+//        animatorSet.start()
 
         down = true
 

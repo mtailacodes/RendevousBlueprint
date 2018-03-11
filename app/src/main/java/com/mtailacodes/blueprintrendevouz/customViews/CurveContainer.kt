@@ -15,8 +15,8 @@ class CurveContainer : ConstraintLayout{
     var shadowPath = Path()
     var xWidth = 0f
     var xHeight = 0f
-    var biezerYValue = 75
-    var biezerYDefaultVal2 = 75
+    var biezerYValue = 75f
+    var biezerYDefaultVal2 = 75f
     var sideControl = 0.75f
     var sideControlDefaultValue = 0.75f
     var sideControlMaxValue = 0.95f
@@ -42,7 +42,7 @@ class CurveContainer : ConstraintLayout{
         init()
     }
 
-    open fun setBiezerY(y : Int){
+    open fun setBiezerY(y : Float){
         biezerYValue = y
         invalidate()
     }

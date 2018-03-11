@@ -14,15 +14,75 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@android:color/transparent">
 
+            <!--expanded views -->
             <com.mtailacodes.blueprintrendevouz.customViews.CustomImageView android:id="@+id/cv_CustomImageView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="16dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="56dp"
+                android:visibility="gone"
+                android:alpha="0"
+                app:cardBackgroundColor="@color/colorAccent"
+                app:cardCornerRadius="8dp">
 
+
+            </com.mtailacodes.blueprintrendevouz.customViews.CustomImageView>
+
+            <TextView android:id="@+id/tv_expandedMatchesItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_CustomImageView"
+                app:layout_constraintBottom_toTopOf="@+id/tv_expandedSearchSettingsItem"
+                android:textColor="@color/black87"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Connections"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:paddingTop="8dp"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+            <TextView android:id="@+id/tv_expandedSearchSettingsItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_expandedMatchesItem"
+                app:layout_constraintBottom_toTopOf="@+id/tv_expandedProfileSettingsItem"
+                android:textColor="@color/black87"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Search Settings"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:paddingTop="8dp"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+            <TextView android:id="@+id/tv_expandedProfileSettingsItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_expandedSearchSettingsItem"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:paddingTop="8dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black87"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Profile Settings"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+
+            <!--collapsed header icons and shortcut titles-->
             <TextView android:id="@+id/tv_Settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

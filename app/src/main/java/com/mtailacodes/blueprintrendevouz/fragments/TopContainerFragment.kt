@@ -3,9 +3,12 @@ package com.mtailacodes.blueprintrendevouz.fragments
 import android.animation.*
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
+import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
@@ -124,9 +127,9 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
             mBinding.curveParentContainer.layoutParams = params
         }
 
-        val curveAnimator = ValueAnimator.ofInt( 0, mBinding.curveParentContainer.biezerYDefaultVal2)
+        val curveAnimator = ValueAnimator.ofFloat( 0.01f, 1f)
         curveAnimator.addUpdateListener { animator ->
-            mBinding.curveParentContainer.setBiezerY(animator.animatedValue as Int)
+            mBinding.curveParentContainer.setBiezerY((animator.animatedValue as Float) * mBinding.curveParentContainer.biezerYDefaultVal2)
         }
 
         val sideContainerAnimator = ValueAnimator.ofFloat(mBinding.curveParentContainer.sideControl,
@@ -170,24 +173,23 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
 
         val heightAnimator = ValueAnimator.ofInt(currentHeight, containerMaxHeight)
         heightAnimator.addUpdateListener { animator ->
-            params.height = animator.animatedValue as Int
-            mBinding.curveParentContainer.layoutParams = params
+            var testParam : ConstraintLayout.LayoutParams = mBinding.curveParentContainer.layoutParams as ConstraintLayout.LayoutParams
+            testParam.height = animator.animatedValue as Int
+            mBinding.curveParentContainer.layoutParams = testParam
         }
 
-        val curveAnimator = ValueAnimator.ofInt(mBinding.curveParentContainer.biezerYValue, 0)
+        val curveAnimator = ValueAnimator.ofFloat(1f, 0.01f)
         curveAnimator.addUpdateListener { animator ->
-            mBinding.curveParentContainer.setBiezerY(animator.animatedValue as Int)
+            mBinding.curveParentContainer.setBiezerY((animator.animatedValue as Float) * mBinding.curveParentContainer.biezerYDefaultVal2)
         }
 
-        val sideContainerAnimator = ValueAnimator.ofFloat(mBinding.curveParentContainer.sideControl,
-                mBinding.curveParentContainer.sideControlMaxValue)
-                        sideContainerAnimator.addUpdateListener { animator ->
-            mBinding.curveParentContainer.setSideYValue(animator.animatedValue as Float)
+        val sideContainerAnimator = ValueAnimator.ofFloat(1f, 1.266f)
+        sideContainerAnimator.addUpdateListener { animator ->
+            mBinding.curveParentContainer.setSideYValue((animator.animatedValue as Float) * mBinding.curveParentContainer.sideControlDefaultValue)
         }
-
 
         var animatorSet = AnimatorSet()
-        animatorSet.playTogether(curveAnimator, heightAnimator, sideContainerAnimator)
+        animatorSet.playTogether(curveAnimator, sideContainerAnimator, heightAnimator)
         animatorSet.duration = 300
         animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.addListener(object : AnimatorListenerAdapter(){
@@ -199,14 +201,42 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
 
                 mAnimationList.clear()
                 for (view in mViewsList) {
-                    mAnimationList.add(AnimationUtil.alpha(view = view, alphaValue =  0f))
+                    mAnimationList.add(AnimationUtil.alpha(view = view, alphaValue =  0f, duration = 300))
                 }
+
+                mBinding.cvCustomImageView.visibility = VISIBLE
+                mBinding.tvExpandedMatchesItem.visibility = VISIBLE
+                mBinding.tvExpandedSearchSettingsItem.visibility = VISIBLE
+                mBinding.tvExpandedProfileSettingsItem.visibility = VISIBLE
+
+                // todo clean up
+
                 var hideContainerSettingsShortcutViews = AnimationUtil.combineToAnimatorSet(mAnimationList)
-                hideContainerSettingsShortcutViews.duration = 200
-                hideContainerSettingsShortcutViews.interpolator = AccelerateInterpolator()
-                hideContainerSettingsShortcutViews.start()
+
+                mViewsList.clear()
+                mAnimationList.clear()
+
+                mViewsList.add(mBinding.cvCustomImageView)
+                mViewsList.add(mBinding.tvExpandedMatchesItem)
+                mViewsList.add(mBinding.tvExpandedProfileSettingsItem)
+                mViewsList.add(mBinding.tvExpandedSearchSettingsItem)
+
+                for (view in mViewsList) {
+                    mAnimationList.add(AnimationUtil.alpha(view = view, alphaValue =  1f, duration = 300))
+                }
+
+                var showContainerSettingsShortcutViews = AnimationUtil.combineToAnimatorSet(mAnimationList)
+                showContainerSettingsShortcutViews.startDelay = 200
+                showContainerSettingsShortcutViews.duration = 400
+
+
+                val animatorSet = AnimatorSet()
+                animatorSet.playTogether(showContainerSettingsShortcutViews, hideContainerSettingsShortcutViews)
+                animatorSet.interpolator = AccelerateDecelerateInterpolator()
+                animatorSet.start()
 
             }
+
         })
         animatorSet.start()
 
