@@ -9,10 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.drm.DrmStore.Action.PREVIEW
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -35,14 +32,12 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.GeoPoint
 import com.mtailacodes.blueprintrendevouz.MyApplication
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
@@ -54,13 +49,11 @@ import com.mtailacodes.blueprintrendevouz.fragments.TopContainerFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Single
+import rx.functions.Action1
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 /**
@@ -70,8 +63,12 @@ import kotlin.collections.ArrayList
 class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickListener,
         PromptSettingsFragment.UserSearchSettingsListener{
 
-    var index = 0
     var maps: GoogleMap? = null
+
+
+
+    // userFlow variables
+    var gotUserFromFirestoreDocuments = false
 
 
     //Activity variables
@@ -106,11 +103,13 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_map_search)
 
+        gotUserFromFirestoreDocuments = true // guards against race condition issue with getUser from onResume
+
+        // needed to get heights of topCurveContainerFragment for animation
         mBinding.root.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 slideIn(mBinding.topContainerFrame, -1f, 0f)
                 mBinding.root.viewTreeObserver.removeOnPreDrawListener(this)
-
                 return false
             }
         })
@@ -131,51 +130,31 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     }
 
-
     private fun slideIn(view: View, from: Float, to: Float) {
-        val animator = ValueAnimator.ofFloat(from, to)
-        animator.addUpdateListener {
-            animator -> view.translationY = (animator.animatedValue as Float) * view.measuredHeight
-        }
-        animator.duration = 600
-        animator.interpolator = AccelerateDecelerateInterpolator()
-        animator.addListener(object : AnimatorListenerAdapter(){
+        val mOnEnterSlideInAnimator = AnimationUtil.slideInAnimator(view, from, to)
+        mOnEnterSlideInAnimator.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
                 super.onAnimationStart(animation, isReverse)
-                staggeredHeaderNavAnimation()
+                picturePreviewOnEnterAnimation()
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                getUserDocument()
             }
         })
-        animator.start()
+        mOnEnterSlideInAnimator.start()
     }
 
-    private fun staggeredHeaderNavAnimation() {
-        var viewsList : ArrayList<View> = ArrayList()
+    private fun picturePreviewOnEnterAnimation() {
 
-        viewsList.add(mBinding.picturePreview)
-
-        var iconsAnimatorSet = AnimatorSet()
-
-        for (v in viewsList){
-            val animator = ValueAnimator.ofFloat(-1f, 0f)
-            animator.addUpdateListener {
-                animator -> v.translationY = (animator.animatedValue as Float) * mBinding.topContainerFrame.measuredHeight
-            }
-            iconsAnimatorSet.play(animator)
-        }
-        iconsAnimatorSet.duration = 650
-
-
-        var finalAnimatorSet = AnimatorSet()
-        finalAnimatorSet.playTogether(iconsAnimatorSet)
-        finalAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
-        finalAnimatorSet.addListener(object : AnimatorListenerAdapter(){
+        val mPicturePreviewAnimator = AnimationUtil.picturePreviewSlideInAnimator(mBinding.picturePreview, mBinding.topContainerFrame.measuredHeight)
+        mPicturePreviewAnimator.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
                 handleCaptureImageCardView(1f)
             }
         })
-        finalAnimatorSet.start()
-
+        mPicturePreviewAnimator.start()
     }
 
     private fun startListeningForEventBus() {
@@ -225,17 +204,36 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     override fun onResume() {
         super.onResume()
 
-        var mUserRef = RxUserUtil().getUserDocument()
-        mUserRef.get().addOnSuccessListener {
-            data : DocumentSnapshot ->
-            if (data.exists()){
-                mUser.emailAddress = data.getString("emailAddress")
-                mUser.uuID = data.getString("uuID")
-                mUser.username = data.getString("username")
-                mUser.requiresOnboarding = data.getBoolean("requiresOnboarding")
-                directUser(mUser)
-            }
+        // if mUser already instantiated from onCreate, no need to do it again
+        // if onPause is called, update the user on onResume
+        if (!gotUserFromFirestoreDocuments){
+            getUserDocument()
         }
+    }
+
+    private fun getUserDocument() {
+        var mUserRef = RxUserUtil().getUserDocument()
+
+        rx.Single.create<Unit> {
+            mUserRef.get().addOnSuccessListener {
+                data : DocumentSnapshot -> if (data.exists()){
+                // handle hardcoded values (strings) correctly
+                    mUser.emailAddress = data.getString("emailAddress")
+                    mUser.uuID = data.getString("uuID")
+                    mUser.username = data.getString("username")
+                    mUser.requiresOnboarding = data.getBoolean("requiresOnboarding")
+                    gotUserFromFirestoreDocuments = true
+                    directUser(mUser)
+                }
+            }.addOnFailureListener {
+                gotUserFromFirestoreDocuments = false
+            }
+        }.subscribe()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        gotUserFromFirestoreDocuments = false
     }
 
     private fun directUser(mUser: RendevouzUserModel) {

@@ -209,4 +209,27 @@ object AnimationUtil {
     }
 
 
+
+    // map search activity specific animations
+
+    fun slideInAnimator(view: View, from: Float, to: Float) : ValueAnimator {
+        val mOnEnterSlideInAnimator = ValueAnimator.ofFloat(from, to)
+        mOnEnterSlideInAnimator.addUpdateListener {
+            animator -> view.translationY = (animator.animatedValue as Float) * view.measuredHeight
+        }
+        mOnEnterSlideInAnimator.duration = 600
+        mOnEnterSlideInAnimator.interpolator = AccelerateDecelerateInterpolator()
+        return mOnEnterSlideInAnimator
+    }
+
+    fun picturePreviewSlideInAnimator(view: View, measuredHeight: Int): ValueAnimator {
+
+        val mPicturePreviewAnimator = ValueAnimator.ofFloat(-1f, 0f)
+        mPicturePreviewAnimator.addUpdateListener {
+            animator -> view.translationY = (animator.animatedValue as Float) * measuredHeight
+        }
+        mPicturePreviewAnimator.duration = 650
+        mPicturePreviewAnimator.interpolator = AccelerateDecelerateInterpolator()
+        return mPicturePreviewAnimator
+    }
 }
