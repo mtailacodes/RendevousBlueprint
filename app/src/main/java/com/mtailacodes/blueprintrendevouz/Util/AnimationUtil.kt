@@ -232,4 +232,21 @@ object AnimationUtil {
         mPicturePreviewAnimator.interpolator = AccelerateDecelerateInterpolator()
         return mPicturePreviewAnimator
     }
+
+    fun onBoardingStaggered (viewList : ArrayList<View>, standardHeight : Int, startDelay: Long) : AnimatorSet {
+
+        var mAnimatorSet = AnimatorSet()
+
+        for (v in viewList){
+            val animator = ValueAnimator.ofFloat(-0.25f, 0f)
+            animator.addUpdateListener { animator -> v.translationY = (animator.animatedValue as Float) * standardHeight}
+            val alphaAnimator = AnimationUtil.alpha(v, 1f)
+            mAnimatorSet.play(animator)
+            mAnimatorSet.play(alphaAnimator)
+        }
+
+        mAnimatorSet.startDelay = startDelay
+
+        return mAnimatorSet
+    }
 }

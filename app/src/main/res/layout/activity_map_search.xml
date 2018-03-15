@@ -3,57 +3,61 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
-    <android.support.v7.widget.CardView android:id="@+id/cv_ProfileSettingsShortcut"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="2dp"
-        android:visibility="gone">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_ProfileSettingsShortcut"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView android:id="@+id/tv_Settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Settings"
-                android:textSize="16sp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:textColor="@color/black87"/>
+                <TextView
+                    android:id="@+id/tv_Settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Settings"
+                    android:textColor="@color/black87"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView android:id="@+id/iv_SettingsIcon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                app:layout_constraintTop_toTopOf="@+id/picturePreview"
-                app:layout_constraintBottom_toBottomOf="@+id/picturePreview"
-                app:layout_constraintStart_toStartOf="@+id/tv_Settings"
-                app:layout_constraintEnd_toEndOf="@+id/tv_Settings"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_settings"
-                android:tint="@color/hideContainer"/>
+                <ImageView
+                    android:id="@+id/iv_SettingsIcon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_settings"
+                    android:tint="@color/hideContainer"
+                    app:layout_constraintBottom_toBottomOf="@+id/picturePreview"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_Settings"
+                    app:layout_constraintStart_toStartOf="@+id/tv_Settings"
+                    app:layout_constraintTop_toTopOf="@+id/picturePreview" />
 
-            <TextView android:id="@+id/tv_YouProfilePic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@+id/tv_Settings"
-                app:layout_constraintStart_toStartOf="@+id/picturePreview"
-                app:layout_constraintEnd_toEndOf="@+id/picturePreview"
-                android:text="You"
-                android:textSize="16sp"
-                android:textColor="@color/black87"/>
+                <TextView
+                    android:id="@+id/tv_YouProfilePic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="You"
+                    android:textColor="@color/black87"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/picturePreview"
+                    app:layout_constraintStart_toStartOf="@+id/picturePreview"
+                    app:layout_constraintTop_toTopOf="@+id/tv_Settings" />
 
-            <!--<com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/picturePreview"-->
+                <!--<com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/picturePreview"-->
                 <!--android:transitionName="@string/profilePictureTransition"-->
                 <!--android:layout_width="48dp"-->
                 <!--android:layout_height="48dp"-->
@@ -68,239 +72,348 @@
                 <!--android:layout_marginStart="16dp"-->
                 <!--android:src="@drawable/icon_user"/>-->
 
-            <TextView android:id="@+id/tv_MatchesHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@+id/tv_Settings"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Connections"
-                android:textSize="16sp"
-                android:textColor="@color/black87"/>
+                <TextView
+                    android:id="@+id/tv_MatchesHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Connections"
+                    android:textColor="@color/black87"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_Settings" />
 
-            <ImageView android:id="@+id/iv_MatchesIcon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                app:layout_constraintTop_toTopOf="@+id/iv_SettingsIcon"
-                app:layout_constraintStart_toStartOf="@+id/tv_MatchesHeader"
-                app:layout_constraintEnd_toEndOf="@+id/tv_MatchesHeader"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_connections"
-                android:tint="@color/hideContainer"/>
+                <ImageView
+                    android:id="@+id/iv_MatchesIcon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_connections"
+                    android:tint="@color/hideContainer"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_MatchesHeader"
+                    app:layout_constraintStart_toStartOf="@+id/tv_MatchesHeader"
+                    app:layout_constraintTop_toTopOf="@+id/iv_SettingsIcon" />
 
-        </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
-    <FrameLayout android:id="@+id/topContainerFrame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="3dp">
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/topContainerFrame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
-    <com.appeaser.imagetransitionlibrary.TransitionImageView android:id="@+id/picturePreview"
-        android:transitionName="@string/profilePictureTransition"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        app:tiv_rounding="1"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/topContainerFrame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/icon_user" />
+        <com.appeaser.imagetransitionlibrary.TransitionImageView
+            android:id="@+id/picturePreview"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_user"
+            android:transitionName="@string/profilePictureTransition"
+            app:layout_constraintBottom_toBottomOf="@+id/topContainerFrame"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tiv_rounding="1" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#eeeeee"
-        android:elevation="1dp"
-        android:visibility="gone"/>
 
-    <!--<ImageView android:id="@+id/stubView"-->
+
+        <!--<ImageView android:id="@+id/stubView"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:elevation="3dp"-->
         <!--android:src="@drawable/stub_marker"-->
         <!--android:tint="@color/colorAccent"/>-->
-    <!--<ImageView android:id="@+id/one"-->
+        <!--<ImageView android:id="@+id/one"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:elevation="3dp"-->
         <!--android:src="@drawable/stub_marker"/>-->
-    <!--<ImageView android:id="@+id/two"-->
+        <!--<ImageView android:id="@+id/two"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:elevation="3dp"-->
         <!--android:src="@drawable/stub_marker"/>-->
-    <!--<ImageView android:id="@+id/three"-->
+        <!--<ImageView android:id="@+id/three"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:elevation="3dp"-->
         <!--android:src="@drawable/stub_marker"/>-->
 
-    <fragment android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/userListFragment"/>
-
-    <android.support.constraint.ConstraintLayout android:id="@+id/searchSettingsPlaceholder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_ProfileSettingsShortcut"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#B322313F"
-        android:visibility="gone"
-        android:alpha="0">
-
-        <android.support.v7.widget.CardView android:id="@+id/cv_SearchSettingsContainer"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="0dp"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/userListFragment"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="24dp"
-            app:cardCornerRadius="12dp">
-
-            <FrameLayout
-                android:id="@+id/zzxxx"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </FrameLayout>
-
-        </android.support.v7.widget.CardView>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.v7.widget.CardView android:id="@+id/cv_PromptUserImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="24dp"
-        app:cardCornerRadius="12dp"
-        android:elevation="3dp"
-        android:alpha="0"
-        android:visibility="gone"
-        android:scaleX="0.2"
-        android:scaleY="0.2">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/searchSettingsPlaceholder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:background="#B322313F"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_ProfileSettingsShortcut">
 
-
-            <TextView android:id="@+id/tv_PromptTitle"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_SearchSettingsContainer"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_height="400dp"
+                android:layout_margin="24dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:background="@drawable/border_bottom_primary"
-                android:text="Introduce yourself"
-                android:textColor="@color/hideContainer"
-                android:textSize="16sp"
-                android:gravity="center_horizontal"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView android:id="@+id/tv_PromptDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_PromptTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:padding="16dp"
-                android:text="Before you can interact with other users, you must post a picture."
-                android:layout_marginTop="32dp"
-                android:gravity="center_horizontal"/>
+                <FrameLayout
+                    android:id="@+id/zzxxx"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></FrameLayout>
 
-            <TextView android:id="@+id/tv_TakeAPicture"
-                android:layout_width="0dp"
+            </android.support.v7.widget.CardView>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_PromptUserImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:alpha="0"
+            android:elevation="3dp"
+            android:scaleX="0.2"
+            android:scaleY="0.2"
+            android:visibility="gone"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/tv_PromptTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom_primary"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:text="Introduce yourself"
+                    android:textColor="@color/hideContainer"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_PromptDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center_horizontal"
+                    android:padding="16dp"
+                    android:text="Before you can interact with other users, you must post a picture."
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_PromptTitle" />
+
+                <TextView
+                    android:id="@+id/tv_TakeAPicture"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/border_top_light"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:text="TAKE A PICTURE"
+                    android:textColor="@color/failedRed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_PromptDescription" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <FrameLayout
+            android:id="@+id/userListFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></FrameLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_OnBoardUserContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#e05c5c"
+            android:elevation="6dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--// ViewPagerGuideline - allows for dynamic/responsive layouts-->
+            <android.support.constraint.Guideline
+                android:id="@+id/gl_OnBoardHorizontal20"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_PromptDescription"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:background="@drawable/border_top_light"
-                android:text="TAKE A PICTURE"
-                android:layout_marginTop="32dp"
-                android:gravity="center_horizontal"
-                android:textColor="@color/failedRed"/>
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.2" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/gl_OnBoardHorizontal80"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/gl_OnBoardVertical15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/gl_OnBoardVertical85"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <fragment
+                android:id="@+id/onBoardingFragment"
+                android:name="com.mtailacodes.blueprintrendevouz.fragments.onboarding.OnBoardingFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/gl_OnBoardHorizontal80"
+                app:layout_constraintEnd_toEndOf="@id/gl_OnBoardVertical85"
+                app:layout_constraintStart_toStartOf="@id/gl_OnBoardVertical15"
+                app:layout_constraintTop_toTopOf="@id/gl_OnBoardHorizontal20" />
 
         </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_onBoardingMessageContainer"
+            android:layout_width="0dp"
+            android:layout_height="240dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:alpha="0"
+            android:elevation="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <FrameLayout android:id="@+id/userListFragment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </FrameLayout>
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout android:id="@+id/cl_OnBoardUserContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#e05c5c"
-        android:elevation="6dp"
-        android:visibility="gone">
+                <View android:id="@+id/v_WelcomeHeaderBreaker"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="56dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:alpha="0"
+                    android:background="#e05c5c"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-        <!--// ViewPagerGuideline - allows for dynamic/responsive layouts-->
-        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardHorizontal20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2"/>
-        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardHorizontal80"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8"/>
-        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardVertical15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05"/>
-        <android.support.constraint.Guideline android:id="@+id/gl_OnBoardVertical85"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95"/>
+                <View android:id="@+id/v_TopBreaker"
+                    android:layout_width="40dp"
+                    android:layout_height="1dp"
+                    android:alpha="0"
+                    android:background="#e05c5c"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_TopOnBoardingMessage" />
 
-        <fragment android:id="@+id/onBoardingFragment"
-            android:name="com.mtailacodes.blueprintrendevouz.fragments.onboarding.OnBoardingFragment"
+                <TextView android:id="@+id/tv_BottomObBoardingMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:text="START"
+                    android:textColor="@color/black87"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/v_WelcomeHeaderBreaker" />
+
+                <TextView android:id="@+id/tv_TopOnBoardingMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:text="Welcome"
+                    android:textColor="@color/black87"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_MiddleOnBoardingMessage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView android:id="@+id/tv_MiddleOnBoardingMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="56dp"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:text="Tell us about yourself and who you're looking for. It will help Rendezvous find the best match."
+                    android:textColor="@color/black87"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/v_WelcomeHeaderBreaker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <View
+            android:id="@+id/v_OnBoardingTintBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/gl_OnBoardVertical15"
-            app:layout_constraintEnd_toEndOf="@id/gl_OnBoardVertical85"
-            app:layout_constraintTop_toTopOf="@id/gl_OnBoardHorizontal20"
-            app:layout_constraintBottom_toBottomOf="@id/gl_OnBoardHorizontal80" />
+            android:alpha="0"
+            android:background="#a3a3a3"
+            android:elevation="3dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
-
-</android.support.constraint.ConstraintLayout>
 
 </layout>

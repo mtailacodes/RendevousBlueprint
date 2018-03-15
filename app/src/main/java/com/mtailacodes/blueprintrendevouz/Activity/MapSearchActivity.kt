@@ -28,8 +28,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewAnimationUtils
 import android.view.ViewTreeObserver
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
+import android.view.animation.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
@@ -49,8 +48,6 @@ import com.mtailacodes.blueprintrendevouz.fragments.TopContainerFragment
 import com.mtailacodes.blueprintrendevouz.fragments.UserCardFragment
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import com.mtailacodes.blueprintrendevouz.models.user.user.login.UserSearchSettings
-import io.reactivex.Single
-import rx.functions.Action1
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -93,11 +90,18 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     lateinit var map: MapFragment
     lateinit var mFusedLocationProvider: FusedLocationProviderClient
 
-//    activity variables
+    // activity variables
     var mAnimationList : ArrayList<Animator> = ArrayList()
     var stubList : ArrayList<RendevouzUserModel> = ArrayList()
     lateinit var mBinding : ActivityMapSearchBinding
     var mSearchSettings =  UserSearchSettings()
+
+    // todo - this will be replaced with groups when it's there's a stable release
+    // views variables
+    var onboardingMessageTopViews: ArrayList<View> = ArrayList()
+    var onboardingMessageMiddleViews: ArrayList<View> = ArrayList()
+    var onboardingMessageBottomViews: ArrayList<View> = ArrayList()
+    var onboardingMessageAllViews: ArrayList<View> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -249,7 +253,67 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
     }
 
     private fun startUserOnBoardingProcess() {
-        mBinding.clOnBoardUserContainer.visibility = VISIBLE
+        // make container visible + background
+        mBinding.cvOnBoardingMessageContainer.visibility = VISIBLE
+        val container = mBinding.cvOnBoardingMessageContainer
+        mBinding.vOnBoardingTintBackground.visibility = VISIBLE
+
+        mBinding.vOnBoardingTintBackground.z = 6f
+        container.z = 8f
+        mAnimationList.clear()
+
+        // animate - the expansion of the container with a bounce scaleX/Y
+        // animate - alpha
+
+        var scaleAnim = ScaleAnimation(0.3f, 1f, 0.1f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        scaleAnim.duration = 650
+        scaleAnim.interpolator = OvershootInterpolator(1.5f)
+
+        mAnimationList.add(AnimationUtil.alpha(view = container, alphaValue = 1f))
+        mAnimationList.add(AnimationUtil.alpha(view = mBinding.vOnBoardingTintBackground, alphaValue = 0.75f))
+
+        val showContainerAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+
+        showContainerAnimatorSet.duration = 300
+        showContainerAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+        showContainerAnimatorSet.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationStart(animation: Animator?) {
+                super.onAnimationStart(animation)
+                container.startAnimation(scaleAnim)
+            }
+
+            override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                super.onAnimationEnd(animation, isReverse)
+
+
+                onboardingMessageTopViews.add(mBinding.tvTopOnBoardingMessage)
+                onboardingMessageTopViews.add(mBinding.vTopBreaker)
+
+                onboardingMessageMiddleViews.add(mBinding.tvMiddleOnBoardingMessage)
+
+                onboardingMessageBottomViews.add(mBinding.vWelcomeHeaderBreaker)
+                onboardingMessageBottomViews.add(mBinding.tvBottomObBoardingMessage)
+
+
+                var topAnimatorSet = AnimationUtil.onBoardingStaggered(onboardingMessageTopViews,
+                        standardHeight = mBinding.tvTopOnBoardingMessage.measuredHeight, startDelay = 0 )
+
+                var middleAnimatorSet = AnimationUtil.onBoardingStaggered(onboardingMessageMiddleViews,
+                        standardHeight = mBinding.tvTopOnBoardingMessage.measuredHeight, startDelay = 100 )
+
+                var bottomAnimatorSet = AnimationUtil.onBoardingStaggered(onboardingMessageBottomViews,
+                        standardHeight = mBinding.tvTopOnBoardingMessage.measuredHeight, startDelay = 200 )
+
+                val staggeredContentAnimatorSet = AnimatorSet()
+                staggeredContentAnimatorSet.playTogether(topAnimatorSet, middleAnimatorSet, bottomAnimatorSet)
+                staggeredContentAnimatorSet.interpolator = AccelerateDecelerateInterpolator()
+                staggeredContentAnimatorSet.duration = 350
+                staggeredContentAnimatorSet.start()
+
+            }
+        })
+        showContainerAnimatorSet.start()
+
     }
 
     private fun setOnClickListeners() {

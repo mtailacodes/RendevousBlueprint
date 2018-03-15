@@ -73,6 +73,8 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
     }
 
     private fun staggeredHeaderNavAnimation() {
+
+        // todo clean this shit up
         var viewsList : ArrayList<View> = ArrayList()
 
         viewsList.add(mBinding.ivMatchesIcon)
