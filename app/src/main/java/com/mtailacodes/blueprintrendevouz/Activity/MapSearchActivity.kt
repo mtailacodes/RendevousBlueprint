@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.CardView
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -285,6 +286,9 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
             override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
                 super.onAnimationEnd(animation, isReverse)
 
+                mBinding.tvBottomObBoardingMessage.setOnClickListener {
+                    _ -> customTransitionIntoOnBoardingActivity(container)
+                }
 
                 onboardingMessageTopViews.add(mBinding.tvTopOnBoardingMessage)
                 onboardingMessageTopViews.add(mBinding.vTopBreaker)
@@ -314,6 +318,18 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         })
         showContainerAnimatorSet.start()
 
+    }
+
+    private fun customTransitionIntoOnBoardingActivity(container: CardView) {
+        val screenLocation : IntArray = IntArray(2)
+        container.getLocationOnScreen(screenLocation)
+        var intent = Intent(this@MapSearchActivity, OnBoardingActivity::class.java)
+        intent.putExtra("Left", screenLocation[0])
+        intent.putExtra("Top", screenLocation[1])
+        intent.putExtra("Width", container.width)
+        intent.putExtra("Height", container.height)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 
     private fun setOnClickListeners() {
