@@ -40,21 +40,21 @@
 
 
         <activity android:name=".NavigationActivity"></activity>
-        <activity android:name=".Activity.LoginActivity"></activity>
-        <activity android:name=".Activity.SignInActivity">
+        <activity android:name=".Activity.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.LoginActivity"></activity>
+        <activity android:name=".Activity.SignInActivity"></activity>
         <activity android:name=".Activity.MapSearchActivity"></activity>
         <activity android:name=".TestActivity"></activity>
         <activity android:name=".Activity.OnBoardingActivity" android:theme="@style/transparent"></activity>
         <activity android:name=".Activity.ProfileActivity"></activity>
         <activity android:name=".Activity.RangeBarActivity"></activity>
         <activity android:name=".Activity.NotificationSettingsActivity"></activity>
-        <activity android:name=".Activity.SearchSettingsActivity" android:theme="@style/SearchSetting">
-        </activity>
+        <activity android:name=".Activity.SearchSettingsActivity" android:theme="@style/SearchSetting"></activity>
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

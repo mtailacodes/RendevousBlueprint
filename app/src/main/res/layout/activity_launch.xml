@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_trianglify3">
+
+    <android.support.constraint.Guideline android:id="@+id/gd_horizontalFiftyPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <View android:id="@+id/v_emailBackground"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gd_horizontalFiftyPercent"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/background_onboarding_border"
+        android:backgroundTint="#FFFFFF"
+        android:paddingEnd="4dp"
+        android:textSize="24sp" />
+
+    <TextView android:id="@+id/tv_emailTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        app:layout_constraintStart_toStartOf="@+id/v_emailBackground"
+        app:layout_constraintBottom_toTopOf="@+id/v_emailBackground"
+        app:layout_constraintTop_toTopOf="@+id/v_emailBackground"
+        android:layout_marginStart="8dp"
+        android:paddingBottom="2dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:paddingTop="2dp"
+        android:text="Email"
+        android:textColor="@color/failedRed"
+        android:background="@drawable/background_field_title"
+        android:backgroundTint="#FFFFFF" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_emailTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/v_emailBackground"
+        app:layout_constraintStart_toStartOf="@+id/tv_emailTitle"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_email_icon"/>
+
+    <EditText android:id="@+id/et_UsernameInput"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/v_emailBackground"
+        app:layout_constraintStart_toEndOf="@+id/tv_emailTitle"
+        app:layout_constraintEnd_toEndOf="@+id/v_emailBackground"
+        android:background="@android:color/transparent"
+        android:hint="jon@...."
+        android:paddingStart="16dp"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:text="matt@yahoo.com"/>
+
+    <View android:id="@+id/v_passwordBackground"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        app:layout_constraintStart_toStartOf="@+id/v_emailBackground"
+        app:layout_constraintEnd_toEndOf="@+id/v_emailBackground"
+        app:layout_constraintTop_toBottomOf="@+id/v_emailBackground"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_onboarding_border"
+        android:backgroundTint="#FFFFFF"
+        android:paddingEnd="4dp"
+        android:textSize="24sp" />
+
+    <TextView android:id="@+id/tv_passwordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        app:layout_constraintStart_toStartOf="@+id/v_passwordBackground"
+        app:layout_constraintBottom_toTopOf="@+id/v_passwordBackground"
+        app:layout_constraintTop_toTopOf="@+id/v_passwordBackground"
+        android:layout_marginStart="8dp"
+        android:paddingBottom="2dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:paddingTop="2dp"
+        android:text="Password"
+        android:textColor="@color/failedRed"
+        android:background="@drawable/background_field_title"
+        android:backgroundTint="#FFFFFF" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_passwordTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/v_passwordBackground"
+        app:layout_constraintStart_toStartOf="@+id/tv_passwordTitle"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_password_icon"/>
+
+    <EditText android:id="@+id/et_passwordInput"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/v_passwordBackground"
+        app:layout_constraintStart_toStartOf="@+id/et_UsernameInput"
+        app:layout_constraintEnd_toEndOf="@+id/v_passwordBackground"
+        android:background="@android:color/transparent"
+        android:hint="jon@...."
+        android:paddingStart="16dp"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:text="password"/>
+
+    <Button android:id="@+id/btn_login"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        app:layout_constraintStart_toStartOf="@+id/v_passwordBackground"
+        app:layout_constraintEnd_toEndOf="@+id/v_passwordBackground"
+        app:layout_constraintTop_toBottomOf="@+id/v_passwordBackground"
+        android:layout_marginTop="48dp"
+        android:background="#FFFFFF"
+        android:text="Sign in"
+        android:textAllCaps="false"
+        android:textColor="@color/failedRed"
+        android:paddingEnd="4dp"
+        android:textSize="24sp" />
+
+
+
+</android.support.constraint.ConstraintLayout>
+</layout>
