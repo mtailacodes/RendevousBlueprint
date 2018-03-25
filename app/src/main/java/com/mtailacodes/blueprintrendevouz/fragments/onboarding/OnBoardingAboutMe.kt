@@ -56,7 +56,7 @@ class OnBoardingAboutMe : Fragment(), View.OnClickListener, DatePickerFragment.E
         when (p0.id){
             R.id.et_AgeDay ->{ // show birthDate picker
                 if (!birthdateDialogueHandled){
-                    DatePickerFragment(mBinding.etAgeYear, mUser, this).show(activity.fragmentManager, "DatePicker")
+//                    DatePickerFragment(mBinding.etAgeYear, mUser, this@).show(activity.fragmentManager, "DatePicker")
                     birthdateDialogueHandled = true
                 }
             }

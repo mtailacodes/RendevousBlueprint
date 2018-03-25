@@ -1,18 +1,387 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <android.support.v7.widget.CardView android:id="@+id/cv_TransitionContainer"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cv_TransitionContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="12dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        app:cardCornerRadius="12dp">
 
-        <android.support.constraint.ConstraintLayout android:id="@+id/parentContainer"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/parentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <android.support.constraint.Guideline
+                android:id="@+id/topContainerGD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent=".125" />
 
+            <!--// personal detail views-->
+            <TextView
+                android:id="@+id/tv_personalDetailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="Personal Details"
+                android:textColor="@color/failedRed"
+                android:textSize="32sp"
+                app:layout_constraintBottom_toBottomOf="@+id/topContainerGD"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/tv_personalDetailsIntro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="A little about you..."
+                android:textColor="@color/black65"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_personalDetailsTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_personalDetailsTitle" />
 
+            <android.support.constraint.Guideline
+                android:id="@+id/centerVerticalDG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/genderGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.55" />
+
+            <TextView android:id="@+id/tv_GenderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="Your gender"
+                android:textColor="@color/black65"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_personalDetailsIntro"
+                app:layout_constraintTop_toBottomOf="@+id/tv_personalDetailsIntro" />
+
+            <com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView android:id="@+id/iv_maleSelection"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="20dp"
+                android:alpha="0"
+                android:background="#ffffff"
+                android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/genderGuideline"
+                app:layout_constraintEnd_toEndOf="@+id/centerVerticalDG"
+                app:layout_constraintStart_toStartOf="@+id/tv_GenderTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_GenderTitle" />
+
+            <com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView android:id="@+id/iv_femaleSelection"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:alpha="0"
+                android:background="#ffffff"
+                android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/genderGuideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/centerVerticalDG"
+                app:layout_constraintTop_toBottomOf="@+id/tv_GenderTitle" />
+
+            <View android:id="@+id/v_UsernameBackground"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="12dp"
+                android:alpha="0"
+                android:background="@drawable/background_onboarding_border"
+                android:paddingEnd="4dp"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_GenderTitle"
+                app:layout_constraintTop_toBottomOf="@+id/genderGuideline" />
+
+            <TextView android:id="@+id/tv_UsernameTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:alpha="0"
+                android:background="@drawable/background_field_title"
+                android:paddingBottom="2dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:text="Name"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/v_UsernameBackground"
+                app:layout_constraintStart_toStartOf="@+id/v_UsernameBackground"
+                app:layout_constraintTop_toTopOf="@+id/v_UsernameBackground" />
+
+            <EditText android:id="@+id/et_UsernameInput"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:alpha="0"
+                android:background="@android:color/transparent"
+                android:hint="Your name"
+                android:paddingStart="16dp"
+                android:textColor="@color/black87"
+                app:layout_constraintBottom_toBottomOf="@+id/v_UsernameBackground"
+                app:layout_constraintEnd_toEndOf="@+id/v_UsernameBackground"
+                app:layout_constraintStart_toStartOf="@+id/v_UsernameBackground" />
+
+            <TextView android:id="@+id/tv_DOB"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="16dp"
+                android:alpha="0"
+                android:background="@drawable/background_onboarding_border"
+                android:gravity="bottom"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:text="Set your birthday"
+                android:textColor="@color/shadowGrey"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/v_UsernameBackground"
+                app:layout_constraintStart_toStartOf="@+id/v_UsernameBackground"
+                app:layout_constraintTop_toBottomOf="@+id/v_UsernameBackground" />
+
+            <TextView android:id="@+id/tv_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:alpha="0"
+                android:padding="16dp"
+                android:text="Next"
+                android:textColor="@color/black87"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:alpha="0"
+                android:padding="16dp"
+                android:text="Back"
+                android:textColor="@color/black87"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.mtailacodes.blueprintrendevouz.customViews.OnBoardingStateIndicator
+                android:id="@+id/stateIndicator"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                android:alpha="0"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_next" />
+
+            <!--// search setting views-->
+
+            <TextView android:id="@+id/tv_searchSettingTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="Search Settings"
+                android:textColor="@color/iconPurple"
+                android:textSize="32sp"
+                app:layout_constraintBottom_toBottomOf="@+id/topContainerGD"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:alpha="1" />
+
+            <TextView android:id="@+id/tv_searchSettingIntro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="A little about them..."
+                android:textColor="@color/black65"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_searchSettingTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_searchSettingTitle"
+                tools:alpha="1" />
+
+            <TextView android:id="@+id/tv_TheirGenderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:alpha="0"
+                android:paddingEnd="16dp"
+                android:text="Their gender"
+                android:textColor="@color/black65"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_searchSettingIntro"
+                app:layout_constraintTop_toBottomOf="@+id/tv_searchSettingIntro"
+                tools:alpha="1" />
+
+            <com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView android:id="@+id/iv_maleSearchSetting"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="20dp"
+                android:alpha="0"
+                android:background="#ffffff"
+                android:elevation="1dp"
+                android:src="@drawable/male"
+                app:layout_constraintBottom_toBottomOf="@+id/genderGuideline"
+                app:layout_constraintEnd_toEndOf="@+id/centerVerticalDG"
+                app:layout_constraintStart_toStartOf="@+id/tv_TheirGenderTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_TheirGenderTitle"
+                tools:alpha="1" />
+
+            <com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView android:id="@+id/iv_femaleSearchSetting"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:alpha="0"
+                android:background="#ffffff"
+                android:elevation="1dp"
+                android:src="@drawable/girl"
+                app:layout_constraintBottom_toBottomOf="@+id/genderGuideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/centerVerticalDG"
+                app:layout_constraintTop_toBottomOf="@+id/tv_TheirGenderTitle"
+                tools:alpha="1" />
+
+            <View android:id="@+id/v_AgeRangeBackground"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="12dp"
+                android:alpha="0"
+                android:background="@drawable/background_onboarding_border"
+                android:backgroundTint="@color/iconPurple"
+                android:paddingEnd="4dp"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_TheirGenderTitle"
+                app:layout_constraintTop_toBottomOf="@+id/genderGuideline"
+                tools:alpha="1" />
+
+            <TextView android:id="@+id/tv_AgeRangeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:alpha="0"
+                android:background="@drawable/background_field_title"
+                android:backgroundTint="@color/iconPurple"
+                android:paddingBottom="2dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:text="Their Age"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toStartOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintBottom_toTopOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintTop_toTopOf="@+id/v_AgeRangeBackground"
+                tools:alpha="1" />
+
+            <android.support.constraint.ConstraintLayout android:id="@+id/cl_ageRangeValueContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:alpha="0"
+                android:background="@drawable/background_field_title"
+                android:backgroundTint="@color/iconPurple"
+                app:layout_constraintBottom_toTopOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintEnd_toEndOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintTop_toTopOf="@+id/v_AgeRangeBackground"
+                tools:alpha="1">
+
+                <TextView android:id="@+id/minValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/to"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:layout_marginStart="8dp"
+                    android:text="18"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
+                <TextView android:id="@+id/to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toEndOf="@+id/minValue"
+                    app:layout_constraintEnd_toStartOf="@+id/maxValue"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:text=" to "
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
+                <TextView android:id="@+id/maxValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/to"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="60"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar android:id="@+id/ageRangeBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintEnd_toEndOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintTop_toTopOf="@+id/v_AgeRangeBackground"
+                app:layout_constraintBottom_toBottomOf="@+id/v_AgeRangeBackground"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="69.5dp"
+                app:corner_radius="5"
+                app:min_value="18"
+                app:max_value="60"
+                app:gap="1"
+                app:bar_color="@color/iconPurple"
+                app:bar_highlight_color="@color/iconPurple"
+                app:left_thumb_color="#F1A9A0"
+                app:right_thumb_color="#F1A9A0"
+                app:left_thumb_color_pressed="#F1A9A0"
+                app:right_thumb_color_pressed="#F1A9A0"
+                app:data_type="_integer"
+                android:alpha="0"/>
 
         </android.support.constraint.ConstraintLayout>
 

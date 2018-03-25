@@ -1,7 +1,9 @@
 package com.mtailacodes.blueprintrendevouz.Util
 
 import android.animation.*
+import android.graphics.Color
 import android.provider.ContactsContract
+import android.renderscript.Sampler
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.util.TypedValue
@@ -11,6 +13,8 @@ import android.widget.TextView
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mtailacodes.blueprintrendevouz.R
+import com.mtailacodes.blueprintrendevouz.customViews.OnBoardingStateIndicator
+import com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView
 
 /**
  * Created by matthewtaila on 12/20/17.
@@ -249,4 +253,156 @@ object AnimationUtil {
 
         return mAnimatorSet
     }
+
+    fun translateYRelativeToHeightAnimator (view : View,
+                                            from : Float = -1f,
+                                            to : Float = 0f,
+                                            interpolator: Interpolator = DecelerateInterpolator(),
+                                            duration: Long = 300,
+                                            startDelay: Long = 0): AnimatorSet {
+
+        var mAnimatorSet = AnimatorSet()
+
+        var translateYAnimator = ValueAnimator.ofFloat( from, to)
+        translateYAnimator.addUpdateListener { animator ->
+            view.translationY = (animator.animatedValue as Float) *  view.height
+        }
+
+        mAnimatorSet.play(translateYAnimator)
+
+        var alphaAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0f, 1f)
+
+        mAnimatorSet.play(alphaAnimator)
+
+        mAnimatorSet.duration = duration
+        mAnimatorSet.startDelay = startDelay
+        mAnimatorSet.interpolator = interpolator
+        return mAnimatorSet
+    }
+
+    fun stateIndicatorAnimator (selectedView : OnBoardingStateIndicator,
+                                selectedValue : Int,
+                                interpolator: Interpolator = DecelerateInterpolator(),
+                                duration: Long = 300,
+                                startDelay: Long = 0) : AnimatorSet {
+
+        var mAnimatorSet = AnimatorSet()
+
+        when (selectedValue){
+            0 -> {
+                selectedView.stepOnePaint.color = Color.parseColor("#c0392b")
+                var selectState = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault/2)
+                selectState.addUpdateListener { animator ->
+                    selectedView.selectStepOne(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(selectState)
+
+                selectedView.stepTwoPaint.color = Color.parseColor("#999999")
+                var deselectState2 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                deselectState2.addUpdateListener { animator ->
+                    selectedView.selectStepTwo(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState2)
+
+                selectedView.stepThreePaint.color = Color.parseColor("#999999")
+                var deselectState3 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                deselectState3.addUpdateListener { animator ->
+                    selectedView.selectStepThree(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState3)
+            }
+            1 ->{
+                selectedView.stepOnePaint.color = Color.parseColor("#999999")
+                var selectState = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                selectState.addUpdateListener { animator ->
+                    selectedView.selectStepOne(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(selectState)
+
+                selectedView.stepTwoPaint.color = Color.parseColor("#BF55EC")
+                var deselectState2 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault/2)
+                deselectState2.addUpdateListener { animator ->
+                    selectedView.selectStepTwo(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState2)
+
+                selectedView.stepThreePaint.color = Color.parseColor("#999999")
+                var deselectState3 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                deselectState3.addUpdateListener { animator ->
+                    selectedView.selectStepThree(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState3)
+            }
+        }
+
+        mAnimatorSet.duration = duration
+        mAnimatorSet.startDelay = startDelay
+        mAnimatorSet.interpolator = interpolator
+        return mAnimatorSet
+    }
+
+    fun nextOnBoarding(viewList : ArrayList<View>) : AnimatorSet {
+        var mAnimatorSet = AnimatorSet()
+        for (view in viewList){
+            var mValueAnimator = ValueAnimator.ofFloat(0f, -20f)
+            mValueAnimator.addUpdateListener { animator ->
+                view.translationX = view.left * animator.animatedValue as Float
+            }
+            mValueAnimator.startDelay = (viewList.indexOf(view) * 15).toLong()
+            mAnimatorSet.play(mValueAnimator)
+        }
+        mAnimatorSet.duration = 300
+        mAnimatorSet.interpolator = AccelerateInterpolator()
+        return mAnimatorSet
+    }
+
+    fun backOnBoarding(viewList : ArrayList<View>) : AnimatorSet {
+        var mAnimatorSet = AnimatorSet()
+        for (view in viewList){
+            var mValueAnimator = ValueAnimator.ofFloat(0f, +20f)
+            mValueAnimator.addUpdateListener { animator ->
+                view.translationX = view.right * animator.animatedValue as Float
+            }
+            mValueAnimator.startDelay = (viewList.indexOf(view) * 15).toLong()
+            mAnimatorSet.play(mValueAnimator)
+        }
+        mAnimatorSet.duration = 300
+        mAnimatorSet.interpolator = AccelerateInterpolator()
+        return mAnimatorSet
+    }
+
+    fun nextButtonColorAnimator(textView: TextView,
+                                passed : Boolean) : ValueAnimator {
+
+        var endColor = Color.parseColor("#DE000000")
+        var startColor = Color.parseColor("#DE000000")
+
+        if (passed) endColor = Color.parseColor("#e74c3c")
+
+        var mAnimator = ValueAnimator.ofArgb(startColor, endColor)
+            mAnimator.addUpdateListener { animator ->
+            textView.setTextColor(animator.animatedValue as Int)
+        }
+        mAnimator.duration = 300
+        mAnimator.interpolator = AccelerateDecelerateInterpolator()
+
+        return mAnimator
+    }
+
+    fun resetAnimationPosition(viewList : ArrayList<View>){
+        lateinit var objectAnimator : ObjectAnimator
+        for (view in viewList){
+            objectAnimator = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0f)
+            objectAnimator.duration = 0
+            objectAnimator.start()
+
+            objectAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0f)
+            objectAnimator.duration = 0
+            objectAnimator.start()
+        }
+    }
+
+
+
+
 }

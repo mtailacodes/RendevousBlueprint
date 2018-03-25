@@ -328,6 +328,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         intent.putExtra("Top", screenLocation[1])
         intent.putExtra("Width", container.width)
         intent.putExtra("Height", container.height)
+        intent.putExtra("mUser", mUser)
         startActivity(intent)
         overridePendingTransition(0, 0)
     }

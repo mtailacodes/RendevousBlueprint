@@ -2,9 +2,11 @@ package com.mtailacodes.blueprintrendevouz.customViews
 
 import android.R
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DialogFragment
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.DatePicker
@@ -17,11 +19,11 @@ import java.util.*
  * Created by matthewtaila on 2/13/18.
  */
 @SuppressLint("ValidFragment")
-open class DatePickerFragment(textView: TextView, userModel: RendevouzUserModel, targetFragment: OnBoardingAboutMe) : DialogFragment(), DatePickerDialog.OnDateSetListener{
+open class DatePickerFragment(textView: TextView, userModel: RendevouzUserModel, activity: Activity) : DialogFragment(), DatePickerDialog.OnDateSetListener{
 
     var tv : TextView = textView
     var mUserModel = userModel
-    var targetFrag = targetFragment
+    var targetFrag = activity
 
     override fun onCreateDialog(savedInstanceState: Bundle?): DatePickerDialog {
         val c : Calendar = Calendar.getInstance()
