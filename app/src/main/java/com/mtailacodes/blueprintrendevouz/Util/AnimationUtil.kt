@@ -9,12 +9,15 @@ import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.*
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mtailacodes.blueprintrendevouz.Activity.OnBoardingActivity
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.customViews.OnBoardingStateIndicator
 import com.mtailacodes.blueprintrendevouz.customViews.SelectGenderImageView
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 
 /**
  * Created by matthewtaila on 12/20/17.
@@ -268,6 +271,7 @@ object AnimationUtil {
             view.translationY = (animator.animatedValue as Float) *  view.height
         }
 
+        view.elevation = 1f
         mAnimatorSet.play(translateYAnimator)
 
         var alphaAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0f, 1f)
@@ -348,6 +352,7 @@ object AnimationUtil {
             mValueAnimator.addUpdateListener { animator ->
                 view.translationX = view.left * animator.animatedValue as Float
             }
+            view.elevation = 1f
             mValueAnimator.startDelay = (viewList.indexOf(view) * 15).toLong()
             mAnimatorSet.play(mValueAnimator)
         }
@@ -365,6 +370,7 @@ object AnimationUtil {
             }
             mValueAnimator.startDelay = (viewList.indexOf(view) * 15).toLong()
             mAnimatorSet.play(mValueAnimator)
+            view.elevation = 0f
         }
         mAnimatorSet.duration = 300
         mAnimatorSet.interpolator = AccelerateInterpolator()
@@ -399,7 +405,37 @@ object AnimationUtil {
             objectAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0f)
             objectAnimator.duration = 0
             objectAnimator.start()
+
+            view.elevation = 0f
         }
+    }
+
+    // select gender animation
+    fun selectGender (mUser : RendevouzUserModel,
+                      maleImageView : ImageView,
+                      femaleImageView : ImageView) : AnimatorSet{
+
+        var mAnimatorSet = AnimatorSet()
+
+        when (mUser.gender){
+            "defaultUser" ->{
+
+            }
+            OnBoardingActivity().MALE_GENDER ->{
+
+            }
+            OnBoardingActivity().FEMALE_GENDER ->{
+
+            }
+
+
+        }
+
+    }
+
+    fun genderSelectionAnimator (genderView : ImageView,
+                                 sleected : Boolean) : AnimatorSet {
+
     }
 
 
