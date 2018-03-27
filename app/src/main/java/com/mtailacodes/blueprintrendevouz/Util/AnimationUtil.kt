@@ -410,33 +410,33 @@ object AnimationUtil {
         }
     }
 
-    // select gender animation
-    fun selectGender (mUser : RendevouzUserModel,
-                      maleImageView : ImageView,
-                      femaleImageView : ImageView) : AnimatorSet{
-
-        var mAnimatorSet = AnimatorSet()
-
-        when (mUser.gender){
-            "defaultUser" ->{
-
-            }
-            OnBoardingActivity().MALE_GENDER ->{
-
-            }
-            OnBoardingActivity().FEMALE_GENDER ->{
-
-            }
-
-
-        }
-
-    }
-
-    fun genderSelectionAnimator (genderView : ImageView,
-                                 sleected : Boolean) : AnimatorSet {
-
-    }
+//    // select gender animation
+//    fun selectGender (mUser : RendevouzUserModel,
+//                      maleImageView : ImageView,
+//                      femaleImageView : ImageView) : AnimatorSet{
+//
+//        var mAnimatorSet = AnimatorSet()
+//
+//        when (mUser.gender){
+//            "defaultUser" ->{
+//
+//            }
+//            OnBoardingActivity().MALE_GENDER ->{
+//
+//            }
+//            OnBoardingActivity().FEMALE_GENDER ->{
+//
+//            }
+//
+//
+//        }
+//
+//    }
+//
+//    fun genderSelectionAnimator (genderView : ImageView,
+//                                 sleected : Boolean) : AnimatorSet {
+//
+//    }
 
 
 

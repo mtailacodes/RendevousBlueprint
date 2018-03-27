@@ -28,7 +28,7 @@ class OnBoardingWelcomeFragment: Fragment(), View.OnClickListener{
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_onboarding_welcome, container, false)
+        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_onboarding_welcome, container, false)
         return mBinding.root
     }
 

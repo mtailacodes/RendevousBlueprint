@@ -36,7 +36,7 @@ class UserCardFragment: Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_cards, container, false)
+        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_user_cards, container, false)
         return mBinding.root
     }
 

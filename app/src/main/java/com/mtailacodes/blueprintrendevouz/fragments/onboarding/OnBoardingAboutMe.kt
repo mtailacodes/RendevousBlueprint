@@ -40,7 +40,7 @@ class OnBoardingAboutMe : Fragment(), View.OnClickListener, DatePickerFragment.E
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_onboarding_about_me, container, false)
+        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_onboarding_about_me, container, false)
         return mBinding.root
     }
 
