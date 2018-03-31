@@ -37,7 +37,9 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
     val MALE_GENDER = "Male"
     var birthdateDialogueHandled = false
 
-    var mPersonalDetailsViewList : ArrayList<View> = ArrayList()
+    var personalDetailsViewsList: ArrayList<View> = ArrayList()
+    var searchSettingsViewsList: ArrayList<View> = ArrayList()
+    var finishOnBoardingViewList: ArrayList<View> = ArrayList()
 
     // custom transition activity variables
     var mLeftDelta : Int = 0
@@ -58,11 +60,10 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_onboarding)
         mUserSearchSettings = UserSearchSettings()
 
-        // get extras from bundle to:
-        // 1. instantiate user object
+        generateViewsList()
+
         val bundle = intent.extras
         mUser = bundle.getParcelable("mUser")
-        // 2. handle transition animation
         val givenLeft = bundle.getInt("Left")
         val givenTop = bundle.getInt("Top")
         val givenWidth = bundle.getInt("Width")
@@ -83,6 +84,34 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
                 return false
             }
         })
+    }
+
+    private fun generateViewsList() {
+        personalDetailsViewsList.add(mBinding.tvPersonalDetailsTitle)
+        personalDetailsViewsList.add(mBinding.tvPersonalDetailsIntro)
+        personalDetailsViewsList.add(mBinding.tvGenderTitle)
+        personalDetailsViewsList.add(mBinding.ivMaleSelection)
+        personalDetailsViewsList.add(mBinding.ivFemaleSelection)
+        personalDetailsViewsList.add(mBinding.tvUsernameTitle)
+        personalDetailsViewsList.add(mBinding.etUsernameInput)
+        personalDetailsViewsList.add(mBinding.vUsernameBackground)
+        personalDetailsViewsList.add(mBinding.tvDOB)
+        personalDetailsViewsList.add(mBinding.etUsernameInput)
+
+        searchSettingsViewsList.add(mBinding.tvSearchSettingTitle)
+        searchSettingsViewsList.add(mBinding.tvSearchSettingIntro)
+        searchSettingsViewsList.add(mBinding.tvTheirGenderTitle)
+        searchSettingsViewsList.add(mBinding.ivMaleSearchSetting)
+        searchSettingsViewsList.add(mBinding.ivFemaleSearchSetting)
+        searchSettingsViewsList.add(mBinding.ageRangeBar)
+        searchSettingsViewsList.add(mBinding.clAgeRangeValueContainer)
+        searchSettingsViewsList.add(mBinding.tvAgeRangeTitle)
+        searchSettingsViewsList.add(mBinding.vAgeRangeBackground)
+
+        finishOnBoardingViewList.add(mBinding.tvFinishOnboardingTitle)
+        finishOnBoardingViewList.add(mBinding.tvFinishOnboardingIntro)
+        finishOnBoardingViewList.add(mBinding.tvTakePictureIntro)
+        finishOnBoardingViewList.add(mBinding.ivCameraOnboarding)
     }
 
     private fun runOnEnterAnimation() {
@@ -122,10 +151,14 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
     override fun onClick(view: View) {
         when(view.id){
             R.id.iv_femaleSelection ->{
-                selectGender(FEMALE_GENDER)
+                if (mUser.gender != FEMALE_GENDER){
+                    selectGender(FEMALE_GENDER)
+                }
             }
             R.id.iv_maleSelection ->{
-                selectGender(MALE_GENDER)
+                if (mUser.gender != MALE_GENDER){
+                    selectGender(MALE_GENDER)
+                }
             }
             R.id.tv_next ->{
                 when (onBoardingStep){
@@ -136,10 +169,13 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
                         } else handleError(checkPersonalDetailCredentials())
                     }
                     1 ->{
-                        // todo check search settings credentials
+                        if (mUserSearchSettings.gender != "default user"){
+//                            setSearchSettings()
+                            onBoardingStep += 1
+                            showFinalOnBoardingStep()
+                        }
                     }
                 }
-
             }
             R.id.tv_DOB ->{
                 if (!birthdateDialogueHandled){
@@ -148,16 +184,60 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
                 }
             }
             R.id.tv_back ->{
+                if (onBoardingStep == 2){
+                    var animatorSet = AnimationUtil.backOnBoarding(finishOnBoardingViewList)
+                    animatorSet.addListener(object : AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            AnimationUtil.resetAnimationPosition(finishOnBoardingViewList)
+                        }
+                    })
+                    animatorSet.start()
+
+                }
                 onBoardingStep -= 1
                 updateOnBoardingStep(onBoardingStep)
             }
             R.id.iv_femaleSearchSetting ->{
-                selectSearchSettingsGender(FEMALE_GENDER)
+                if (mUserSearchSettings.gender != FEMALE_GENDER){
+                    selectSearchSettingsGender(FEMALE_GENDER)
+                }
             }
             R.id.iv_maleSearchSetting ->{
-                selectSearchSettingsGender(MALE_GENDER)
+                if (mUserSearchSettings.gender != MALE_GENDER) {
+                    selectSearchSettingsGender(MALE_GENDER)
+                }
             }
         }
+    }
+
+    private fun showFinalOnBoardingStep() {
+        searchSettingsViewsList.forEach { it.setOnClickListener(null) }
+        var animatorSet = AnimationUtil.nextOnBoarding(searchSettingsViewsList)
+        animatorSet.addListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                AnimationUtil.resetAnimationPosition(searchSettingsViewsList)
+                animateFinishOnboarding()
+            }
+        })
+        animatorSet.start()
+    }
+
+    private fun animateFinishOnboarding() {
+        var mAnimationList : ArrayList<Animator> = ArrayList()
+        mAnimationList.add(AnimationUtil.translateYRelativeToHeightAnimator(mBinding.tvFinishOnboardingTitle, from = -0.5f))
+        mAnimationList.add(AnimationUtil.translateYRelativeToHeightAnimator(mBinding.tvFinishOnboardingIntro, from = -0.75f, startDelay = 30))
+        mAnimationList.add(AnimationUtil.translateYRelativeToHeightAnimator(mBinding.tvTakePictureIntro, from = -0.5f, startDelay = 60))
+        mAnimationList.add(AnimationUtil.translateYRelativeToHeightAnimator(mBinding.ivCameraOnboarding, from = -0.2f, startDelay = 60))
+        mAnimationList.add(AnimationUtil.stateIndicatorAnimator(mBinding.stateIndicator, selectedValue = onBoardingStep, startDelay = 100, duration = 300))
+        mAnimationList.add(AnimationUtil.nextButtonColorAnimator(mBinding.tvNext, true, endingTextColor = Color.parseColor("#2D9A5B")))
+        var mAnimatorSet = AnimationUtil.combineToAnimatorSet(mAnimationList)
+        mAnimatorSet.start()
+    }
+
+    private fun setSearchSettings() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun selectSearchSettingsGender(gender: String) {
@@ -165,89 +245,46 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
 
         when (gender){
             MALE_GENDER ->{
-                if (!mBinding.ivMaleSearchSetting.viewSelected){
+                val selectMaleAnimator = AnimationUtil.selectGender(mBinding.ivMaleSearchSetting)
+                genderSelectionAnimatorSet.play(selectMaleAnimator)
 
-                    mBinding.ivMaleSearchSetting.viewSelected = true
-
-                    val elevationAnimator = ValueAnimator.ofFloat(1f, 10f)
-                    elevationAnimator.addUpdateListener { animator ->
-                        mBinding.ivMaleSearchSetting.elevation = animator.animatedValue as Float
-                    }
-                    elevationAnimator.duration = 300
-                    elevationAnimator.interpolator = OvershootInterpolator(12f)
-                    genderSelectionAnimatorSet.play(elevationAnimator)
-
-                    if (mBinding.ivFemaleSearchSetting.viewSelected){
-                        val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
-                        elevationAnimator.addUpdateListener { animator ->
-                            mBinding.ivFemaleSearchSetting.elevation = animator.animatedValue as Float
-                        }
-                        elevationAnimator.duration = 300
-                        elevationAnimator.interpolator = AccelerateInterpolator()
-                        genderSelectionAnimatorSet.play(elevationAnimator)
-                        mBinding.ivFemaleSearchSetting.viewSelected = false
-                    }
-
-                    genderSelectionAnimatorSet.start()
-                    mUserSearchSettings.gender = MALE_GENDER
+                if (mUserSearchSettings.gender == FEMALE_GENDER){
+                    val deselectFemaleAnimator = AnimationUtil.deselectGender(mBinding.ivFemaleSearchSetting)
+                    genderSelectionAnimatorSet.play(deselectFemaleAnimator)
                 }
+
+                genderSelectionAnimatorSet.start()
+                mUserSearchSettings.gender = MALE_GENDER
             }
             FEMALE_GENDER ->{
+                val selectFemaleAnimator = AnimationUtil.selectGender(mBinding.ivFemaleSearchSetting)
+                genderSelectionAnimatorSet.play(selectFemaleAnimator)
 
-                if (!mBinding.ivFemaleSearchSetting.viewSelected){
-
-                    mBinding.ivFemaleSearchSetting.viewSelected = true
-                    val elevationAnimator = ValueAnimator.ofFloat(1f, 10f)
-                    elevationAnimator.addUpdateListener { animator ->
-                        mBinding.ivFemaleSearchSetting.elevation = animator.animatedValue as Float
-                    }
-                    elevationAnimator.duration = 300
-                    elevationAnimator.interpolator = OvershootInterpolator(12f)
-                    genderSelectionAnimatorSet.play(elevationAnimator)
-
-                    if (mBinding.ivMaleSearchSetting.viewSelected){
-                        val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
-                        elevationAnimator.addUpdateListener { animator ->
-                            mBinding.ivMaleSearchSetting.elevation = animator.animatedValue as Float
-                        }
-                        elevationAnimator.duration = 300
-                        elevationAnimator.interpolator = AccelerateInterpolator()
-                        genderSelectionAnimatorSet.play(elevationAnimator)
-                        mBinding.ivMaleSearchSetting.viewSelected = false
-                    }
-
-                    genderSelectionAnimatorSet.start()
-                    mUserSearchSettings.gender = FEMALE_GENDER
+                if (mUserSearchSettings.gender == MALE_GENDER){
+                    val deselectMaleAnimator = AnimationUtil.deselectGender(mBinding.ivMaleSearchSetting)
+                    genderSelectionAnimatorSet.play(deselectMaleAnimator)
                 }
+
+                genderSelectionAnimatorSet.start()
+                mUserSearchSettings.gender = FEMALE_GENDER
             }
         }
+
+        checkComplete(onBoardingStep)
+
     }
 
     private fun updateOnBoardingStep(onBoardingStep: Int) {
         when (onBoardingStep){
             0 ->{
-                mPersonalDetailsViewList.clear()
-
-                mPersonalDetailsViewList.add(mBinding.tvSearchSettingTitle)
-                mPersonalDetailsViewList.add(mBinding.tvSearchSettingIntro)
-                mPersonalDetailsViewList.add(mBinding.tvTheirGenderTitle)
-                mPersonalDetailsViewList.add(mBinding.ivMaleSearchSetting)
-                mPersonalDetailsViewList.add(mBinding.ivFemaleSearchSetting)
-                mPersonalDetailsViewList.add(mBinding.ageRangeBar)
-                mPersonalDetailsViewList.add(mBinding.clAgeRangeValueContainer)
-                mPersonalDetailsViewList.add(mBinding.tvAgeRangeTitle)
-                mPersonalDetailsViewList.add(mBinding.vAgeRangeBackground)
-
-                var animatorSet = AnimationUtil.backOnBoarding(mPersonalDetailsViewList)
-
+                var animatorSet = AnimationUtil.backOnBoarding(searchSettingsViewsList)
                 animatorSet.play(AnimationUtil.translateYRelativeToHeightAnimator(mBinding.tvBack, from = 0f, to = 5f))
-
                 animatorSet.play(AnimationUtil.stateIndicatorAnimator(mBinding.stateIndicator, onBoardingStep))
 
                 animatorSet.addListener(object : AnimatorListenerAdapter(){
                     override fun onAnimationEnd(animation: Animator?) {
                         super.onAnimationEnd(animation)
-                        AnimationUtil.resetAnimationPosition(mPersonalDetailsViewList)
+                        AnimationUtil.resetAnimationPosition(searchSettingsViewsList)
                         animatePersonalDetailsContent()
                     }
                 })
@@ -258,28 +295,12 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setPersonalDetails() {
-        mPersonalDetailsViewList.clear()
-
-        mPersonalDetailsViewList.add(mBinding.tvPersonalDetailsTitle)
-        mPersonalDetailsViewList.add(mBinding.tvPersonalDetailsIntro)
-        mPersonalDetailsViewList.add(mBinding.tvGenderTitle)
-        mPersonalDetailsViewList.add(mBinding.ivMaleSelection)
-        mPersonalDetailsViewList.add(mBinding.ivFemaleSelection)
-        mPersonalDetailsViewList.add(mBinding.tvUsernameTitle)
-        mPersonalDetailsViewList.add(mBinding.etUsernameInput)
-        mPersonalDetailsViewList.add(mBinding.vUsernameBackground)
-        mPersonalDetailsViewList.add(mBinding.tvDOB)
-        mPersonalDetailsViewList.add(mBinding.etUsernameInput)
-
-        mPersonalDetailsViewList
-                .filter { it.id != R.id.tv_next }
-                .forEach { it.setOnClickListener(null) }
-
-        var animatorSet = AnimationUtil.nextOnBoarding(mPersonalDetailsViewList)
+        personalDetailsViewsList.forEach { it.setOnClickListener(null) }
+        var animatorSet = AnimationUtil.nextOnBoarding(personalDetailsViewsList)
         animatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-                AnimationUtil.resetAnimationPosition(mPersonalDetailsViewList)
+                AnimationUtil.resetAnimationPosition(personalDetailsViewsList)
                 animateSearchSettingsContent()
             }
         })
@@ -304,7 +325,6 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
         mAnimatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-
                 mBinding.ageRangeBar.setOnRangeSeekbarChangeListener { minValue, maxValue ->
                     mBinding.minValue.text = minValue.toString()
                     mBinding.maxValue.text = maxValue.toString()
@@ -354,82 +374,36 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
 
         when (gender){
             MALE_GENDER ->{
-                if (!mBinding.ivMaleSelection.viewSelected){
 
-                    mBinding.ivMaleSelection.viewSelected = true
+                    val selectMaleAnimator = AnimationUtil.selectGender(mBinding.ivMaleSelection)
+                    genderSelectionAnimatorSet.play(selectMaleAnimator)
 
-                    val elevationAnimator = ValueAnimator.ofFloat(1f, 10f)
-                    elevationAnimator.addUpdateListener { animator ->
-                        mBinding.ivMaleSelection.elevation = animator.animatedValue as Float
-                    }
-                    elevationAnimator.duration = 300
-                    elevationAnimator.interpolator = OvershootInterpolator(12f)
-                    genderSelectionAnimatorSet.play(elevationAnimator)
-
-                    if (mBinding.ivFemaleSelection.viewSelected){
-                        val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
-                        elevationAnimator.addUpdateListener { animator ->
-                            mBinding.ivFemaleSelection.elevation = animator.animatedValue as Float
-                        }
-                        elevationAnimator.duration = 300
-                        elevationAnimator.interpolator = AccelerateInterpolator()
-                        genderSelectionAnimatorSet.play(elevationAnimator)
-                        mBinding.ivFemaleSelection.viewSelected = false
+                    if (mUser.gender == FEMALE_GENDER){
+                        val deselectFemaleAnimator = AnimationUtil.deselectGender(mBinding.ivFemaleSelection)
+                        genderSelectionAnimatorSet.play(deselectFemaleAnimator)
                     }
 
                     genderSelectionAnimatorSet.start()
-
                     mUser.gender = MALE_GENDER
-                }
             }
             FEMALE_GENDER ->{
 
-                if (!mBinding.ivFemaleSelection.viewSelected){
-
-                    mBinding.ivFemaleSelection.viewSelected = true
-                    val elevationAnimator = ValueAnimator.ofFloat(1f, 10f)
-                    elevationAnimator.addUpdateListener { animator ->
-                        mBinding.ivFemaleSelection.elevation = animator.animatedValue as Float
+                    val selectFemaleAnimator = AnimationUtil.selectGender(mBinding.ivFemaleSelection)
+                    genderSelectionAnimatorSet.play(selectFemaleAnimator)
+                    if (mUser.gender == MALE_GENDER){
+                        val deselectMaleAnimator = AnimationUtil.deselectGender(mBinding.ivMaleSelection)
+                        genderSelectionAnimatorSet.play(deselectMaleAnimator)
                     }
-                    elevationAnimator.duration = 300
-                    elevationAnimator.interpolator = OvershootInterpolator(12f)
-                    genderSelectionAnimatorSet.play(elevationAnimator)
-
-                    if (mBinding.ivMaleSelection.viewSelected){
-                        val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
-                        elevationAnimator.addUpdateListener { animator ->
-                            mBinding.ivMaleSelection.elevation = animator.animatedValue as Float
-                        }
-                        elevationAnimator.duration = 300
-                        elevationAnimator.interpolator = AccelerateInterpolator()
-                        genderSelectionAnimatorSet.play(elevationAnimator)
-                        mBinding.ivMaleSelection.viewSelected = false
-                    }
-
                     genderSelectionAnimatorSet.start()
                     mUser.gender = FEMALE_GENDER
-                }
+
             }
             else ->{
-
-                val female = ValueAnimator.ofFloat(10f, 1f)
-                female.addUpdateListener { animator ->
-                    mBinding.ivFemaleSelection.elevation = animator.animatedValue as Float
-                }
-                female.duration = 300
-                female.interpolator = AccelerateInterpolator()
-                genderSelectionAnimatorSet.play(female)
-                mBinding.ivFemaleSelection.viewSelected = false
-
-
-                val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
-                elevationAnimator.addUpdateListener { animator ->
-                    mBinding.ivMaleSelection.elevation = animator.animatedValue as Float
-                }
-                elevationAnimator.duration = 300
-                elevationAnimator.interpolator = AccelerateInterpolator()
-                genderSelectionAnimatorSet.play(elevationAnimator)
-                mBinding.ivMaleSelection.viewSelected = false
+                val deselectMaleAnimator = AnimationUtil.deselectGender(mBinding.ivMaleSelection)
+                val deselectFemaleAnimator = AnimationUtil.deselectGender(mBinding.ivFemaleSelection)
+                genderSelectionAnimatorSet.playTogether(deselectFemaleAnimator, deselectMaleAnimator)
+                genderSelectionAnimatorSet.duration = 0
+                genderSelectionAnimatorSet.start()
             }
         }
         checkComplete(onBoardingStep)
@@ -502,6 +476,12 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
                 mNextButtonAnimator = if (checkPersonalDetailCredentials() == personalDetailSuccess){
                     AnimationUtil.nextButtonColorAnimator(mBinding.tvNext, true)
                 } else AnimationUtil.nextButtonColorAnimator(mBinding.tvNext, false)
+                mNextButtonAnimator.start()
+            }
+            1 ->{
+                if (mUserSearchSettings.gender != "default user")
+                    mNextButtonAnimator = AnimationUtil.nextButtonColorAnimator(mBinding.tvNext, true, endingTextColor = Color.parseColor("#BF55EC"))
+                else mNextButtonAnimator = AnimationUtil.nextButtonColorAnimator(mBinding.tvNext, false)
                 mNextButtonAnimator.start()
             }
         }

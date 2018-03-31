@@ -263,7 +263,7 @@ object AnimationUtil {
                                             interpolator: Interpolator = DecelerateInterpolator(),
                                             duration: Long = 300,
                                             startDelay: Long = 0): AnimatorSet {
-
+        view.visibility = View.VISIBLE
         var mAnimatorSet = AnimatorSet()
 
         var translateYAnimator = ValueAnimator.ofFloat( from, to)
@@ -337,6 +337,28 @@ object AnimationUtil {
                 }
                 mAnimatorSet.play(deselectState3)
             }
+            2 ->{
+                selectedView.stepOnePaint.color = Color.parseColor("#999999")
+                var selectState = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                selectState.addUpdateListener { animator ->
+                    selectedView.selectStepOne(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(selectState)
+
+                selectedView.stepTwoPaint.color = Color.parseColor("#999999")
+                var deselectState2 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault)
+                deselectState2.addUpdateListener { animator ->
+                    selectedView.selectStepTwo(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState2)
+
+                selectedView.stepThreePaint.color = Color.parseColor("#2D9A5B")
+                var deselectState3 = ValueAnimator.ofFloat(selectedView.heightDefault, selectedView.heightDefault/2)
+                deselectState3.addUpdateListener { animator ->
+                    selectedView.selectStepThree(animator.animatedValue as Float)
+                }
+                mAnimatorSet.play(deselectState3)
+            }
         }
 
         mAnimatorSet.duration = duration
@@ -378,12 +400,13 @@ object AnimationUtil {
     }
 
     fun nextButtonColorAnimator(textView: TextView,
-                                passed : Boolean) : ValueAnimator {
+                                passed : Boolean,
+                                endingTextColor: Int = Color.parseColor("#e74c3c")) : ValueAnimator {
 
         var endColor = Color.parseColor("#DE000000")
         var startColor = Color.parseColor("#DE000000")
 
-        if (passed) endColor = Color.parseColor("#e74c3c")
+        if (passed) endColor = endingTextColor
 
         var mAnimator = ValueAnimator.ofArgb(startColor, endColor)
             mAnimator.addUpdateListener { animator ->
@@ -407,38 +430,40 @@ object AnimationUtil {
             objectAnimator.start()
 
             view.elevation = 0f
+            view.visibility = View.GONE
         }
     }
 
-//    // select gender animation
-//    fun selectGender (mUser : RendevouzUserModel,
-//                      maleImageView : ImageView,
-//                      femaleImageView : ImageView) : AnimatorSet{
-//
-//        var mAnimatorSet = AnimatorSet()
-//
-//        when (mUser.gender){
-//            "defaultUser" ->{
-//
-//            }
-//            OnBoardingActivity().MALE_GENDER ->{
-//
-//            }
-//            OnBoardingActivity().FEMALE_GENDER ->{
-//
-//            }
-//
-//
-//        }
-//
-//    }
-//
-//    fun genderSelectionAnimator (genderView : ImageView,
-//                                 sleected : Boolean) : AnimatorSet {
-//
-//    }
+    // select gender animation
+    fun selectGender (imageVIew : ImageView) : AnimatorSet{
+
+        var mAnimatorSet = AnimatorSet()
+
+        val elevationAnimator = ValueAnimator.ofFloat(1f, 10f)
+        elevationAnimator.addUpdateListener { animator ->
+            imageVIew.elevation = animator.animatedValue as Float
+        }
+        elevationAnimator.duration = 300
+        elevationAnimator.interpolator = OvershootInterpolator(12f)
+        mAnimatorSet.play(elevationAnimator)
+
+        return mAnimatorSet
+    }
 
 
+    fun deselectGender (imageVIew : ImageView) : AnimatorSet {
 
+        var mAnimatorSet = AnimatorSet()
+
+        val elevationAnimator = ValueAnimator.ofFloat(10f, 1f)
+        elevationAnimator.addUpdateListener { animator ->
+            imageVIew.elevation = animator.animatedValue as Float
+        }
+        elevationAnimator.duration = 300
+        elevationAnimator.interpolator = AccelerateInterpolator()
+        mAnimatorSet.play(elevationAnimator)
+
+        return mAnimatorSet
+    }
 
 }
