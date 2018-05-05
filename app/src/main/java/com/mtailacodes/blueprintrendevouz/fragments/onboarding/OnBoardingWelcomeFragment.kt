@@ -27,12 +27,12 @@ class OnBoardingWelcomeFragment: Fragment(), View.OnClickListener{
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_onboarding_welcome, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_onboarding_welcome, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onEnterAnimation()
         setOnClickListeners()
@@ -95,7 +95,7 @@ class OnBoardingWelcomeFragment: Fragment(), View.OnClickListener{
     override fun onClick(p0: View) {
         when (p0.id){
             R.id.tv_Next -> {
-                (activity.application as MyApplication)
+                (activity!!.application as MyApplication)
                         .bus()
                         .send("NEXT")
             }

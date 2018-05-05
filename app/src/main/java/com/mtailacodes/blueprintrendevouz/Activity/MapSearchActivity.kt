@@ -415,7 +415,7 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
         photoFile = getPhotoFileUri(generateTimeStamp())
 
-        var fileProvider = FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile)
+        var fileProvider = FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile!!)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
         if (intent.resolveActivity(getPackageManager()) != null) {

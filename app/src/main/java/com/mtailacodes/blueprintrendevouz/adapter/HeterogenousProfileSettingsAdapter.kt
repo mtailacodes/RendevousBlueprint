@@ -62,7 +62,7 @@ class HeterogenousProfileSettingsAdapter(settingsList: ArrayList<ProfileSettings
         return mViewHolder
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder!!.itemViewType) {
             PROFILE_HIGHLIGHT -> {
                 var profileHighlightViewholder = holder as ProfileHightlightViewholder

@@ -26,17 +26,17 @@ import com.mtailacodes.blueprintrendevouz.viewpagerAdapter.OnBoardingViewPagerAd
 class OnBoardingFragment : Fragment(){
 
     private lateinit var mBinding : FragmentOnboardingBinding
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_onboarding, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_onboarding, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         onEnterAnimation()
 
-        (activity.application as MyApplication)
+        (activity!!.application as MyApplication)
                 .bus()
                 .toObservable()
                 .subscribe { `object` ->

@@ -41,12 +41,12 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_top_container, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_container, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         staggeredHeaderNavAnimation()
         mBinding.curveParentContainer.setOnClickListener(this)
@@ -147,7 +147,7 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
         animatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-                (activity.application as MyApplication)
+                (activity!!.application as MyApplication)
                         .bus()
                         .send(SHOW_CONTAINER)
             }
@@ -197,7 +197,7 @@ class TopContainerFragment : Fragment(), View.OnClickListener {
         animatorSet.addListener(object : AnimatorListenerAdapter(){
             override fun onAnimationStart(animation: Animator?) {
                 super.onAnimationStart(animation)
-                (activity.application as MyApplication)
+                (activity!!.application as MyApplication)
                         .bus()
                         .send(HIDE_CONTAINER)
 

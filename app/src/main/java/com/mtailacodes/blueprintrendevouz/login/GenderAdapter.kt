@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.databinding.GenderSelectItemListBinding
 import com.mtailacodes.blueprintrendevouz.databinding.GenderSelectItemListSelectedBinding
 

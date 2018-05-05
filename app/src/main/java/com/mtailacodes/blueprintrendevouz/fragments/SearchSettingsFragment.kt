@@ -34,9 +34,9 @@ class SearchSettingsFragment: Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSearchSettings = arguments.getParcelable("SearchSettings")
+        mSearchSettings = arguments!!.getParcelable("SearchSettings")
 
-        (activity.application as MyApplication)
+        (activity!!.application as MyApplication)
                 .bus()
                 .toObservable()
                 .subscribe { `object` ->
@@ -71,7 +71,7 @@ class SearchSettingsFragment: Fragment(){
         var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
         mFirestore .document(uuID).set(mSearchSettings)
                 .addOnSuccessListener{ _ ->
-                    (activity.application as MyApplication)
+                    (activity!!.application as MyApplication)
                             .bus()
                             .send("User Search Settings Stored")
                 }.addOnFailureListener { e ->
@@ -79,12 +79,12 @@ class SearchSettingsFragment: Fragment(){
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_search_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search_settings, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRangeBar() // age range bar listener
         setupSearchSettingsStates()
     }

@@ -28,12 +28,12 @@ class OnBoardingSearchSettings : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_onboarding_search_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_onboarding_search_settings, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.tvNext.setOnClickListener(this)
         setupRangeBar()
@@ -64,7 +64,7 @@ class OnBoardingSearchSettings : Fragment(), View.OnClickListener {
                 var mFirestore = RxUserUtil().UserSettingsCollectionReference(uuID)
                 mFirestore .document(uuID).set(mSearchSettings)
                         .addOnSuccessListener{
-                            (activity.application as MyApplication)
+                            (activity!!.application as MyApplication)
                                     .bus()
                                     .send("USER_SEARCH_SETTINGS_STORED")
                         }

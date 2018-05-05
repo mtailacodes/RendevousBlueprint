@@ -10,7 +10,7 @@ import android.view.MotionEvent
 /**
  * Created by matthewtaila on 2/10/18.
  */
-class NonSwipeableViewPager(context: Context?, attrs: AttributeSet?) : ViewPager(context, attrs) {
+class NonSwipeableViewPager(context: Context?, attrs: AttributeSet?) : ViewPager(context!!, attrs) {
 
     var canSwipe: Boolean = false
 

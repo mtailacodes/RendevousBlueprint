@@ -40,8 +40,8 @@ class PromptSettingsFragment: android.support.v4.app.Fragment(), View.OnClickLis
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_prompt_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_prompt_settings, container, false)
         setupUser()
         setOnClickListeners()
         return mBinding.root

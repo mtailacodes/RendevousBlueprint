@@ -35,17 +35,17 @@ class UserCardFragment: Fragment(){
         generateStubUserData()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_user_cards, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_cards, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupSwipeListener()
 
-        var mAdapter = UserCardAdapter(this@UserCardFragment.context, 10)
+        var mAdapter = UserCardAdapter(this@UserCardFragment.context!!, 10)
         mAdapter.addAll(mUserList)
         mBinding.swipeRecyclerView.setAdapter(mAdapter)
     }
