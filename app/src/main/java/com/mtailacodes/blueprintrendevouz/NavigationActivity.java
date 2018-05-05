@@ -3,22 +3,16 @@ package com.mtailacodes.blueprintrendevouz;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 //import com.mtailacodes.blueprintrendevouz.login.LoginActivity;
-import com.mtailacodes.blueprintrendevouz.Activity.MapSearchActivity;
-import com.mtailacodes.blueprintrendevouz.Activity.SignInActivity;
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityNavigationBinding;
-
-import junit.framework.Test;
 
 public class NavigationActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -50,11 +44,6 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
 //                intent = new Intent(this, LoginActivity.class);
 //                startActivity(intent);
 //                break;
-            case R.id.signInActivityButtonKotlin:
-                Log.i(TAG, "Sign in Activity");
-                Intent newIntent = new Intent(this, SignInActivity.class);
-                startActivity(newIntent);
-                break;
             case R.id.startActivityForREsils:
 //                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -63,8 +52,6 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
                 Intent intent3 = new Intent(this, TestActivity.class);
                 startActivity(intent3);
 
-//                Intent intent2 = new Intent(this, MapSearchActivity.class);
-//                startActivity(intent2);
 
         }
     }

@@ -245,7 +245,6 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
         if (mUser.requiresOnboarding){
             startUserOnBoardingProcess()
         } else {
-            var  mSearchSettings = getUserSearchSettings()
             // todo - check to see if image is already taken within 24 hours
             if(!imageStored) {
 //                handleCaptureImageCardView(1f)
@@ -387,24 +386,8 @@ class MapSearchActivity : FragmentActivity(), OnMapReadyCallback, View.OnClickLi
 
     override fun onClick(view: View) {
         when(view.id){
-            R.id.tv_Settings ->{
-                var intent = Intent(this@MapSearchActivity, SearchSettingsActivity::class.java)
-                intent.putExtra(Constants().USER_SEARCH_SETTINGS_OBJECT, mSearchSettings)
-                intent.putExtra(Constants().SETTINGS_VIEWPAGER_LANDING, 0)
-                startActivity(intent)
-            }
-            R.id.tv_TakeAPicture ->{
+            R.id.tv_TakeAPicture -> {
                 launchCamera()
-            }
-             R.id.picturePreview ->{
-                var intent = Intent(this, ProfileActivity::class.java)
-                intent.putExtra("ADSAD", mSearchSettings)
-                intent.putExtra("PHOTO", photoFile)
-
-                var options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                        mBinding.picturePreview,
-                        ViewCompat.getTransitionName(mBinding.picturePreview))
-                startActivity(intent, options.toBundle())
             }
         }
     }

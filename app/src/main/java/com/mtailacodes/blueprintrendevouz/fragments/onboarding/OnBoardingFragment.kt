@@ -42,12 +42,6 @@ class OnBoardingFragment : Fragment(){
                 .subscribe { `object` ->
                     if (`object` is String) {
                         when (`object`.toString()) {
-                            "NEXT" ->{
-                                mBinding.vpOnBoardingViewPager.currentItem = 1
-                            }
-                            "USER_DATA_STORED" ->{
-                                mBinding.vpOnBoardingViewPager.currentItem = 2
-                            }
                         }
                     }
                 }
@@ -55,8 +49,6 @@ class OnBoardingFragment : Fragment(){
 
     private fun setupOnBoardingViewPager() {
         var mViewPagerAdapter = OnBoardingViewPagerAdapter(fragmentManager)
-        mBinding.vpOnBoardingViewPager.adapter = mViewPagerAdapter
-        mBinding.vpOnBoardingViewPager.setPagingEnabled(false)
     }
 
     private fun onEnterAnimation() {

@@ -30,7 +30,6 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".Activity.CurveActivity"></activity>
         <activity android:name=".NavigationActivity"></activity>
         <activity android:name=".Activity.LaunchActivity"></activity>
         <activity android:name=".login.LoginActivity">
@@ -41,12 +40,9 @@
         </activity>
         <activity android:name=".Activity.SignInActivity"></activity>
         <activity android:name=".Activity.MapSearchActivity"></activity>
-        <activity android:name=".TestActivity"></activity>
         <activity android:name=".Activity.OnBoardingActivity" android:theme="@style/transparent"></activity>
         <activity android:name=".Activity.ProfileActivity"></activity>
-        <activity android:name=".Activity.RangeBarActivity"></activity>
         <activity android:name=".Activity.NotificationSettingsActivity"></activity>
-        <activity android:name=".Activity.SearchSettingsActivity" android:theme="@style/SearchSetting"></activity>
         <activity android:name=".login.CreateUserActivity"></activity>
 
         <meta-data android:name="com.google.android.gms.version"
