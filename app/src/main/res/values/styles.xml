@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/primaryPurpleDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowSharedElementEnterTransition">@transition/itl_image_transition</item>
@@ -32,7 +32,7 @@
 
     <style name="spinner_dropdown_style_theme1" parent="Widget.AppCompat.DropDownItem.Spinner">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">#507B91</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="transparent" parent="Theme.AppCompat.Light.NoActionBar">
@@ -40,4 +40,5 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
 </resources>

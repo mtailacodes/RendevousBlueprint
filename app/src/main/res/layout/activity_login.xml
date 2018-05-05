@@ -1,79 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout android:id="@+id/parentContainer"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/parentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".Activity.LoginActivity">
+        tools:context=".login.LoginActivity">
 
-        <TextView android:id="@+id/tv_CreateNewUser"
-            android:layout_width="0dp"
+        <android.support.constraint.Guideline
+            android:id="@+id/login_gd_20"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="80dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/newUser"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimary" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
 
-        <android.support.constraint.ConstraintLayout android:id="@+id/cl_CreateNewUserContainer"
+        <android.support.constraint.Guideline
+            android:id="@+id/login_gd_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/login_gd_190"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="1.9" />
+
+        <ImageView
+            android:id="@+id/login_iv_mapBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/login_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:elevation="1dp"
-            android:background="#FFFFFF">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView android:id="@+id/iv_CreateUserArrowReveal"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:scaleType="centerCrop"
-                app:srcCompat = "@drawable/create_user_up_arrow"/>
+        <TextView
+            android:id="@+id/login_tv_appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:fontFamily="@font/sanchez"
+            android:gravity="center_horizontal"
+            android:text="nüüd"
+            android:textColor="@android:color/white"
+            android:textSize="42sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/login_iv_mapBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/login_iv_mapBackground" />
 
-            <com.badoualy.stepperindicator.StepperIndicator android:id="@+id/si_CreateUserStepIndicator"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                app:stpi_stepCount="2"
-                app:layout_constraintTop_toBottomOf="@+id/iv_CreateUserArrowReveal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
-                app:stpi_animDuration="150"
-                app:stpi_lineMargin="4dp"
-                app:stpi_circleStrokeWidth="4dp"
-                app:stpi_circleRadius="12dp"
-                app:stpi_circleColor="#947CB0"
-                app:stpi_indicatorRadius="4dp"
-                app:stpi_indicatorColor="#809A12B3"
-                app:stpi_lineDoneColor="#809A12B3"/>
+        <TextView
+            android:id="@+id/login_tv_appMotto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:fontFamily="@font/sanchez"
+            android:gravity="center_horizontal"
+            android:text="Now is happening"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_tv_appTitle" />
 
-            <com.mtailacodes.blueprintrendevouz.customViews.CreateUserViewpager android:id="@+id/vp_CreateUserViewPager"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/si_CreateUserStepIndicator"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/login_et_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:alpha="0"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/sanchez"
+            android:hint="Email"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/login_iv_mapBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_gd_20"
+            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:visibility="visible"
+            tools:alpha="1"/>
 
-            </com.mtailacodes.blueprintrendevouz.customViews.CreateUserViewpager>
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/login_et_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:alpha="0"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/sanchez"
+            android:hint="Password"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/login_et_email"
+            app:layout_constraintStart_toStartOf="@+id/login_et_email"
+            app:layout_constraintTop_toBottomOf="@+id/login_et_email"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-        </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/login_tv_createUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:alpha="0"
+            android:fontFamily="@font/sanchez"
+            android:gravity="center_horizontal"
+            android:text="Don't have an account? Sign Up!"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_et_password"
+            app:layout_constraintBottom_toTopOf="@+id/login_btn_getStarted"/>
 
-
+        <Button
+            android:id="@+id/login_btn_getStarted"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="72dp"
+            android:alpha="0"
+            android:background="@drawable/background_rounded_button"
+            android:fontFamily="@font/sanchez"
+            android:text="Get Started"
+            android:textAllCaps="false"
+            android:textColor="@color/primaryPurple"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/login_gd_90"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/login_gd_90" />
 
     </android.support.constraint.ConstraintLayout>
 

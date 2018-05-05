@@ -11,5 +11,8 @@
 
     <dimen name="searchSettingsTitleTranslationValue">40dp</dimen>
 
+    <!--Login-->
+    <dimen name="createUser_error_container_height">80dp</dimen>
+
 
 </resources>

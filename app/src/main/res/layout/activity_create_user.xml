@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/createUser_vgd_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/createUser_hgd_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/createUser_hgd_90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/createUser_vgd_80"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/createUser_iv_toolbarContainer"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            app:cardCornerRadius="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/createUser_iv_toolbarBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="2dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/onboarding_toolbar_backgroudn" />
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:id="@+id/createUser_tv_appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="3dp"
+            android:fontFamily="@font/sanchez"
+            android:gravity="center_horizontal"
+            android:text="nüüd"
+            android:textColor="@android:color/white"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="@+id/createUser_iv_toolbarContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/createUser_iv_toolbarContainer" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/createUser_et_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:textColorHint="@color/passGreen"
+            android:textColor="@color/black100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_hgd_20"
+            app:layout_constraintVertical_bias="0.25"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelAnimating="true"
+            app:met_floatingLabelTextColor="#FF008F"
+            app:met_primaryColor="#FF008F"
+            app:met_underlineColor="@color/black100"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/createUser_et_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Password"
+            android:password="true"
+            android:textColor="@color/black100"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_et_email"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelAnimating="true"
+            app:met_floatingLabelTextColor="#FF008F"
+            app:met_primaryColor="#FF008F"
+            app:met_underlineColor="@color/black100" />
+
+        <Button
+            android:id="@+id/createUser_btn_getStarted"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="72dp"
+            android:background="@drawable/gradient_green_rounded_button"
+            android:fontFamily="@font/sanchez"
+            android:text="Create User"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/createUser_hgd_90"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/createUser_hgd_90" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/createUser_et_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:textColor="@color/black100"
+            android:alpha="0"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_hgd_20"
+            app:layout_constraintVertical_bias="0.1"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelAnimating="true"
+            app:met_floatingLabelTextColor="#FF008F"
+            app:met_primaryColor="#FF008F"
+            app:met_underlineColor="@color/black100" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/createUser_cl_spinnerContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha="0"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_et_name">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/createUser_vgd_75"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/createUser_spn_age"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <View
+                android:id="@+id/createUser_v_ageDivider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/createUser_et_dob"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha="0"
+            android:text="Age"
+            android:textColor="@color/black100"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_cl_spinnerContainer"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelAnimating="true"
+            app:met_floatingLabelTextColor="#FF008F"
+            app:met_primaryColor="#FF008F"
+            app:met_underlineColor="@color/black100" />
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/createUser_cl_errorContainer"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/createUser_error_container_height"
+            android:background="#FF008F"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/createUser_tv_errorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="Please user a valid email address"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

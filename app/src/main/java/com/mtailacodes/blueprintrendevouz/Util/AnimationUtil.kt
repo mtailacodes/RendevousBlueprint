@@ -257,6 +257,8 @@ object AnimationUtil {
         return mAnimatorSet
     }
 
+
+
     fun translateYRelativeToHeightAnimator (view : View,
                                             from : Float = -1f,
                                             to : Float = 0f,
@@ -450,6 +452,20 @@ object AnimationUtil {
         return mAnimatorSet
     }
 
+    fun translateAnimator (view: View,
+                           startY : Float = 0f,
+                           endY : Float = 0f,
+                           viewIndex : Int) : ValueAnimator{
+
+        var translateYAnimator = ValueAnimator.ofFloat( startY, endY)
+        translateYAnimator.addUpdateListener { animator ->
+            view.translationY = (animator.animatedValue as Float) *  view.height
+        }
+        translateYAnimator.startDelay = (viewIndex * 100).toLong()
+        translateYAnimator.duration = 400
+        return  translateYAnimator
+    }
+
 
     fun deselectGender (imageVIew : ImageView) : AnimatorSet {
 
@@ -465,5 +481,22 @@ object AnimationUtil {
 
         return mAnimatorSet
     }
+
+    fun staggeredAnimatorSet(view: View,
+                             indexOf: Int,
+                             start: Float,
+                             end: Float = 1f): AnimatorSet {
+
+        var mAnimatorSet = AnimatorSet()
+        var alphaInView = ObjectAnimator.ofFloat(view, View.ALPHA, 1f)
+        var translateYView = ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, start, end)
+
+        mAnimatorSet.playTogether(alphaInView, translateYView)
+        mAnimatorSet.duration = 300
+        mAnimatorSet.startDelay = indexOf * 50L
+
+        return mAnimatorSet
+    }
+
 
 }

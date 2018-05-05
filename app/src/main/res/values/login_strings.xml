@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+
+
+
+    <!--// error states-->
+    <string name="createUser_invalide_email_input">Please use a correct email address format</string>
+    <string name="createUser_no_email_input">Please enter an email address</string>
+
+    <string name="createUser_password_empty">Please create a password of at least 6 characters in length</string>
+    <string name="createUser_password_too_short">Password must be at least 6 characters in length</string>
+</resources>
