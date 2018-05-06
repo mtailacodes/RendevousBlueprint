@@ -154,13 +154,6 @@
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
             app:layout_constraintTop_toBottomOf="@+id/createUser_et_name">
 
-            <android.support.constraint.Guideline
-                android:id="@+id/createUser_vgd_75"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
-
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/createUser_spn_age"
                 android:layout_width="0dp"
@@ -172,6 +165,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/createUser_spn_age"
+                app:layout_constraintBottom_toBottomOf="@+id/createUser_spn_age"
+                app:srcCompat="@drawable/ic_chevron_up"
+                android:rotation="180"/>
 
             <View
                 android:id="@+id/createUser_v_spinnerDivider"
@@ -219,6 +220,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/createUser_tv_age"
+                app:layout_constraintBottom_toBottomOf="@+id/createUser_tv_age"
+                app:srcCompat="@drawable/ic_chevron_up"
+                android:rotation="180"/>
 
             <View
                 android:id="@+id/createUser_v_ageDivider"
