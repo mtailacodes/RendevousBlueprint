@@ -25,6 +25,7 @@
 
     <color name="primaryPurple">#7826DC</color>
     <color name="primaryPurpleDark">#461682</color>
+    <color name="pinkPrimary">#FF008F</color>
 
 
 </resources>

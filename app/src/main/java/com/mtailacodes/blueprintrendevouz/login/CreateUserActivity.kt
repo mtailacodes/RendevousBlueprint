@@ -26,10 +26,6 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
     var emailErrorReason : String = ""
     var passwordPassed = false
     var passwordErrorReason : String = ""
-    var initialGenderList = ArrayList<String>()
-    var updatedGenderList = ArrayList<String>()
-
-    lateinit var genderAdapter : GenderAdapter
 
     // views
     var onboardingFirstViewList = ArrayList<View>()
@@ -39,17 +35,8 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_user)
 
         generateViewList()
-        generateGenderList()
         setOnClickListener()
-    }
 
-    private fun generateGenderList() {
-        initialGenderList.add("Gender")
-        initialGenderList.add("Male")
-        initialGenderList.add("Female")
-
-        updatedGenderList.add("Male")
-        updatedGenderList.add("Female")
     }
 
     private fun generateViewList() {
@@ -96,17 +83,6 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     private fun setOnClickListener() {
         mBinding.createUserBtnGetStarted.setOnClickListener(this)
-
-        mBinding.createUserSpnAge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-        override fun onNothingSelected(p0: AdapterView<*>?) {
-        }
-        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-            if (p2 > 0) {
-                genderAdapter.updateData(updatedGenderList)
-            }
-        }
-    }
-
     }
 
     override fun onClick(view: View) {
@@ -156,9 +132,13 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     private fun showOnBoardingViews() {
 
+        var adapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.gender_select_item_list)
+        adapter.setDropDownViewResource(R.layout.gender_select_item_list)
 
-        genderAdapter = GenderAdapter(this, initialGenderList)
-        mBinding.createUserSpnAge.adapter = genderAdapter
+        mBinding.createUserSpnAge.adapter = GenderSpinnerAdapter(
+                adapter,
+                R.layout.gender_select_item_list_selected,
+                this)
 
         mBinding.createUserEtEmail.visibility = View.GONE
         mBinding.createUserEtPassword.visibility = View.GONE
@@ -214,5 +194,5 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     }
 
-    }
+}
 

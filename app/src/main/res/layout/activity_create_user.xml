@@ -15,21 +15,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.2" />
-
         <android.support.constraint.Guideline
             android:id="@+id/createUser_hgd_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.2" />
-
         <android.support.constraint.Guideline
             android:id="@+id/createUser_hgd_90"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.9" />
-
         <android.support.constraint.Guideline
             android:id="@+id/createUser_vgd_80"
             android:layout_width="wrap_content"
@@ -87,7 +84,7 @@
             app:met_floatingLabelAnimating="true"
             app:met_floatingLabelTextColor="#FF008F"
             app:met_primaryColor="#FF008F"
-            app:met_underlineColor="@color/black100"/>
+            app:met_underlineColor="@color/black100" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/createUser_et_password"
@@ -147,11 +144,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:alpha="0"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
-            app:layout_constraintTop_toBottomOf="@+id/createUser_et_name">
+            app:layout_constraintTop_toBottomOf="@+id/createUser_et_name"
+            android:alpha="0"
+            android:visibility="gone">
 
             <android.support.constraint.Guideline
                 android:id="@+id/createUser_vgd_75"
@@ -162,6 +159,7 @@
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/createUser_spn_age"
+                android:background="@null"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginBottom="8dp"
@@ -188,9 +186,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:alpha="0"
+            android:visibility="gone"
             android:text="Age"
             android:textColor="@color/black100"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
             app:layout_constraintTop_toBottomOf="@+id/createUser_cl_spinnerContainer"
