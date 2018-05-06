@@ -3,6 +3,7 @@ package com.mtailacodes.blueprintrendevouz.login
 import android.animation.AnimatorSet
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -42,6 +43,7 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
     private fun generateViewList() {
         onboardingFirstViewList.add(mBinding.createUserEtName)
         onboardingFirstViewList.add(mBinding.createUserClSpinnerContainer)
+        onboardingFirstViewList.add(mBinding.createUserClAgeContainer)
     }
 
     private fun checkPasswordInput() : Boolean {
@@ -88,8 +90,14 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position == 1){
+                    mBinding.createUserVSpinnerDivider.
+                            setBackgroundColor(ContextCompat.getColor(this@CreateUserActivity, R.color.pinkPrimary))
+                    mBinding.createUserVSpinnerDivider2.visibility = View.VISIBLE
                     Log.i("Gender", "Male")
                 } else if (position == 2){
+                    mBinding.createUserVSpinnerDivider.
+                            setBackgroundColor(ContextCompat.getColor(this@CreateUserActivity, R.color.pinkPrimary))
+                    mBinding.createUserVSpinnerDivider2.visibility = View.VISIBLE
                     Log.i("Gender", "Female")
                 }
             }

@@ -14,18 +14,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.2" />
+
         <android.support.constraint.Guideline
             android:id="@+id/createUser_hgd_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.2" />
+
         <android.support.constraint.Guideline
             android:id="@+id/createUser_hgd_90"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.9" />
+
         <android.support.constraint.Guideline
             android:id="@+id/createUser_vgd_80"
             android:layout_width="wrap_content"
@@ -73,7 +76,6 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:textColor="@color/black100"
-            app:met_textColorHint="@color/hint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
@@ -83,6 +85,7 @@
             app:met_floatingLabelAnimating="true"
             app:met_floatingLabelTextColor="#FF008F"
             app:met_primaryColor="#FF008F"
+            app:met_textColorHint="@color/hint"
             app:met_underlineColor="@color/black100" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -91,7 +94,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="Password"
-            app:met_textColorHint="@color/hint"
             android:password="true"
             android:textColor="@color/black100"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
@@ -101,14 +103,15 @@
             app:met_floatingLabelAnimating="true"
             app:met_floatingLabelTextColor="#FF008F"
             app:met_primaryColor="#FF008F"
+            app:met_textColorHint="@color/hint"
             app:met_underlineColor="@color/black100" />
 
         <Button
             android:id="@+id/createUser_btn_getStarted"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginStart="72dp"
             android:layout_marginEnd="72dp"
+            android:layout_marginStart="72dp"
             android:background="@drawable/gradient_green_rounded_button"
             android:fontFamily="@font/sanchez"
             android:text="Create User"
@@ -124,10 +127,9 @@
             android:id="@+id/createUser_et_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:alpha="0"
             android:hint="Name"
             android:textColor="@color/black100"
-            app:met_textColorHint="@color/hint"
-            android:alpha="0"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
@@ -138,6 +140,7 @@
             app:met_floatingLabelAnimating="true"
             app:met_floatingLabelTextColor="#FF008F"
             app:met_primaryColor="#FF008F"
+            app:met_textColorHint="@color/hint"
             app:met_underlineColor="@color/black100" />
 
         <android.support.constraint.ConstraintLayout
@@ -145,11 +148,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:alpha="0"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
-            app:layout_constraintTop_toBottomOf="@+id/createUser_et_name"
-            android:alpha="0"
-            android:visibility="gone">
+            app:layout_constraintTop_toBottomOf="@+id/createUser_et_name">
 
             <android.support.constraint.Guideline
                 android:id="@+id/createUser_vgd_75"
@@ -160,14 +163,61 @@
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/createUser_spn_age"
-                android:background="@null"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginBottom="8dp"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <View
+                android:id="@+id/createUser_v_spinnerDivider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/createUser_v_spinnerDivider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/pinkPrimary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/createUser_v_spinnerDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/createUser_cl_ageContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
+            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
+            app:layout_constraintTop_toBottomOf="@+id/createUser_cl_spinnerContainer"
+            android:visibility="gone"
+            android:alpha="0">
+
+            <TextView
+                android:id="@+id/createUser_tv_age"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="Age"
+                android:textColor="@color/hint"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <View
@@ -176,6 +226,16 @@
                 android:layout_height="1dp"
                 android:background="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/createUser_v_ageDivider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/pinkPrimary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/createUser_v_ageDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
