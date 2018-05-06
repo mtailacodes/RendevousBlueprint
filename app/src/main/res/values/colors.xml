@@ -27,5 +27,11 @@
     <color name="primaryPurpleDark">#461682</color>
     <color name="pinkPrimary">#FF008F</color>
 
+    <!--// font colors -->
+    <color name="hint">#DCDCDC</color>
+
+
+
+
 
 </resources>

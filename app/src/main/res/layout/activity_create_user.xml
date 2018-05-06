@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -73,8 +72,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:textColorHint="@color/passGreen"
             android:textColor="@color/black100"
+            app:met_textColorHint="@color/hint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
             app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
@@ -92,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="Password"
+            app:met_textColorHint="@color/hint"
             android:password="true"
             android:textColor="@color/black100"
             app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
@@ -126,6 +126,7 @@
             android:layout_height="wrap_content"
             android:hint="Name"
             android:textColor="@color/black100"
+            app:met_textColorHint="@color/hint"
             android:alpha="0"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -179,25 +180,6 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
-
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/createUser_et_dob"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:alpha="0"
-            android:visibility="gone"
-            android:text="Age"
-            android:textColor="@color/black100"
-            app:layout_constraintEnd_toEndOf="@+id/createUser_vgd_80"
-            app:layout_constraintStart_toStartOf="@+id/createUser_vgd_20"
-            app:layout_constraintTop_toBottomOf="@+id/createUser_cl_spinnerContainer"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelAnimating="true"
-            app:met_floatingLabelTextColor="#FF008F"
-            app:met_primaryColor="#FF008F"
-            app:met_underlineColor="@color/black100" />
-
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/createUser_cl_errorContainer"

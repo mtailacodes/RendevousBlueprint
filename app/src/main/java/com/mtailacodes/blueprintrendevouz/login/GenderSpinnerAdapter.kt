@@ -57,11 +57,15 @@ class GenderSpinnerAdapter (
                 R.layout.gender_selection, parent, false)
         if (position == 1){
             binding.tv.text = "Male"
+            binding.divider.visibility = View.VISIBLE
         } else if (position == 2){
             binding.tv.text = "Female"
+            binding.divider.visibility = View.GONE
         }
 
         if (active){
+            binding.divider.visibility = View.GONE
+            binding.tv.setPadding(0, 0 , 0 , 2)
             binding.tv.setTextColor(ContextCompat.getColor(context, R.color.pinkPrimary))
         } else {
             binding.tv.setTextColor(ContextCompat.getColor(context, R.color.black100))

@@ -13,9 +13,9 @@
             android:layout_width="0dp"
             android:gravity="center_vertical"
             android:layout_height="42dp"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            android:text="asdasd"/>
+            android:textColor="@color/hint"
+            android:textSize="20sp"
+            android:text="Gender" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

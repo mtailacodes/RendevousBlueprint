@@ -1,10 +1,10 @@
 package com.mtailacodes.blueprintrendevouz.login
 
 import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
@@ -41,7 +41,6 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     private fun generateViewList() {
         onboardingFirstViewList.add(mBinding.createUserEtName)
-        onboardingFirstViewList.add(mBinding.createUserEtDob)
         onboardingFirstViewList.add(mBinding.createUserClSpinnerContainer)
     }
 
@@ -83,6 +82,19 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     private fun setOnClickListener() {
         mBinding.createUserBtnGetStarted.setOnClickListener(this)
+        mBinding.createUserSpnAge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position == 1){
+                    Log.i("Gender", "Male")
+                } else if (position == 2){
+                    Log.i("Gender", "Female")
+                }
+            }
+
+        }
     }
 
     override fun onClick(view: View) {
