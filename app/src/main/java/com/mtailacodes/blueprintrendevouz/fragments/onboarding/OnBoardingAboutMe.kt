@@ -21,6 +21,10 @@ import java.util.*
  */
 class OnBoardingAboutMe : Fragment(), View.OnClickListener, DatePickerFragment.EditNameDialogListener{
 
+    override fun onFinishEditDialog(mUserModel: RendevouzUserModel, date: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
     private lateinit var mBinding : FragmentOnboardingAboutMeBinding
     private lateinit var mUser : RendevouzUserModel
@@ -111,9 +115,5 @@ class OnBoardingAboutMe : Fragment(), View.OnClickListener, DatePickerFragment.E
         }
     }
 
-    override fun onFinishEditDialog(mUserModel: RendevouzUserModel) {
-        mUser = mUserModel
-        birthdateDialogueHandled = false
-    }
 
 }

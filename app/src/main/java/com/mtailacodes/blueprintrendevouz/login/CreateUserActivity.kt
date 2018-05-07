@@ -14,11 +14,14 @@ import android.widget.ArrayAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.mtailacodes.blueprintrendevouz.R
 import com.mtailacodes.blueprintrendevouz.Util.AnimationUtil
+import com.mtailacodes.blueprintrendevouz.customViews.DatePickerFragment
 import com.mtailacodes.blueprintrendevouz.databinding.ActivityCreateUserBinding
+import com.mtailacodes.blueprintrendevouz.models.user.user.login.RendevouzUserModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
+class CreateUserActivity :AppCompatActivity(), View.OnClickListener, DatePickerFragment.EditNameDialogListener{
+
 
     lateinit var mBinding: ActivityCreateUserBinding
 
@@ -27,6 +30,7 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
     var emailErrorReason : String = ""
     var passwordPassed = false
     var passwordErrorReason : String = ""
+    var mUser = RendevouzUserModel()
 
     // views
     var onboardingFirstViewList = ArrayList<View>()
@@ -84,6 +88,7 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
 
     private fun setOnClickListener() {
         mBinding.createUserBtnGetStarted.setOnClickListener(this)
+        mBinding.createUserClAgeContainer.setOnClickListener(this)
         mBinding.createUserSpnAge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -112,7 +117,20 @@ class CreateUserActivity :AppCompatActivity(), View.OnClickListener{
                 passwordPassed = checkPasswordInput()
                 handleInput()
             }
+            R.id.createUser_cl_ageContainer -> {
+                DatePickerFragment(mUser, this).show(fragmentManager, "DatePicker")
+            }
         }
+    }
+
+    override fun onFinishEditDialog(mUserModel: RendevouzUserModel, date : String) {
+        mBinding.createUserTvAge.text = date
+        mBinding.createUserTvAge.setTextColor(ContextCompat.getColor(this@CreateUserActivity, R.color.black100))
+        mBinding.createUserVAgeDivider.
+                setBackgroundColor(ContextCompat.getColor(this@CreateUserActivity, R.color.pinkPrimary))
+        mBinding.createUserVAgeDivider2.visibility = View.VISIBLE
+        mUser = mUserModel
+
     }
 
     private fun handleInput() {

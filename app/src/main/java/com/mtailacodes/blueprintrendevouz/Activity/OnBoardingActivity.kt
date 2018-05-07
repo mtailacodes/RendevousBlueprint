@@ -24,7 +24,11 @@ import java.util.*
  * Created by matthewtaila on 3/14/18.
  */
 class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
+
         DatePickerFragment.EditNameDialogListener, OnBoardingListener{
+    override fun onFinishEditDialog(mUserModel: RendevouzUserModel, date: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     lateinit var mBinding : ActivityOnboardingBinding
     lateinit var mUser : RendevouzUserModel
@@ -179,7 +183,7 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.tv_DOB ->{
                 if (!birthdateDialogueHandled){
-                    DatePickerFragment(mBinding.tvDOB, mUser, this).show(fragmentManager, "DatePicker")
+                    DatePickerFragment(mUser, this).show(fragmentManager, "DatePicker")
                     birthdateDialogueHandled = true
                 }
             }
@@ -462,12 +466,6 @@ class OnBoardingActivity : AppCompatActivity(), View.OnClickListener,
         })
     }
 
-    override fun onFinishEditDialog(mUserModel: RendevouzUserModel) {
-        mUser = mUserModel
-        mBinding.tvDOB.setTextColor( Color.parseColor("#DE000000"))
-        checkComplete(onBoardingStep)
-        birthdateDialogueHandled = false
-    }
 
     override fun checkComplete(stage: Int) {
         lateinit var mNextButtonAnimator : ValueAnimator
